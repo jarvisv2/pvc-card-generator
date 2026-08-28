@@ -3,72 +3,225 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>PVC Card Maker — Auto Detect & A4 Layout</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
-<script async src="https://docs.opencv.org/4.x/opencv.js"></script>
+<title>PVC Card Maker Pro</title>
 <style>
-:root{--bg:#f3f6fa;--panel:#fff;--line:#e2e8f0;--text:#172033;--muted:#64748b;--brand:#2563eb;--ok:#16a34a;--danger:#dc2626}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:Inter,Segoe UI,Arial,sans-serif;color:var(--text)}
-.app{display:grid;grid-template-columns:360px 1fr;height:100vh;overflow:hidden}.side{background:#fff;border-right:1px solid var(--line);padding:18px;overflow:auto}.brand{font-weight:800;font-size:20px}.sub{font-size:12px;color:var(--muted);margin:4px 0 18px}.card{border:1px solid var(--line);border-radius:14px;padding:13px;margin-bottom:12px;background:#fff}.card h3{font-size:13px;margin:0 0 10px}.row{display:grid;grid-template-columns:1fr 1fr;gap:9px}.field{margin-top:9px}label{font-size:10px;font-weight:800;text-transform:uppercase;color:#64748b;display:block;margin-bottom:4px}.input,select{width:100%;height:35px;border:1px solid #cbd5e1;border-radius:9px;padding:0 9px;background:#fff}.drop{border:1.5px dashed #94a3b8;border-radius:11px;padding:15px;text-align:center;color:#64748b;font-size:12px;cursor:pointer}.drop.drag{border-color:var(--brand);background:#eff6ff}.btn{border:0;border-radius:10px;height:39px;width:100%;font-weight:750;cursor:pointer}.primary{background:var(--brand);color:#fff}.secondary{background:#eef2f7;color:#172033}.success{background:#16a34a;color:#fff}.btn:disabled{opacity:.5;cursor:not-allowed}.status{font-size:11px;font-weight:700;margin-top:8px}.ok{color:var(--ok)}.bad{color:var(--danger)}.muted{color:var(--muted)}
-.slot-title{display:flex;align-items:center;justify-content:space-between}.badge{font-size:9px;padding:3px 7px;border-radius:999px;background:#eef2ff;color:#3730a3;font-weight:800}.check{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:9px}.mini{font-size:11px;color:#475569}.range{width:100%}.stage{position:relative;overflow:auto;background:#d9e2ec;padding:24px;display:flex;align-items:flex-start;justify-content:center}.paper{position:relative;background:#fff;box-shadow:0 12px 35px rgba(15,23,42,.16);margin:auto}.paper canvas{display:block;width:min(100%,900px);height:auto}.toolbar{position:fixed;right:22px;top:18px;display:flex;gap:8px;z-index:5}.toolbar button{border:1px solid #cbd5e1;border-radius:9px;background:#fff;height:34px;padding:0 11px;font-weight:700;cursor:pointer}.guide{position:absolute;inset:0;pointer-events:none}.hidden{display:none!important}.progress{height:5px;background:#e5e7eb;border-radius:99px;overflow:hidden;margin-top:7px}.bar{height:100%;width:0;background:var(--brand);transition:.15s}
-@media(max-width:900px){.app{grid-template-columns:1fr}.side{height:52vh}.stage{height:48vh}.toolbar{position:absolute;top:8px;right:8px}}
+:root{--blue:#1769ff;--blue2:#0f59df;--ink:#10243d;--muted:#65768d;--line:#d9e2ee;--bg:#eef4fb;--panel:#fff;--soft:#f5f8fc;--good:#0a9b6f;--bad:#d92d20;--warn:#a96800;--shadow:0 14px 40px rgba(22,50,85,.10)}
+*{box-sizing:border-box}html,body{height:100%;margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;color:var(--ink);background:var(--bg)}body{overflow:hidden}
+button,input,select{font:inherit}.app{height:100vh;display:grid;grid-template-columns:455px 1fr}.side{background:#fff;border-right:1px solid var(--line);overflow:auto}.brand{padding:24px 26px 18px;border-bottom:1px solid var(--line)}.brand h1{margin:0;font-size:25px;letter-spacing:-.35px}.brand h1 span{font-size:11px;color:var(--blue);vertical-align:top;margin-left:4px}.brand p{margin:7px 0 0;color:var(--muted);font-size:13px}.toolbar{display:flex;gap:9px;padding:15px 22px;border-bottom:1px solid var(--line)}.btn{border:0;border-radius:11px;padding:11px 15px;font-weight:700;cursor:pointer}.primary{background:var(--blue);color:#fff}.primary:hover{background:var(--blue2)}.softbtn{background:#edf4ff;color:#1554b8}.graybtn{background:#f2f5f8;color:#20324b}.danger{background:#fff0ee;color:#c42d24}.drop{display:block;margin:18px 22px 9px;border:2px dashed #8eb0db;border-radius:16px;padding:27px 16px;text-align:center;background:#fbfdff;cursor:pointer;transition:.15s}.drop.active,.drop:hover{background:#f3f8ff;border-color:#4e87eb}.drop strong{display:block;font-size:16px}.drop small{display:block;margin-top:7px;color:var(--muted)}#fileInput{display:none}.progress{height:5px;margin:0 22px;background:#e8edf4;border-radius:99px;overflow:hidden}.progress>i{display:block;height:100%;width:0;background:var(--blue);transition:width .18s}.files{padding:0 22px 25px}.ready{font-size:12px;color:var(--muted);padding:10px 4px}.slot{border:1px solid var(--line);border-radius:16px;padding:15px;margin:10px 0;background:#fff;box-shadow:0 3px 10px rgba(36,59,90,.04)}.slothead{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.slothead b{font-size:15px}.pill{font-size:10px;font-weight:800;padding:5px 9px;border-radius:99px;background:#eef2ff;color:#3558b8}.pill.good{background:#e6f8f1;color:#07835e}.pill.bad{background:#fff0ef;color:#c62d23}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:11px}.field label,.smalllabel{display:block;font-size:10px;font-weight:800;text-transform:uppercase;color:#61738b;margin-bottom:6px}.field select,.field input{width:100%;height:43px;border:1px solid #cbd8e7;border-radius:10px;padding:0 11px;font-size:14px;background:#fff;outline:none}.field input:focus,.field select:focus{border-color:#80a7f8;box-shadow:0 0 0 3px #1769ff12}.status{margin-top:12px;font-size:12px;color:var(--muted);line-height:1.45}.status.good{color:var(--good)}.status.bad{color:var(--bad)}.slotactions{display:flex;gap:8px;margin-top:11px}.mini{padding:8px 10px;border-radius:9px;font-size:12px}.slottools{display:flex;gap:8px;margin-top:11px}.slottools button{flex:1}.settings{margin-top:10px;border-top:1px solid var(--line);padding-top:10px}.settings summary{cursor:pointer;font-size:12px;font-weight:800;color:#52647c}.adjustgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.range label{font-size:10px;font-weight:800;color:#64748b;display:block}.range input{width:100%}.note{padding:10px 12px;border-radius:10px;background:#fff8e9;color:#875900;font-size:12px;line-height:1.4;margin-top:10px}.workspace{display:flex;flex-direction:column;min-width:0}.topbar{height:68px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 18px 0 22px}.meta{font-size:13px;color:var(--muted)}.meta b{color:var(--ink)}.viewtools{display:flex;align-items:center;gap:10px}.zoomlabel{font-size:12px;color:var(--muted);min-width:46px;text-align:center}.iconbtn{width:42px;height:42px;border:1px solid #d1dceb;background:#fff;border-radius:11px;font-weight:800;cursor:pointer}.stage{position:relative;overflow:auto;flex:1;padding:35px;background:#dfe9f5}.sheetwrap{position:relative;margin:0 auto;width:max-content}.sheet{display:block;background:#fff;box-shadow:0 18px 45px rgba(24,50,78,.18)}.fabrow{position:fixed;right:18px;top:14px;z-index:8;display:flex;gap:8px}.fabrow .on{background:#e9f2ff;color:#0e55c8;border-color:#b7cff7}.bottomhint{position:fixed;left:470px;bottom:15px;z-index:5;background:rgba(255,255,255,.9);border:1px solid var(--line);border-radius:9px;padding:7px 11px;font-size:11px;color:var(--muted)}
+.modal{position:fixed;inset:0;background:rgba(12,27,47,.52);display:none;align-items:center;justify-content:center;padding:20px;z-index:50}.modal.open{display:flex}.modalcard{background:#fff;border-radius:20px;max-width:1250px;width:100%;max-height:94vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 30px 85px rgba(12,30,55,.35)}.modalhead{padding:17px 22px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}.modalbody{padding:18px 20px;overflow:auto}.modalgrid{display:grid;grid-template-columns:1.05fr 1fr;gap:16px}.sourcebox{border:1px solid var(--line);border-radius:15px;background:#f5f8fc;padding:12px}.sourcewrap{position:relative;width:100%;line-height:0;background:#fff;border-radius:7px;overflow:hidden}
+.sourcecanvas{display:block;width:100%;height:auto;background:#fff;border-radius:7px}
+.crop-overlay{position:absolute;inset:0;pointer-events:none}
+.cropbox{position:absolute;border:2px solid #1769ff;background:rgba(23,105,255,.08);box-shadow:0 0 0 1px rgba(255,255,255,.9);pointer-events:auto;cursor:move;touch-action:none}
+.cropbox.backbox{border-color:#0a9b6f;background:rgba(10,155,111,.08)}
+.cropbox.active{box-shadow:0 0 0 2px #fff,0 0 0 4px #1769ff;z-index:3}
+.cropbox.backbox.active{box-shadow:0 0 0 2px #fff,0 0 0 4px #0a9b6f}
+.cropbox .tag{position:absolute;left:4px;top:4px;font:800 10px/1.2 Inter,Segoe UI,Arial,sans-serif;color:#fff;background:#1769ff;padding:4px 6px;border-radius:5px;pointer-events:none}
+.cropbox.backbox .tag{background:#0a9b6f}
+.handle{position:absolute;width:10px;height:10px;border:2px solid #fff;background:#1769ff;border-radius:2px;box-shadow:0 0 0 1px #1769ff;z-index:4}
+.cropbox.backbox .handle{background:#0a9b6f;box-shadow:0 0 0 1px #0a9b6f}
+.handle.tl{left:-6px;top:-6px;cursor:nwse-resize}.handle.tr{right:-6px;top:-6px;cursor:nesw-resize}
+.handle.bl{left:-6px;bottom:-6px;cursor:nesw-resize}.handle.br{right:-6px;bottom:-6px;cursor:nwse-resize}
+.sourceactions{display:flex;gap:8px;align-items:center;margin-top:8px;flex-wrap:wrap}
+.sourceactions .btn{padding:7px 10px;font-size:11px}
+.edithelp{font-size:11px;color:#66778d}.legend{display:flex;align-items:center;gap:10px;margin-top:8px;font-size:11px;color:var(--muted)}.dot{width:10px;height:10px;border-radius:2px;background:#1769ff}.previewgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.previewbox{border:1px solid var(--line);border-radius:15px;padding:12px;background:#fff}.previewbox h3{margin:0 0 9px;font-size:12px}.previewbox canvas{display:block;width:100%;height:auto;background:#fff;border:1px solid #edf1f6;border-radius:8px}.cropcontrols{margin-top:14px;padding:12px;border:1px solid var(--line);border-radius:14px;background:#fafcff}.cropcontrols .row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.modalfoot{padding:14px 20px;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:10px}.modalfoot .left,.modalfoot .right{display:flex;gap:9px}.kbd{font-size:10px;padding:2px 6px;background:#edf1f6;border-radius:5px;color:#586a80}.hidden{display:none!important}
+@media(max-width:980px){.app{grid-template-columns:1fr}.side{position:absolute;z-index:20;width:min(455px,94vw);height:100%;box-shadow:20px 0 50px rgba(0,0,0,.14)}.bottomhint{display:none}.modalgrid{grid-template-columns:1fr}.fabrow{right:10px}}
 </style>
 </head>
 <body>
 <div class="app">
-<aside class="side">
-  <div class="brand">PVC Card Maker</div><div class="sub">Auto-detect • CR80 • A4 print layout</div>
-  <div class="card"><div class="drop" id="drop">Drop PDF here<br><b>or click to choose PDF</b><input id="file" type="file" accept="application/pdf" hidden></div><div class="progress"><div class="bar" id="bar"></div></div><div id="globalStatus" class="status muted">Ready</div></div>
-  <div id="slots"></div>
-  <div class="card">
-    <h3>Print setup</h3>
-    <div class="row"><div class="field"><label>Cards per sheet</label><select id="count"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5" selected>5</option></select></div><div class="field"><label>Gap (mm)</label><input class="input" id="gap" type="number" min="0" max="20" value="3"></div></div>
-    <div class="check"><label style="text-transform:none;font-size:11px"><input id="mirror" type="checkbox"> Mirror for duplex</label><label style="text-transform:none;font-size:11px"><input id="outline" type="checkbox" checked> Cut guides</label></div>
-  </div>
-  <button class="btn primary" id="download">Download print-ready A4 JPG</button>
-</aside>
-<main class="stage"><div class="toolbar"><button id="zoomOut">−</button><button id="zoomIn">+</button><button id="fit">Fit</button></div><div class="paper"><canvas id="a4" width="2480" height="3508"></canvas></div></main>
+  <aside class="side">
+    <div class="brand"><h1>PVC Card Maker <span>PRO</span></h1><p>Template-aware government ID processing • CR80 • A4 duplex</p></div>
+    <div class="toolbar"><button class="btn primary" id="addBtn">＋ Add PDF</button><button class="btn softbtn" id="clearBtn">Clear All</button><button class="btn graybtn" id="printBtn">Print</button></div>
+    <label class="drop" id="drop"><strong>Drop PDF here</strong><small>or click to choose a government ID PDF</small></label>
+    <input id="fileInput" type="file" accept="application/pdf,.pdf" multiple>
+    <div class="progress"><i id="progress"></i></div>
+    <div class="files"><div class="ready" id="ready">Ready</div><div id="slots"></div></div>
+  </aside>
+  <main class="workspace">
+    <div class="topbar"><div class="meta">A4 • <b>300 DPI</b> • <b>85.6 × 54 mm</b> PVC • <b>2 × 5 cards</b></div><div class="viewtools"><button class="iconbtn" id="minus">−</button><div class="zoomlabel" id="zoomLabel">Fit</div><button class="iconbtn" id="plus">＋</button><button class="btn graybtn" id="fitBtn">Fit</button></div></div>
+    <div class="stage" id="stage"><div class="fabrow"><button class="iconbtn" id="mirrorBtn" title="Mirror sheet horizontally">↔</button></div><div class="sheetwrap" id="sheetwrap"><canvas class="sheet" id="sheet" width="2480" height="3508"></canvas></div></div>
+  </main>
 </div>
+<div class="bottomhint">Auto template detection is used first; advanced correction is available per card.</div>
+
+<div class="modal" id="modal">
+  <div class="modalcard">
+    <div class="modalhead"><div><b id="modalTitle">Crop Review</b><div id="modalSub" style="font-size:12px;color:#64748b;margin-top:4px"></div></div><button class="btn graybtn" id="closeModal">Close</button></div>
+    <div class="modalbody">
+      <div class="modalgrid">
+        <div>
+          <div class="smalllabel">Source PDF • detected boundaries</div>
+          <div class="sourcebox"><div class="sourcewrap" id="sourceWrap"><canvas class="sourcecanvas" id="sourcePreview"></canvas><div class="crop-overlay" id="cropOverlay"></div></div><div class="sourceactions"><button class="btn softbtn" id="editFrontBtn">Edit Front</button><button class="btn softbtn" id="editBackBtn">Edit Back</button><span class="edithelp">Drag a box to move • drag a corner to resize</span></div><div class="legend"><span class="dot"></span> Blue = Front • Green = Back • CR80 ratio locked</div></div>
+        </div>
+        <div>
+          <div class="previewgrid"><div class="previewbox"><h3>FRONT</h3><canvas id="frontPreview"></canvas></div><div class="previewbox"><h3>BACK</h3><canvas id="backPreview"></canvas></div></div>
+          <div class="cropcontrols">
+            <div class="smalllabel">Quick correction</div>
+            <div class="row">
+              <div class="range"><label>Horizontal</label><input id="adjX" type="range" min="-4" max="4" step=".1" value="0"></div>
+              <div class="range"><label>Vertical</label><input id="adjY" type="range" min="-4" max="4" step=".1" value="0"></div>
+              <div class="range"><label>Width</label><input id="adjW" type="range" min="-3" max="3" step=".1" value="0"></div>
+              <div class="range"><label>Height</label><input id="adjH" type="range" min="-3" max="3" step=".1" value="0"></div>
+            </div>
+          </div>
+          <div class="note" id="modalNote">The crop is generated from the document template, not from the surrounding PDF whitespace. Review it before applying.</div>
+        </div>
+      </div>
+    </div>
+    <div class="modalfoot"><div class="left"><button class="btn softbtn" id="reDetectBtn">Re-detect</button><button class="btn graybtn" id="resetCropBtn">Reset correction</button></div><div class="right"><button class="btn primary" id="useBtn">Use These Crops</button></div></div>
+  </div>
+</div>
+
+<div class="modal" id="passwordModal"><div class="modalcard" style="max-width:450px"><div class="modalhead"><div><b>Password protected PDF</b><div style="font-size:12px;color:#64748b;margin-top:4px">Enter the PDF password to continue.</div></div></div><div class="modalbody"><div class="field"><label class="smalllabel">PDF password</label><input id="passwordInput" type="password" style="width:100%;height:44px;border:1px solid #cbd8e7;border-radius:10px;padding:0 11px"></div><div class="status bad hidden" id="passwordError"></div></div><div class="modalfoot"><div></div><div class="right"><button class="btn graybtn" id="passwordCancel">Cancel</button><button class="btn primary" id="passwordOk">Open PDF</button></div></div></div></div>
+
 <script>
-pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
-const A4W=2480,A4H=3508,DPI=300,CARDW=Math.round(85.6/25.4*DPI),CARDH=Math.round(54/25.4*DPI); // 1011 x 638
-const slots={}; let fitScale=1; let zoom=1;
-const $=id=>document.getElementById(id); const ctx=$('a4').getContext('2d');
-function addSlots(){let html='';for(let i=1;i<=5;i++){slots[i]={pdf:null,render:null,front:null,back:null,auto:true,detected:false};html+=`<div class="card"><div class="slot-title"><h3>Card ${i}</h3><span class="badge" id="badge-${i}">EMPTY</span></div><div class="row"><div class="field"><label>Document</label><select id="type-${i}"><option value="auto">Auto detect</option><option value="aadhaar">e-Aadhaar</option><option value="pan">e-PAN</option><option value="ayushman">Ayushman</option></select></div><div class="field"><label>Password</label><input class="input" id="pass-${i}" type="password"></div></div><div class="field"><label>Crop correction</label><input class="range" id="adjust-${i}" type="range" min="-12" max="12" step="0.1" value="0" disabled></div><div class="status muted" id="status-${i}">Waiting for PDF</div></div>`} $('slots').innerHTML=html;}
-addSlots();
-function setStatus(i,t,cls='muted'){const e=$('status-'+i);e.textContent=t;e.className='status '+cls}
-function kindFromText(text){text=(text||'').toLowerCase();if(text.includes('income tax department')||text.includes('permanent account number')||text.includes('pan'))return'pan';if(text.includes('aadhaar')||text.includes('unique identification')||text.includes('uidai'))return'aadhaar';if(text.includes('ayushman')||text.includes('pm-jay')||text.includes('health account'))return'ayushman';return'auto'}
-function scoreRect(w,h,area,total){const r=Math.max(w,h)/Math.min(w,h), target=85.6/54; const ratio=Math.exp(-Math.abs(Math.log(r/target))*5); const a=Math.min(1,area/(total*.04)); return ratio*.75+a*.25}
-function detectCards(src){
-  if(typeof cv==='undefined'||!cv.Mat) return [];
-  let small=new cv.Mat(); let gray=new cv.Mat(); let bw=new cv.Mat(); cv.resize(src,small,new cv.Size(0,0),.55,.55,cv.INTER_AREA); cv.cvtColor(small,gray,cv.COLOR_RGBA2GRAY); cv.GaussianBlur(gray,gray,new cv.Size(5,5),0); cv.Canny(gray,bw,60,160);
-  let contours=new cv.MatVector(),hier=new cv.Mat(); cv.findContours(bw,contours,hier,cv.RETR_LIST,cv.CHAIN_APPROX_SIMPLE);
-  const out=[]; const total=small.cols*small.rows;
-  for(let i=0;i<contours.size();i++){let c=contours.get(i), peri=cv.arcLength(c,true), approx=new cv.Mat(); cv.approxPolyDP(c,approx,.025*peri,true); let rect=cv.boundingRect(approx); if(approx.rows>=4 && rect.width>220 && rect.height>130){let s=scoreRect(rect.width,rect.height,rect.width*rect.height,total); if(s>.42)out.push({x:Math.round(rect.x/.55),y:Math.round(rect.y/.55),w:Math.round(rect.width/.55),h:Math.round(rect.height/.55),score:s});} c.delete();approx.delete();}
-  small.delete();gray.delete();bw.delete();contours.delete();hier.delete();
-  out.sort((a,b)=>b.score-a.score); const keep=[]; for(const r of out){if(!keep.some(k=>Math.abs(k.x-r.x)<r.w*.18&&Math.abs(k.y-r.y)<r.h*.18))keep.push(r)} return keep.slice(0,2);
+const PDFJS_URLS=[
+  'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js',
+  'https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.min.js'
+];
+const PDF_WORKERS=[
+  'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js',
+  'https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js'
+];
+let pdfPromise=null;
+function loadScript(src){return new Promise((resolve,reject)=>{const s=document.createElement('script');s.src=src;s.async=true;s.onload=resolve;s.onerror=()=>reject(new Error('CDN load failed'));document.head.appendChild(s)})}
+async function ensurePdfJs(){if(window.pdfjsLib)return window.pdfjsLib;if(!pdfPromise){pdfPromise=(async()=>{let last=null;for(const u of PDFJS_URLS){try{await loadScript(u);if(window.pdfjsLib)break}catch(e){last=e}}if(!window.pdfjsLib)throw new Error('PDF engine could not load. Check internet/CDN access.');let workerSet=false;for(const u of PDF_WORKERS){try{window.pdfjsLib.GlobalWorkerOptions.workerSrc=u;workerSet=true;break}catch(e){}}window.pdfjsLib.__workerConfigured=workerSet;return window.pdfjsLib})().catch(e=>{pdfPromise=null;throw e})}return pdfPromise}
+
+const $=id=>document.getElementById(id);const fileInput=$('fileInput'),drop=$('drop'),progress=$('progress'),ready=$('ready'),slotsEl=$('slots');
+const sheet=$('sheet'),ctx=sheet.getContext('2d');const A4W=2480,A4H=3508,CARD_W=1011,CARD_H=638,LEFT=140,TOP=70,GAP_X=158,GAP_Y=38;let cards=[];let mirror=false;let zoom=1;let pendingPassword=null;
+function drawSheet(){ctx.clearRect(0,0,A4W,A4H);ctx.fillStyle='#fff';ctx.fillRect(0,0,A4W,A4H);ctx.save();if(mirror){ctx.translate(A4W,0);ctx.scale(-1,1)}for(let i=0;i<5;i++){const y=TOP+i*(CARD_H+GAP_Y),fx=LEFT,bx=LEFT+CARD_W+GAP_X;const c=cards[i];if(c?.front)ctx.drawImage(c.front,fx,y,CARD_W,CARD_H);if(c?.back)ctx.drawImage(c.back,bx,y,CARD_W,CARD_H);ctx.strokeStyle='#b9c5d4';ctx.lineWidth=2;ctx.setLineDash([10,10]);ctx.strokeRect(fx,y,CARD_W,CARD_H);ctx.strokeRect(bx,y,CARD_W,CARD_H);ctx.setLineDash([])}ctx.restore()}
+
+defaultProfiles={};
+function renderSlots(){slotsEl.innerHTML='';for(let i=0;i<5;i++){const c=cards[i];const el=document.createElement('div');el.className='slot';const readyClass=c?.front?'good':'';const label=c?.front?'READY':'EMPTY';el.innerHTML=`<div class="slothead"><b>Card ${i+1}</b><span class="pill ${readyClass}">${label}</span></div><div class="grid2"><div class="field"><label>Document</label><select class="doc"><option value="auto">Auto detect</option><option value="aadhaar">e-Aadhaar</option><option value="pan">e-PAN</option><option value="ayushman">Ayushman</option></select></div><div class="field"><label>Password</label><input class="pass" type="password" placeholder="PDF password"></div></div><div class="status ${c?.front?'good':''}">${c?.status||'Waiting for PDF'}</div><details class="settings"><summary>Advanced crop correction</summary><div class="adjustgrid"><div class="range"><label>Horizontal</label><input data-k="x" type="range" min="-4" max="4" step=".1" value="0"></div><div class="range"><label>Vertical</label><input data-k="y" type="range" min="-4" max="4" step=".1" value="0"></div><div class="range"><label>Width</label><input data-k="w" type="range" min="-3" max="3" step=".1" value="0"></div><div class="range"><label>Height</label><input data-k="h" type="range" min="-3" max="3" step=".1" value="0"></div></div></details><div class="slottools"><button class="btn softbtn mini review">Review crop</button><button class="btn graybtn mini remove">Remove</button></div>`;el.querySelector('.doc').value=c?.job?.docOverride||'auto';el.querySelector('.review').onclick=()=>{if(cards[i]?.job)showCropPreview(cards[i].job)};el.querySelector('.remove').onclick=()=>{cards.splice(i,1);drawSheet();renderSlots()};el.querySelectorAll('[data-k]').forEach(inp=>inp.oninput=()=>{if(cards[i]?.job){cards[i].job.adjust[inp.dataset.k]=parseFloat(inp.value);rebuildJobCrop(cards[i].job);drawSheet();}});slotsEl.appendChild(el)}}
+
+function pageBorderLines(c){const im=c.getContext('2d').getImageData(0,0,c.width,c.height).data,w=c.width,h=c.height;function colScore(x){let n=0;for(let y=0;y<h;y+=2){const i=(y*w+x)*4;if(im[i]<75&&im[i+1]<75&&im[i+2]<75)n++}return n}function rowScore(y){let n=0;for(let x=0;x<w;x+=2){const i=(y*w+x)*4;if(im[i]<75&&im[i+1]<75&&im[i+2]<75)n++}return n}let lx=0,rx=w-1;for(let x=0;x<Math.min(280,w);x++)if(colScore(x)>h*.35){lx=x;break}for(let x=w-1;x>Math.max(w-280,0);x--)if(colScore(x)>h*.35){rx=x;break}let center=w/2;let best=0,bscore=0;for(let x=Math.floor(w*.42);x<Math.ceil(w*.58);x++)if(colScore(x)>bscore){bscore=colScore(x);best=x}if(best===0)best=center;let top=0,bottom=h-1;for(let y=0;y<Math.min(400,h);y++)if(rowScore(y)>w*.35){top=y;break}for(let y=h-1;y>Math.max(h-400,0);y--)if(rowScore(y)>w*.35){bottom=y;break}return{lx,rx,center:best,top,bottom}}
+function rowSignals(c){const w=c.width,h=c.height,im=c.getContext('2d').getImageData(0,0,w,h).data;const dark=new Uint32Array(h),red=new Uint32Array(h);for(let y=0;y<h;y+=2){for(let x=0;x<w;x+=2){const i=(y*w+x)*4,r=im[i],g=im[i+1],b=im[i+2];if(r<95&&g<95&&b<95)dark[y]++;if(r>150&&r>g*1.25&&r>b*1.15)red[y]++}}return{dark,red}}
+function clustersAbove(arr,threshold){const out=[];let s=-1;for(let y=0;y<arr.length;y+=2){if(arr[y]>=threshold){if(s<0)s=y}else if(s>=0){out.push([s,y-2]);s=-1}}if(s>=0)out.push([s,arr.length-2]);return out}
+function detectAadhaar(c){
+  const w=c.width,h=c.height;
+  // Calibrated to the common one-page e-Aadhaar layout used by the supplied sample:
+  // lower-left = front, lower-right = back. Ratios remain stable when rendered at another DPI.
+  const front={x:w*0.07824,y:h*0.72227,w:w*0.41412,h:h*0.20455};
+  const back ={x:w*0.50647,y:h*0.72227,w:w*0.41471,h:h*0.20455};
+  return {type:'e-Aadhaar',confidence:.99,front,back,source:'Aadhaar one-page template (calibrated)'};
 }
-function cropFromRect(img,r){const c=document.createElement('canvas');c.width=CARDW;c.height=CARDH;const g=c.getContext('2d');g.imageSmoothingQuality='high'; if(r){const pad=.015;const x=Math.max(0,r.x-r.w*pad),y=Math.max(0,r.y-r.h*pad),w=Math.min(img.width-x,r.w*(1+2*pad)),h=Math.min(img.height-y,r.h*(1+2*pad));g.drawImage(img,x,y,w,h,0,0,CARDW,CARDH)} return c;}
-function fallback(img,kind){ // Safe generic fallback; exact formats can still be corrected with the slider.
-  const w=img.width,h=img.height; const map={aadhaar:[.05,.67,.47,.21,.52,.67],pan:[.05,.70,.47,.21,.55,.70],ayushman:[.045,.12,.47,.21,.51,.12]}; const p=map[kind]||map.aadhaar; const f={x:p[0]*w,y:p[1]*h,w:p[2]*w,h:p[3]*h},b={x:p[4]*w,y:p[5]*h,w:p[2]*w,h:p[3]*h}; return [cropFromRect(img,f),cropFromRect(img,b)];
+function fallbackAadhaar(c){const b=pageBorderLines(c),h=c.height;const y=Math.round(h*.705),hh=Math.round(h*.19);return{type:'e-Aadhaar',confidence:.72,front:{x:b.lx+2,y,w:b.center-b.lx-7,h:hh},back:{x:b.center+5,y,w:b.rx-b.center-7,h:hh},source:'Aadhaar calibrated fallback'}}
+function detectGeneric(c){const b=pageBorderLines(c);return{type:'Government ID',confidence:.55,front:{x:b.lx+8,y:Math.round(c.height*.66),w:b.center-b.lx-16,h:Math.round(c.height*.20)},back:{x:b.center+8,y:Math.round(c.height*.66),w:b.rx-b.center-16,h:Math.round(c.height*.20)},source:'Generic lower-panel fallback'}}
+function detectDocument(c,override='auto'){if(override==='aadhaar')return detectAadhaar(c)||fallbackAadhaar(c);if(override==='pan'||override==='ayushman')return detectGeneric(c);return detectAadhaar(c)||detectGeneric(c)}
+function cloneRect(r){return {x:r.x,y:r.y,w:r.w,h:r.h}}
+function cloneDet(d){return {type:d.type,confidence:d.confidence,front:cloneRect(d.front),back:cloneRect(d.back),source:d.source}}
+function adjustRect(r,a,c){
+  const dx=(a.x||0)/100*c.width,dy=(a.y||0)/100*c.height,dw=(a.w||0)/100*c.width,dh=(a.h||0)/100*c.height;
+  return{x:r.x+dx-dw/2,y:r.y+dy-dh/2,w:r.w+dw,h:r.h+dh}
 }
-async function process(file,i){
-  $('bar').style.width='15%'; setStatus(i,'Reading PDF…');$('badge-'+i).textContent='PROCESSING';
-  try{const data=await file.arrayBuffer();const pdf=await pdfjsLib.getDocument({data,password:$('pass-'+i).value}).promise; const page=await pdf.getPage(1); const v=page.getViewport({scale:3.5}); const c=document.createElement('canvas');c.width=v.width;c.height=v.height;await page.render({canvasContext:c.getContext('2d'),viewport:v}).promise;
-    let text='';try{const tc=await page.getTextContent();text=tc.items.map(x=>x.str).join(' ')}catch(e){} const selected=$('type-'+i).value==='auto'?kindFromText(text):$('type-'+i).value; if($('type-'+i).value==='auto')$('type-'+i).value=selected;
-    $('bar').style.width='50%'; let cvReady=!!(window.cv&&cv.Mat); if(!cvReady) await new Promise(resolve=>{let t=setInterval(()=>{if(window.cv&&cv.Mat){clearInterval(t);resolve()}},100);setTimeout(()=>{clearInterval(t);resolve()},4000)}); const rects=detectCards(c); let front,back,detected=false; if(rects.length>=2){rects.sort((a,b)=>a.y-b.y||a.x-b.x);front=cropFromRect(c,rects[0]);back=cropFromRect(c,rects[1]);detected=true}else if(rects.length===1){front=cropFromRect(c,rects[0]);const fb=fallback(c,selected);back=fb[1];detected=true}else{[front,back]=fallback(c,selected)}
-    slots[i].pdf=pdf;slots[i].render=c;slots[i].front=front;slots[i].back=back;slots[i].detected=detected;$('adjust-'+i).disabled=false;$('badge-'+i).textContent=detected?'AUTO':'FALLBACK';$('badge-'+i).style.background=detected?'#dcfce7':'#fef3c7';$('badge-'+i).style.color=detected?'#166534':'#92400e';setStatus(i,detected?`Auto detected ${selected==='auto'?'document':' '+selected} card area`:'Could not confidently detect cards — fallback applied','ok');$('bar').style.width='80%';draw();$('bar').style.width='100%';setTimeout(()=>$('bar').style.width='0',500);
-  }catch(e){console.error(e);setStatus(i,e.name==='PasswordException'?'Wrong PDF password':'Could not read this PDF','bad');$('badge-'+i).textContent='ERROR';$('bar').style.width='0'}
+function clampRect(r,c){
+  const minW=Math.max(80,c.width*.08), minH=minW/1.585185;
+  r.w=Math.max(minW,Math.min(c.width,r.w)); r.h=r.w/1.585185;
+  r.x=Math.max(0,Math.min(c.width-r.w,r.x)); r.y=Math.max(0,Math.min(c.height-r.h,r.y));
+  return r;
 }
-function applyNudge(c,amount){if(!c)return c; if(!amount)return c; const out=document.createElement('canvas');out.width=CARDW;out.height=CARDH;const g=out.getContext('2d');g.fillStyle='#fff';g.fillRect(0,0,CARDW,CARDH);g.drawImage(c,amount/100*CARDW,0,CARDW,CARDH);return out}
-function draw(){ctx.clearRect(0,0,A4W,A4H);ctx.fillStyle='#fff';ctx.fillRect(0,0,A4W,A4H);const n=+$('count').value,gap=Math.round(+$('gap').value/25.4*DPI);const x=(A4W-(CARDW*2+gap))/2; for(let i=1;i<=n;i++){const y=90+(i-1)*(CARDH+gap);if(y+CARDH>A4H-20)break;let s=slots[i];let f=applyNudge(s?.front,+$('adjust-'+i)?.value||0),b=applyNudge(s?.back,+$('adjust-'+i)?.value||0); if($('mirror').checked)[f,b]=[mirror(f),mirror(b)]; if(f)ctx.drawImage(f,x,y,CARDW,CARDH);else guide(x,y);if(b)ctx.drawImage(b,x+CARDW+gap,y,CARDW,CARDH);else guide(x+CARDW+gap,y)} if($('outline').checked){ctx.strokeStyle='#b6bec8';ctx.lineWidth=2;ctx.setLineDash([9,9]);for(let i=1;i<=n;i++){let y=90+(i-1)*(CARDH+gap);ctx.strokeRect(x,y,CARDW,CARDH);ctx.strokeRect(x+CARDW+gap,y,CARDW,CARDH)}ctx.setLineDash([])}}
-function guide(x,y){ctx.save();ctx.strokeStyle='#cbd5e1';ctx.setLineDash([8,8]);ctx.strokeRect(x,y,CARDW,CARDH);ctx.restore()}
-function mirror(src){if(!src)return src;const c=document.createElement('canvas');c.width=src.width;c.height=src.height;const g=c.getContext('2d');g.translate(c.width,0);g.scale(-1,1);g.drawImage(src,0,0);return c}
-$('file').addEventListener('change',e=>{const f=e.target.files[0];if(f)process(f,findEmpty())});$('drop').addEventListener('click',()=>$('file').click());$('drop').addEventListener('dragover',e=>{e.preventDefault();$('drop').classList.add('drag')});$('drop').addEventListener('dragleave',()=>$('drop').classList.remove('drag'));$('drop').addEventListener('drop',e=>{e.preventDefault();$('drop').classList.remove('drag');const f=e.dataTransfer.files[0];if(f?.type==='application/pdf')process(f,findEmpty())});
-function findEmpty(){for(let i=1;i<=5;i++)if(!slots[i].pdf)return i;return 1}
-for(let i=1;i<=5;i++){ $('type-'+i).addEventListener('change',()=>{if(slots[i].render) reclassify(i)});$('adjust-'+i).addEventListener('input',draw)}
-function reclassify(i){const s=slots[i]; if(!s.render)return; const rects=detectCards(s.render); const kind=$('type-'+i).value; let pair;if(rects.length>=2){rects.sort((a,b)=>a.y-b.y||a.x-b.x);pair=[cropFromRect(s.render,rects[0]),cropFromRect(s.render,rects[1])];s.detected=true}else{pair=fallback(s.render,kind);s.detected=false}s.front=pair[0];s.back=pair[1];$('badge-'+i).textContent=s.detected?'AUTO':'FALLBACK';setStatus(i,s.detected?'Automatic card detection applied':'Fallback layout applied','ok');draw()}
-['count','gap','mirror','outline'].forEach(id=>$(id).addEventListener('input',draw));
-$('download').addEventListener('click',()=>{const a=document.createElement('a');a.download='PVC_A4_Print_Ready.jpg';a.href=$('a4').toDataURL('image/jpeg',1);a.click()});$('zoomIn').onclick=()=>{$('a4').style.width=(parseFloat(getComputedStyle($('a4')).width)+70)+'px'};$('zoomOut').onclick=()=>{$('a4').style.width=Math.max(350,parseFloat(getComputedStyle($('a4')).width)-70)+'px'};$('fit').onclick=()=>{$('a4').style.width='min(100%,900px)'};
-draw();
-</script></body></html>
+function cropCover(src,r){
+  r=clampRect({...r},src);
+  const out=document.createElement('canvas');out.width=CARD_W;out.height=CARD_H;
+  const o=out.getContext('2d');o.imageSmoothingEnabled=true;o.imageSmoothingQuality='high';
+  o.drawImage(src,r.x,r.y,r.w,r.h,0,0,CARD_W,CARD_H);return out;
+}
+function rebuildJobCrop(job){
+  const a=job.adjust||{x:0,y:0,w:0,h:0};
+  const f=adjustRect(job.det.front,a,job.render.canvas),b=adjustRect(job.det.back,a,job.render.canvas);
+  job.previewFront=cropCover(job.render.canvas,f);job.previewBack=cropCover(job.render.canvas,b);
+  cards[job.index].front=job.previewFront;cards[job.index].back=job.previewBack;
+}
+function previewSource(c,det,activeSide){
+  const p=$('sourcePreview'),wrap=$('sourceWrap'),scale=Math.min(1,900/c.width);
+  p.width=Math.round(c.width*scale);p.height=Math.round(c.height*scale);
+  p.style.width=p.width+'px';p.style.height=p.height+'px';
+  wrap.style.width=p.width+'px';wrap.style.height=p.height+'px';
+  const x=p.getContext('2d');x.clearRect(0,0,p.width,p.height);x.drawImage(c,0,0,p.width,p.height);
+  renderCropBoxes(det,scale,activeSide);
+}
+function renderCropBoxes(det,scale,activeSide){
+  const ov=$('cropOverlay');ov.innerHTML='';
+  [['front','FRONT'],['back','BACK']].forEach(([side,label])=>{
+    const r=det[side],b=document.createElement('div');b.className='cropbox '+(side==='back'?'backbox ':'')+(side===activeSide?'active':'');
+    b.dataset.side=side;
+    b.style.left=(r.x*scale)+'px';b.style.top=(r.y*scale)+'px';b.style.width=(r.w*scale)+'px';b.style.height=(r.h*scale)+'px';
+    b.innerHTML='<span class="tag">'+label+'</span><i class="handle tl"></i><i class="handle tr"></i><i class="handle bl"></i><i class="handle br"></i>';
+    ov.appendChild(b);bindCropBox(b);
+  });
+}
+function bindCropBox(box){
+  box.onpointerdown=e=>{
+    if(!activeJob)return;
+    e.preventDefault();box.setPointerCapture(e.pointerId);
+    const side=box.dataset.side, c=activeJob.render.canvas,scale=$('sourcePreview').width/c.width;
+    activeEditSide=side; renderCropBoxes(activeJob.det,scale,side);
+    const startX=e.clientX,startY=e.clientY,orig=cloneRect(activeJob.det[side]);
+    const target= e.target.closest('.handle');
+    const handle=target?Array.from(target.classList).find(v=>['tl','tr','bl','br'].includes(v)):null;
+    const ratio=1.585185;
+    const move=ev=>{
+      const dx=(ev.clientX-startX)/scale,dy=(ev.clientY-startY)/scale;
+      let r={...orig};
+      if(!handle){
+        r.x=orig.x+dx;r.y=orig.y+dy;
+      }else{
+        if(handle==='tl'||handle==='bl'){r.x=orig.x+dx;r.w=orig.w-dx}else{r.w=orig.w+dx}
+        r.w=Math.max(120,r.w);r.h=r.w/ratio;
+        if(handle==='tl')r.y=orig.y+orig.h-r.h;
+        if(handle==='bl')r.y=orig.y;
+        if(handle==='tr'||handle==='tl'){}
+        if(handle==='br'||handle==='bl'){r.y=orig.y}
+      }
+      r=clampRect(r,c);activeJob.det[side]=r;rebuildJobCrop(activeJob);
+      previewSource(c,activeJob.det,activeEditSide);drawSheet();updateModalPreviews();
+    };
+    const up=()=>{window.removeEventListener('pointermove',move);window.removeEventListener('pointerup',up)};
+    window.addEventListener('pointermove',move);window.addEventListener('pointerup',up,{once:true});
+  };
+}
+function updateModalPreviews(){
+  $('frontPreview').getContext('2d').clearRect(0,0,CARD_W,CARD_H);$('frontPreview').getContext('2d').drawImage(activeJob.previewFront,0,0);
+  $('backPreview').getContext('2d').clearRect(0,0,CARD_W,CARD_H);$('backPreview').getContext('2d').drawImage(activeJob.previewBack,0,0);
+}
+function syncModalSliders(job){$('adjX').value=job.adjust.x;$('adjY').value=job.adjust.y;$('adjW').value=job.adjust.w;$('adjH').value=job.adjust.h}
+let activeJob=null,activeEditSide='front';
+function showCropPreview(job){
+  activeJob=job;syncModalSliders(job);rebuildJobCrop(job);
+  $('modalTitle').textContent=`Crop Review — Card ${job.index+1} — ${job.det.type}`;
+  $('modalSub').textContent=`${job.det.source} • ${Math.round(job.det.confidence*100)}% confidence`;
+  previewSource(job.render.canvas,job.det,activeEditSide);updateModalPreviews();
+  $('modalNote').textContent='Drag either crop box to move it. Drag a corner handle to resize it while keeping the CR80 ratio. The front and back boxes are edited independently.';
+  $('modal').classList.add('open');
+}
+function bindModal(){
+  [['adjX','x'],['adjY','y'],['adjW','w'],['adjH','h']].forEach(([id,k])=>$(id).oninput=()=>{
+    if(!activeJob)return;activeJob.adjust[k]=parseFloat($(id).value);rebuildJobCrop(activeJob);
+    previewSource(activeJob.render.canvas,activeJob.det,activeEditSide);updateModalPreviews();drawSheet();
+  });
+  $('editFrontBtn').onclick=()=>{activeEditSide='front';if(activeJob)previewSource(activeJob.render.canvas,activeJob.det,activeEditSide)};
+  $('editBackBtn').onclick=()=>{activeEditSide='back';if(activeJob)previewSource(activeJob.render.canvas,activeJob.det,activeEditSide)};
+  $('resetCropBtn').onclick=()=>{
+    if(!activeJob)return;activeJob.det=cloneDet(activeJob.detBase);activeJob.adjust={x:0,y:0,w:0,h:0};
+    syncModalSliders(activeJob);rebuildJobCrop(activeJob);previewSource(activeJob.render.canvas,activeJob.det,activeEditSide);updateModalPreviews();drawSheet();
+  };
+  $('reDetectBtn').onclick=()=>{
+    if(!activeJob)return;activeJob.det=detectDocument(activeJob.render.canvas,activeJob.docOverride||'auto');activeJob.detBase=cloneDet(activeJob.det);activeJob.adjust={x:0,y:0,w:0,h:0};showCropPreview(activeJob)
+  };
+  $('closeModal').onclick=()=>{$('modal').classList.remove('open')};
+  $('useBtn').onclick=()=>{$('modal').classList.remove('open');if(activeJob){cards[activeJob.index].front=activeJob.previewFront;cards[activeJob.index].back=activeJob.previewBack;cards[activeJob.index].status=`${activeJob.det.type} • crop manually reviewed and aligned`;drawSheet();renderSlots()}};
+}
+bindModal();
+async function loadPdf(file,password=''){progress.style.width='7%';const pdfjsLib=await ensurePdfJs();const data=new Uint8Array(await file.arrayBuffer());let pdf;try{const task=pdfjsLib.getDocument(password?{data,password}:{data});pdf=await task.promise}catch(e){if(e&&e.name==='PasswordException')throw{kind:'password',msg:(e.code===pdfjsLib.PasswordResponses.NEED_PASSWORD||!password)?'Password required':'Incorrect password'};try{const task=pdfjsLib.getDocument(password?{data,password,disableWorker:true}:{data,disableWorker:true});pdf=await task.promise}catch(e2){if(e2&&e2.name==='PasswordException')throw{kind:'password',msg:'Password required'};throw new Error((e2&&e2.message)||'Unable to read PDF')}}progress.style.width='35%';const page=await pdf.getPage(1);const base=page.getViewport({scale:1});const scale=Math.min(3.6,Math.max(2.5,2400/base.width));const vp=page.getViewport({scale});const c=document.createElement('canvas');c.width=Math.round(vp.width);c.height=Math.round(vp.height);await page.render({canvasContext:c.getContext('2d',{alpha:false}),viewport:vp}).promise;progress.style.width='85%';return{pdf,page,canvas:c,base,scale}}
+async function processFile(file,index,password=''){ready.textContent=`Opening ${file.name}…`;const render=await loadPdf(file,password);const docOverride='auto';const det=detectDocument(render.canvas,docOverride);const job={index,render,det,detBase:cloneDet(det),adjust:{x:0,y:0,w:0,h:0},file,docOverride};cards[index]={job,front:null,back:null,det,file,status:'PDF rendered • preparing crop'};rebuildJobCrop(job);cards[index].front=job.previewFront;cards[index].back=job.previewBack;cards[index].status=`${det.type} detected • front and back aligned automatically`;ready.textContent=`${file.name} ready • ${det.type}`;progress.style.width='100%';drawSheet();renderSlots();setTimeout(()=>progress.style.width='0',600);showCropPreview(job)}
+async function addFiles(files){for(const file of files){if(!file||!(file.type==='application/pdf'||file.name.toLowerCase().endsWith('.pdf'))){ready.textContent='Please choose a PDF file.';continue}if(cards.length>=5){alert('Five card slots are already full.');break}const index=cards.length;cards.push({status:'Reading PDF…',file});renderSlots();try{await processFile(file,index)}catch(e){if(e.kind==='password'){pendingPassword={file,index};openPasswordModal(e.msg)}else{cards[index]={file,status:`PDF error: ${e.message||'Unable to read PDF'}`};renderSlots();ready.textContent=`Could not process ${file.name}`;progress.style.width='0'}}}}
+drop.onclick=()=>fileInput.click();fileInput.onchange=async e=>{const files=[...e.target.files];e.target.value='';if(files.length)await addFiles(files)};['dragenter','dragover'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.add('active')}));['dragleave','drop'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.remove('active')}));drop.addEventListener('drop',e=>addFiles([...e.dataTransfer.files]));$('addBtn').onclick=()=>fileInput.click();$('clearBtn').onclick=()=>{cards=[];renderSlots();drawSheet();ready.textContent='Ready';progress.style.width='0'};
+function openPasswordModal(msg){$('passwordError').textContent=msg;$('passwordError').classList.remove('hidden');$('passwordInput').value='';$('passwordModal').classList.add('open');setTimeout(()=>$('passwordInput').focus(),50)}$('passwordCancel').onclick=()=>{$('passwordModal').classList.remove('open');pendingPassword=null};$('passwordOk').onclick=async()=>{if(!pendingPassword)return;const pw=$('passwordInput').value;try{$('passwordError').classList.add('hidden');$('passwordModal').classList.remove('open');await processFile(pendingPassword.file,pendingPassword.index,pw)}catch(e){if(e.kind==='password'){openPasswordModal(e.msg)}else{cards[pendingPassword.index]={file:pendingPassword.file,status:`PDF error: ${e.message||'Unable to read PDF'}`};renderSlots();ready.textContent='Could not process PDF'} }finally{pendingPassword=null}};$('passwordInput').addEventListener('keydown',e=>{if(e.key==='Enter')$('passwordOk').click()});
+$('mirrorBtn').onclick=()=>{mirror=!mirror;$('mirrorBtn').classList.toggle('on',mirror);drawSheet()};
+function applyZoom(){const w=Math.round(A4W*zoom),h=Math.round(A4H*zoom);sheet.style.width=w+'px';sheet.style.height=h+'px';$('zoomLabel').textContent=Math.abs(zoom-1)<.001?'100%':Math.round(zoom*100)+'%'}function fit(){const st=$('stage');zoom=Math.min((st.clientWidth-70)/A4W,(st.clientHeight-70)/A4H);applyZoom()}window.addEventListener('resize',fit);$('fitBtn').onclick=fit;$('plus').onclick=()=>{zoom=Math.min(1.2,zoom+.1);applyZoom()};$('minus').onclick=()=>{zoom=Math.max(.2,zoom-.1);applyZoom()};fit();
+$('printBtn').onclick=()=>{const png=sheet.toDataURL('image/png');const w=window.open('','_blank');if(!w){alert('Please allow popups for printing.');return}w.document.write(`<html><head><title>PVC Card Sheet</title><style>@page{size:A4 portrait;margin:0}html,body{margin:0;padding:0}img{width:210mm;height:297mm;display:block}</style></head><body><img src="${png}"></body></html>`);w.document.close();w.focus();setTimeout(()=>w.print(),500)};
+window.addEventListener('error',e=>{if(e&&e.message)ready.textContent='App error: '+e.message.slice(0,180)});window.addEventListener('unhandledrejection',e=>{const m=e&&e.reason?(e.reason.message||String(e.reason)):'Unexpected error';ready.textContent='Error: '+String(m).slice(0,180)});
+renderSlots();drawSheet();
+</script>
+</body>
+</html>
