@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pinpoint Auto-Crop PVC Layout</title>
+    <!-- PDF.js for reading PDFs locally -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
     <style>
         body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #eef2f5; margin: 0; padding: 20px; display: flex; height: 100vh; box-sizing: border-box; }
@@ -37,7 +38,7 @@
 <body>
     <div class="sidebar">
         <h2>Pinpoint Auto-Crop</h2>
-        <p style="font-size:12px; color:#64748b; margin-top:0; margin-bottom: 15px;">Upload a PDF. If the cut is slightly off, use the sliders to nudge it perfectly into place!</p>
+        <p style="font-size:12px; color:#64748b; margin-top:0; margin-bottom: 15px;">Upload a PDF. Aadhaar and Ayushman are pre-calibrated. Use sliders to nudge if slightly off!</p>
         
         <div id="slots-container"></div>
 
@@ -58,15 +59,17 @@
         const ctx = canvas.getContext('2d');
         let isMirrored = false;
         
+        // Exact A4 dimensions in pixels at 300 DPI
         const A4_W = 2480, A4_H = 3508;
+        // Standard CR80 PVC Card dimensions in pixels at 300 DPI (86mm x 54mm)
         const CARD_W = 1015, CARD_H = 638; 
         const START_X = 200, START_Y = 150, GAP_X = 60, GAP_Y = 20;
 
-        // Perfected baseline coordinates (Percentages of A4 page)
+        // PERFECTED CALIBRATIONS BASED ON SAMPLE PDFS
         const PROFILES = {
-            'aadhaar': { fx: 6.6, fy: 68.0, bx: 52.3, by: 68.0, zoom: 18.2 },
-            'pan':     { fx: 5.0, fy: 70.0, bx: 55.0, by: 70.0, zoom: 18.2 },
-            'ayushman':{ fx: 5.0, fy: 65.0, bx: 55.0, by: 65.0, zoom: 18.2 }
+            'aadhaar': { fx: 4.8, fy: 67.1, bx: 51.5, by: 67.1, zoom: 18.2 },
+            'pan':     { fx: 5.0, fy: 70.0, bx: 55.0, by: 70.0, zoom: 18.2 }, // Needs final calibration
+            'ayushman':{ fx: 4.5, fy: 12.0, bx: 51.0, by: 12.0, zoom: 18.2 }
         };
 
         const slots = {
@@ -81,26 +84,30 @@
             ctx.fillStyle = '#ffffff';
             ctx.fillRect(0, 0, A4_W, A4_H);
             ctx.save();
-            if (isMirrored) { ctx.translate(A4_W, 0); ctx.scale(-1, 1); }
+            
+            if (isMirrored) { 
+                ctx.translate(A4_W, 0); 
+                ctx.scale(-1, 1); 
+            }
 
             for (let i = 1; i <= 5; i++) {
                 const y = START_Y + (i - 1) * (CARD_H + GAP_Y);
                 const fx = START_X, bx = START_X + CARD_W + GAP_X;
 
-                // Draw outlines
+                // Draw outlines for visual guides
                 ctx.strokeStyle = '#cccccc'; ctx.lineWidth = 4; ctx.setLineDash([15, 15]);
                 ctx.strokeRect(fx, y, CARD_W, CARD_H);
                 ctx.strokeRect(bx, y, CARD_W, CARD_H);
                 ctx.setLineDash([]);
 
-                // Draw cropped images
+                // Draw cropped front and back images
                 if (slots[i].front) ctx.drawImage(slots[i].front, fx, y, CARD_W, CARD_H);
                 if (slots[i].back) ctx.drawImage(slots[i].back, bx, y, CARD_W, CARD_H);
             }
             ctx.restore();
         }
 
-        // Generate UI for 5 slots
+        // Generate UI for 5 upload slots
         const container = document.getElementById('slots-container');
         for (let i = 1; i <= 5; i++) {
             container.innerHTML += `
@@ -134,13 +141,13 @@
                             <span>Front ↔</span>
                             <input type="range" id="fx-${i}" min="0" max="20" step="0.1" oninput="applyCrop(${i})">
                             <span>↕</span>
-                            <input type="range" id="fy-${i}" min="50" max="90" step="0.1" oninput="applyCrop(${i})">
+                            <input type="range" id="fy-${i}" min="0" max="90" step="0.1" oninput="applyCrop(${i})">
                         </div>
                         <div class="slider-row">
                             <span>Back ↔</span>
                             <input type="range" id="bx-${i}" min="40" max="70" step="0.1" oninput="applyCrop(${i})">
                             <span>↕</span>
-                            <input type="range" id="by-${i}" min="50" max="90" step="0.1" oninput="applyCrop(${i})">
+                            <input type="range" id="by-${i}" min="0" max="90" step="0.1" oninput="applyCrop(${i})">
                         </div>
                         <div class="slider-row">
                             <span>Zoom 🔍</span>
@@ -149,7 +156,6 @@
                     </div>
                 </div>
             `;
-            // Set initial slider values silently
             setTimeout(() => resetSliders(i), 100); 
         }
 
@@ -179,19 +185,19 @@
                 const pdf = await pdfjsLib.getDocument({ data: arrayBuffer, password: pass }).promise;
                 const page = await pdf.getPage(1);
                 
-                // Render at very high resolution to preserve small text quality
+                // Render at very high resolution to preserve small text quality (4x scale)
                 const viewport = page.getViewport({ scale: 4.0 });
                 const pdfCanvas = document.createElement('canvas');
                 pdfCanvas.width = viewport.width;
                 pdfCanvas.height = viewport.height;
                 await page.render({ canvasContext: pdfCanvas.getContext('2d'), viewport: viewport }).promise;
 
-                // Save PDF to memory and reveal sliders
+                // Save full PDF to memory and reveal fine-tune sliders
                 slots[slot].fullPdf = pdfCanvas;
                 document.getElementById(`sliders-${slot}`).style.display = 'block';
                 
                 status.style.color = '#10b981';
-                status.innerText = "Success! Use sliders below to pinpoint crop.";
+                status.innerText = "Success! Nudge sliders if needed.";
                 
                 applyCrop(slot);
 
@@ -206,18 +212,18 @@
             if (!slots[slot].fullPdf) return;
             const pdfCanvas = slots[slot].fullPdf;
             
-            // Get current slider values as percentages
+            // Get current slider values as percentages of the A4 page
             const fx = parseFloat(document.getElementById(`fx-${slot}`).value) / 100;
             const fy = parseFloat(document.getElementById(`fy-${slot}`).value) / 100;
             const bx = parseFloat(document.getElementById(`bx-${slot}`).value) / 100;
             const by = parseFloat(document.getElementById(`by-${slot}`).value) / 100;
             const zoom = parseFloat(document.getElementById(`zoom-${slot}`).value) / 100;
 
-            // Calculate exact crop box based on perfect CR80 ratio (1.5909 : 1)
+            // Calculate exact crop box based on perfect CR80 ratio (1.5909 Width : 1 Height)
             const cropH = zoom * pdfCanvas.height;
             const cropW = cropH * 1.5909; 
 
-            // Extract Front
+            // Extract Front Side
             const frontCanvas = document.createElement('canvas');
             frontCanvas.width = cropW; frontCanvas.height = cropH;
             frontCanvas.getContext('2d').drawImage(
@@ -226,7 +232,7 @@
                 0, 0, cropW, cropH
             );
             
-            // Extract Back
+            // Extract Back Side
             const backCanvas = document.createElement('canvas');
             backCanvas.width = cropW; backCanvas.height = cropH;
             backCanvas.getContext('2d').drawImage(
@@ -235,12 +241,13 @@
                 0, 0, cropW, cropH
             );
 
+            // Store in memory and update display
             slots[slot].front = frontCanvas;
             slots[slot].back = backCanvas;
             drawLayout();
         }
 
-        // Button Controls
+        // Handle Mirror Mode Toggle
         document.getElementById('btn-mirror').addEventListener('click', (e) => {
             isMirrored = !isMirrored;
             e.target.classList.toggle('active');
@@ -248,6 +255,7 @@
             drawLayout();
         });
 
+        // Handle Download Action
         document.getElementById('btn-download').addEventListener('click', () => {
             const link = document.createElement('a');
             link.download = isMirrored ? 'PVC_A4_Mirrored.jpg' : 'PVC_A4_Standard.jpg';
@@ -255,6 +263,7 @@
             link.click();
         });
 
+        // Initial empty canvas render
         drawLayout();
     </script>
 </body>
