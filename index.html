@@ -30,7 +30,7 @@ button,input,select{font:inherit}.app{height:100vh;display:grid;grid-template-co
 <body>
 <div class="app">
   <aside class="side">
-    <div class="brand"><h1>PVC Card Maker <span>PRO</span></h1><p>Template-aware government ID processing • CR80 • A4 duplex</p></div>
+    <div class="brand"><h1>PVC Card Maker <span>PRO</span></h1><p>Template-aware government ID processing • CR80 • A4 duplex • Aadhaar • ABHA • e-Ration • Ayushman</p></div>
     <div class="toolbar"><button class="btn primary" id="addBtn">＋ Add PDF</button><button class="btn softbtn" id="clearBtn">Clear All</button><button class="btn graybtn" id="printBtn">Print</button></div>
     <label class="drop" id="drop"><strong>Drop PDF here</strong><small>or click to choose a government ID PDF</small></label>
     <input id="fileInput" type="file" accept="application/pdf,.pdf" multiple>
@@ -38,7 +38,7 @@ button,input,select{font:inherit}.app{height:100vh;display:grid;grid-template-co
     <div class="files"><div class="ready" id="ready">Ready</div><div id="slots"></div></div>
   </aside>
   <main class="workspace">
-    <div class="topbar"><div class="meta">A4 • <b>300 DPI</b> • <b>85.6 × 54 mm</b> PVC • <b>2 × 5 cards</b></div><div class="viewtools"><button class="iconbtn" id="minus">−</button><div class="zoomlabel" id="zoomLabel">Fit</div><button class="iconbtn" id="plus">＋</button><button class="btn graybtn" id="fitBtn">Fit</button></div></div>
+    <div class="topbar"><div class="meta">A4 • <b>300 DPI</b> • <b>86 × 54 mm</b> PVC • <b>2 × 5 cards</b></div><div class="viewtools"><button class="iconbtn" id="minus">−</button><div class="zoomlabel" id="zoomLabel">Fit</div><button class="iconbtn" id="plus">＋</button><button class="btn graybtn" id="fitBtn">Fit</button></div></div>
     <div class="stage" id="stage"><div class="fabrow"><button class="iconbtn" id="mirrorBtn" title="Mirror sheet horizontally">↔</button></div><div class="sheetwrap" id="sheetwrap"><canvas class="sheet" id="sheet" width="2480" height="3508"></canvas></div></div>
   </main>
 </div>
@@ -51,7 +51,7 @@ button,input,select{font:inherit}.app{height:100vh;display:grid;grid-template-co
       <div class="modalgrid">
         <div>
           <div class="smalllabel">Source PDF • detected boundaries</div>
-          <div class="sourcebox"><div class="sourcewrap" id="sourceWrap"><canvas class="sourcecanvas" id="sourcePreview"></canvas><div class="crop-overlay" id="cropOverlay"></div></div><div class="sourceactions"><button class="btn softbtn" id="editFrontBtn">Edit Front</button><button class="btn softbtn" id="editBackBtn">Edit Back</button><span class="edithelp">Drag a box to move • drag a corner to resize</span></div><div class="legend"><span class="dot"></span> Blue = Front • Green = Back • CR80 ratio locked</div></div>
+          <div class="sourcebox"><div class="sourcewrap" id="sourceWrap"><canvas class="sourcecanvas" id="sourcePreview"></canvas><div class="crop-overlay" id="cropOverlay"></div></div><div class="sourceactions"><button class="btn softbtn" id="editFrontBtn">Edit Front</button><button class="btn softbtn" id="editBackBtn">Edit Back</button><span class="edithelp">Drag a box to move • drag a corner to resize</span></div><div class="legend"><span class="dot"></span> Blue = Front • Green = Back • CR80 output • Drag to adjust</div></div>
         </div>
         <div>
           <div class="previewgrid"><div class="previewbox"><h3>FRONT</h3><canvas id="frontPreview"></canvas></div><div class="previewbox"><h3>BACK</h3><canvas id="backPreview"></canvas></div></div>
@@ -64,7 +64,7 @@ button,input,select{font:inherit}.app{height:100vh;display:grid;grid-template-co
               <div class="range"><label>Height</label><input id="adjH" type="range" min="-3" max="3" step=".1" value="0"></div>
             </div>
           </div>
-          <div class="note" id="modalNote">The crop is generated from the document template, not from the surrounding PDF whitespace. Review it before applying.</div>
+          <div class="note" id="modalNote">The crop uses a calibrated document template first, then normalizes to CR80. Review the source boxes and front/back previews before applying.</div>
         </div>
       </div>
     </div>
@@ -92,52 +92,137 @@ const sheet=$('sheet'),ctx=sheet.getContext('2d');const A4W=2480,A4H=3508,CARD_W
 function drawSheet(){ctx.clearRect(0,0,A4W,A4H);ctx.fillStyle='#fff';ctx.fillRect(0,0,A4W,A4H);ctx.save();if(mirror){ctx.translate(A4W,0);ctx.scale(-1,1)}for(let i=0;i<5;i++){const y=TOP+i*(CARD_H+GAP_Y),fx=LEFT,bx=LEFT+CARD_W+GAP_X;const c=cards[i];if(c?.front)ctx.drawImage(c.front,fx,y,CARD_W,CARD_H);if(c?.back)ctx.drawImage(c.back,bx,y,CARD_W,CARD_H);ctx.strokeStyle='#b9c5d4';ctx.lineWidth=2;ctx.setLineDash([10,10]);ctx.strokeRect(fx,y,CARD_W,CARD_H);ctx.strokeRect(bx,y,CARD_W,CARD_H);ctx.setLineDash([])}ctx.restore()}
 
 defaultProfiles={};
-function renderSlots(){slotsEl.innerHTML='';for(let i=0;i<5;i++){const c=cards[i];const el=document.createElement('div');el.className='slot';const readyClass=c?.front?'good':'';const label=c?.front?'READY':'EMPTY';el.innerHTML=`<div class="slothead"><b>Card ${i+1}</b><span class="pill ${readyClass}">${label}</span></div><div class="grid2"><div class="field"><label>Document</label><select class="doc"><option value="auto">Auto detect</option><option value="aadhaar">e-Aadhaar</option><option value="pan">e-PAN</option><option value="ayushman">Ayushman</option></select></div><div class="field"><label>Password</label><input class="pass" type="password" placeholder="PDF password"></div></div><div class="status ${c?.front?'good':''}">${c?.status||'Waiting for PDF'}</div><details class="settings"><summary>Advanced crop correction</summary><div class="adjustgrid"><div class="range"><label>Horizontal</label><input data-k="x" type="range" min="-4" max="4" step=".1" value="0"></div><div class="range"><label>Vertical</label><input data-k="y" type="range" min="-4" max="4" step=".1" value="0"></div><div class="range"><label>Width</label><input data-k="w" type="range" min="-3" max="3" step=".1" value="0"></div><div class="range"><label>Height</label><input data-k="h" type="range" min="-3" max="3" step=".1" value="0"></div></div></details><div class="slottools"><button class="btn softbtn mini review">Review crop</button><button class="btn graybtn mini remove">Remove</button></div>`;el.querySelector('.doc').value=c?.job?.docOverride||'auto';el.querySelector('.review').onclick=()=>{if(cards[i]?.job)showCropPreview(cards[i].job)};el.querySelector('.remove').onclick=()=>{cards.splice(i,1);drawSheet();renderSlots()};el.querySelectorAll('[data-k]').forEach(inp=>inp.oninput=()=>{if(cards[i]?.job){cards[i].job.adjust[inp.dataset.k]=parseFloat(inp.value);rebuildJobCrop(cards[i].job);drawSheet();}});slotsEl.appendChild(el)}}
+function renderSlots(){slotsEl.innerHTML='';for(let i=0;i<5;i++){const c=cards[i];const el=document.createElement('div');el.className='slot';const readyClass=c?.front?'good':'';const label=c?.front?'READY':'EMPTY';el.innerHTML=`<div class="slothead"><b>Card ${i+1}</b><span class="pill ${readyClass}">${label}</span></div><div class="grid2"><div class="field"><label>Document</label><select class="doc"><option value="auto">Auto detect</option><option value="aadhaar">e-Aadhaar</option><option value="abha">ABHA Card</option><option value="eration">e-Ration Card</option><option value="pan">e-PAN</option><option value="ayushman">Ayushman</option></select></div><div class="field"><label>Password</label><input class="pass" type="password" placeholder="PDF password"></div></div><div class="status ${c?.front?'good':''}">${c?.status||'Waiting for PDF'}</div><details class="settings"><summary>Advanced crop correction</summary><div class="adjustgrid"><div class="range"><label>Horizontal</label><input data-k="x" type="range" min="-4" max="4" step=".1" value="0"></div><div class="range"><label>Vertical</label><input data-k="y" type="range" min="-4" max="4" step=".1" value="0"></div><div class="range"><label>Width</label><input data-k="w" type="range" min="-3" max="3" step=".1" value="0"></div><div class="range"><label>Height</label><input data-k="h" type="range" min="-3" max="3" step=".1" value="0"></div></div></details><div class="slottools"><button class="btn softbtn mini review">Review crop</button><button class="btn graybtn mini remove">Remove</button></div>`;el.querySelector('.doc').value=c?.job?.docOverride||'auto';el.querySelector('.doc').onchange=()=>{if(cards[i]?.job){cards[i].job.docOverride=el.querySelector('.doc').value;cards[i].job.det=detectDocument(cards[i].job.render.canvas,cards[i].job.docOverride,cards[i].job.render.text||'',cards[i].job.render.pages||[]);if(cards[i].job.det.twoPage&&cards[i].job.render.pages?.length>1){const p1=cards[i].job.render.pages[0].canvas,p2=cards[i].job.render.pages[1].canvas,gap=cards[i].job.det.gap||Math.max(20,Math.round(p1.height*.035));const comp=document.createElement('canvas');comp.width=Math.max(p1.width,p2.width);comp.height=p1.height+gap+p2.height;const cc=comp.getContext('2d');cc.fillStyle='#fff';cc.fillRect(0,0,comp.width,comp.height);cc.drawImage(p1,0,0);cc.drawImage(p2,0,p1.height+gap);cards[i].job.render.sourceCanvas=comp}else{cards[i].job.render.sourceCanvas=cards[i].job.render.canvas}cards[i].job.detBase=cloneDet(cards[i].job.det);cards[i].job.adjust={x:0,y:0,w:0,h:0};rebuildJobCrop(cards[i].job);cards[i].status=`${cards[i].job.det.type} detected • template updated`;drawSheet();renderSlots();showCropPreview(cards[i].job)}};el.querySelector('.review').onclick=()=>{if(cards[i]?.job)showCropPreview(cards[i].job)};el.querySelector('.remove').onclick=()=>{cards.splice(i,1);drawSheet();renderSlots()};el.querySelectorAll('[data-k]').forEach(inp=>inp.oninput=()=>{if(cards[i]?.job){cards[i].job.adjust[inp.dataset.k]=parseFloat(inp.value);rebuildJobCrop(cards[i].job);drawSheet();}});slotsEl.appendChild(el)}}
 
 function pageBorderLines(c){const im=c.getContext('2d').getImageData(0,0,c.width,c.height).data,w=c.width,h=c.height;function colScore(x){let n=0;for(let y=0;y<h;y+=2){const i=(y*w+x)*4;if(im[i]<75&&im[i+1]<75&&im[i+2]<75)n++}return n}function rowScore(y){let n=0;for(let x=0;x<w;x+=2){const i=(y*w+x)*4;if(im[i]<75&&im[i+1]<75&&im[i+2]<75)n++}return n}let lx=0,rx=w-1;for(let x=0;x<Math.min(280,w);x++)if(colScore(x)>h*.35){lx=x;break}for(let x=w-1;x>Math.max(w-280,0);x--)if(colScore(x)>h*.35){rx=x;break}let center=w/2;let best=0,bscore=0;for(let x=Math.floor(w*.42);x<Math.ceil(w*.58);x++)if(colScore(x)>bscore){bscore=colScore(x);best=x}if(best===0)best=center;let top=0,bottom=h-1;for(let y=0;y<Math.min(400,h);y++)if(rowScore(y)>w*.35){top=y;break}for(let y=h-1;y>Math.max(h-400,0);y--)if(rowScore(y)>w*.35){bottom=y;break}return{lx,rx,center:best,top,bottom}}
 function rowSignals(c){const w=c.width,h=c.height,im=c.getContext('2d').getImageData(0,0,w,h).data;const dark=new Uint32Array(h),red=new Uint32Array(h);for(let y=0;y<h;y+=2){for(let x=0;x<w;x+=2){const i=(y*w+x)*4,r=im[i],g=im[i+1],b=im[i+2];if(r<95&&g<95&&b<95)dark[y]++;if(r>150&&r>g*1.25&&r>b*1.15)red[y]++}}return{dark,red}}
 function clustersAbove(arr,threshold){const out=[];let s=-1;for(let y=0;y<arr.length;y+=2){if(arr[y]>=threshold){if(s<0)s=y}else if(s>=0){out.push([s,y-2]);s=-1}}if(s>=0)out.push([s,arr.length-2]);return out}
 function detectAadhaar(c){
   const w=c.width,h=c.height;
-  // Calibrated to the common one-page e-Aadhaar layout used by the supplied sample:
-  // lower-left = front, lower-right = back. Ratios remain stable when rendered at another DPI.
+  // Calibrated to the supplied one-page e-Aadhaar sample:
+  // lower-left panel = front, lower-right panel = back.
   const front={x:w*0.07824,y:h*0.72227,w:w*0.41412,h:h*0.20455};
   const back ={x:w*0.50647,y:h*0.72227,w:w*0.41471,h:h*0.20455};
-  return {type:'e-Aadhaar',confidence:.99,front,back,source:'Aadhaar one-page template (calibrated)'};
+  return {type:'e-Aadhaar',confidence:.99,front,back,source:'Aadhaar one-page template (calibrated)',mode:'stretch'};
 }
-function fallbackAadhaar(c){const b=pageBorderLines(c),h=c.height;const y=Math.round(h*.705),hh=Math.round(h*.19);return{type:'e-Aadhaar',confidence:.72,front:{x:b.lx+2,y,w:b.center-b.lx-7,h:hh},back:{x:b.center+5,y,w:b.rx-b.center-7,h:hh},source:'Aadhaar calibrated fallback'}}
-function detectGeneric(c){const b=pageBorderLines(c);return{type:'Government ID',confidence:.55,front:{x:b.lx+8,y:Math.round(c.height*.66),w:b.center-b.lx-16,h:Math.round(c.height*.20)},back:{x:b.center+8,y:Math.round(c.height*.66),w:b.rx-b.center-16,h:Math.round(c.height*.20)},source:'Generic lower-panel fallback'}}
-function detectDocument(c,override='auto'){if(override==='aadhaar')return detectAadhaar(c)||fallbackAadhaar(c);if(override==='pan'||override==='ayushman')return detectGeneric(c);return detectAadhaar(c)||detectGeneric(c)}
+function detectABHA(c){
+  const w=c.width,h=c.height;
+  // Supplied ABHA sample: two stacked card faces, one card per half.
+  // Use the complete printed card panel and let cropCover make the final CR80 trim.
+  const front={x:w*0.02043,y:h*0.01736,w:w*0.95914,h:h*0.47396};
+  const back ={x:w*0.02043,y:h*0.50694,w:w*0.95914,h:h*0.47656};
+  return {type:'ABHA Card',confidence:.99,front,back,source:'ABHA two-panel template (calibrated)',mode:'stretch'};
+}
+function detectERation(c){
+  const w=c.width,h=c.height;
+  // Supplied West Bengal e-Ration sample: the actual PVC faces are the two
+  // blue rounded-rectangle cards at the bottom of the A4 page.
+  const front={x:w*0.09076,y:h*0.79216,w:w*0.39496,h:h*0.16746};
+  const back ={x:w*0.51933,y:h*0.79216,w:w*0.39496,h:h*0.16746};
+  return {type:'e-Ration Card',confidence:.99,front,back,source:'West Bengal e-Ration lower-card template (calibrated)',mode:'stretch'};
+}
+function detectAyushman(c,pages){
+  // Supplied Ayushman sample is a true two-page document:
+  // page 1 = member card/front, page 2 = information/back.
+  // Keep the complete page artwork and normalize only at the final PVC output stage.
+  const p1=(pages&&pages[0]?.canvas)||c, p2=(pages&&pages[1]?.canvas)||p1;
+  const gap=Math.max(20,Math.round(p1.height*0.035));
+  const front={x:0,y:0,w:p1.width,h:p1.height};
+  const back ={x:0,y:p1.height+gap,w:p2.width,h:p2.height};
+  return {type:'Ayushman Card',confidence:1,front,back,source:'Ayushman two-page template (calibrated)',mode:'stretch',twoPage:true,gap};
+}
+function fallbackAadhaar(c){const b=pageBorderLines(c),h=c.height;const y=Math.round(h*.705),hh=Math.round(h*.19);return{type:'e-Aadhaar',confidence:.72,front:{x:b.lx+2,y,w:b.center-b.lx-7,h:hh},back:{x:b.center+5,y,w:b.rx-b.center-7,h:hh},source:'Aadhaar calibrated fallback',mode:'stretch'}}
+function detectGeneric(c){const b=pageBorderLines(c);return{type:'Government ID',confidence:.55,front:{x:b.lx+8,y:Math.round(c.height*.66),w:b.center-b.lx-16,h:Math.round(c.height*.20)},back:{x:b.center+8,y:Math.round(c.height*.66),w:b.rx-b.center-16,h:Math.round(c.height*.20)},source:'Generic lower-panel fallback',mode:'stretch'}}
+function detectDocument(c,override='auto',text='',pages=[]){
+  const t=String(text||'').toLowerCase();
+  if(override==='aadhaar')return detectAadhaar(c)||fallbackAadhaar(c);
+  if(override==='abha')return detectABHA(c);
+  if(override==='eration')return detectERation(c);
+  if(override==='ayushman')return detectAyushman(c,pages);
+  if(override==='pan')return detectGeneric(c);
+  if(/ayushman bharat|pradhan mantri jan arogya|pm-jay|ayushman card/.test(t))return detectAyushman(c,pages);
+  if(/ayushman bharat health account|\babha\b|abha address|abha number/.test(t))return detectABHA(c);
+  if(/e-ration card|digital ration card|department of food.*supplies|food & supplies/.test(t))return detectERation(c);
+  if(/aadhaar|uidai|unique identification authority/.test(t))return detectAadhaar(c)||fallbackAadhaar(c);
+  const visual=estimateGovernmentBand(c);
+  if(visual==='abha')return detectABHA(c);
+  if(visual==='eration')return detectERation(c);
+  if(visual==='ayushman')return detectAyushman(c,pages);
+  return detectGeneric(c);
+}
+function estimateGovernmentBand(c){
+  const im=c.getContext('2d').getImageData(0,0,c.width,c.height).data,w=c.width,h=c.height;
+  let orange=0,blue=0,total=0,step=Math.max(1,Math.floor(Math.min(w,h)/500));
+  for(let y=0;y<Math.min(h,Math.floor(h*.32));y+=step*2){
+    for(let x=0;x<w;x+=step*2){
+      const i=(y*w+x)*4,r=im[i],g=im[i+1],b=im[i+2];
+      if(r>180&&g>75&&g<190&&b<80)orange++;
+      if(b>120&&b>r*1.25&&b>g*.95&&r<110)blue++;
+      total++;
+    }
+  }
+  if(orange>total*.05 && w/h>1.6)return 'ayushman';
+  if(blue>total*.05)return 'abha';
+  return null;
+}
+function estimateBlueBand(c){
+  const im=c.getContext('2d').getImageData(0,0,c.width,c.height).data,w=c.width,h=c.height;
+  let topBlue=0, lowerBlue=0, samples=0;
+  const step=Math.max(1,Math.floor(Math.min(w,h)/700));
+  for(let y=0;y<h;y+=step*2){
+    for(let x=0;x<w;x+=step*2){
+      const i=(y*w+x)*4,r=im[i],g=im[i+1],b=im[i+2];
+      const isDarkBlue=(b>110 && b>r*1.15 && b>g*0.95 && r<90);
+      const isLightBlue=(b>170 && g>130 && b>r*1.15 && r<170);
+      if(isDarkBlue && y<h*.35) topBlue++;
+      if(isLightBlue && y>h*.65) lowerBlue++;
+      samples++;
+    }
+  }
+  if(topBlue>samples*.025)return 'abha';
+  if(lowerBlue>samples*.025)return 'eration';
+  return null;
+}
 function cloneRect(r){return {x:r.x,y:r.y,w:r.w,h:r.h}}
-function cloneDet(d){return {type:d.type,confidence:d.confidence,front:cloneRect(d.front),back:cloneRect(d.back),source:d.source}}
+function cloneDet(d){return {type:d.type,confidence:d.confidence,front:cloneRect(d.front),back:cloneRect(d.back),source:d.source,mode:d.mode||'cover',twoPage:!!d.twoPage,gap:d.gap||0}}
 function adjustRect(r,a,c){
   const dx=(a.x||0)/100*c.width,dy=(a.y||0)/100*c.height,dw=(a.w||0)/100*c.width,dh=(a.h||0)/100*c.height;
   return{x:r.x+dx-dw/2,y:r.y+dy-dh/2,w:r.w+dw,h:r.h+dh}
 }
 function clampRect(r,c){
-  const minW=Math.max(80,c.width*.08), minH=minW/1.585185;
+  const minW=Math.max(80,c.width*.08);
   r.w=Math.max(minW,Math.min(c.width,r.w)); r.h=r.w/1.585185;
   r.x=Math.max(0,Math.min(c.width-r.w,r.x)); r.y=Math.max(0,Math.min(c.height-r.h,r.y));
   return r;
 }
-function cropCover(src,r){
-  r=clampRect({...r},src);
+function cropCover(src,r,mode='cover'){
   const out=document.createElement('canvas');out.width=CARD_W;out.height=CARD_H;
   const o=out.getContext('2d');o.imageSmoothingEnabled=true;o.imageSmoothingQuality='high';
+  if(mode==='stretch'){
+    const rr={...r};
+    rr.x=Math.max(0,Math.min(src.width-1,rr.x)); rr.y=Math.max(0,Math.min(src.height-1,rr.y));
+    rr.w=Math.max(1,Math.min(src.width-rr.x,rr.w)); rr.h=Math.max(1,Math.min(src.height-rr.y,rr.h));
+    o.drawImage(src,rr.x,rr.y,rr.w,rr.h,0,0,CARD_W,CARD_H);
+    return out;
+  }
+  r=clampRect({...r},src);
   o.drawImage(src,r.x,r.y,r.w,r.h,0,0,CARD_W,CARD_H);return out;
 }
 function rebuildJobCrop(job){
   const a=job.adjust||{x:0,y:0,w:0,h:0};
-  const f=adjustRect(job.det.front,a,job.render.canvas),b=adjustRect(job.det.back,a,job.render.canvas);
-  job.previewFront=cropCover(job.render.canvas,f);job.previewBack=cropCover(job.render.canvas,b);
+  const src=job.render.sourceCanvas||job.render.canvas;
+  const f=adjustRect(job.det.front,a,src),b=adjustRect(job.det.back,a,src);
+  const mode=job.det.mode||'cover';
+  job.previewFront=cropCover(src,f,mode);job.previewBack=cropCover(src,b,mode);
   cards[job.index].front=job.previewFront;cards[job.index].back=job.previewBack;
 }
 function previewSource(c,det,activeSide){
-  const p=$('sourcePreview'),wrap=$('sourceWrap'),scale=Math.min(1,900/c.width);
-  p.width=Math.round(c.width*scale);p.height=Math.round(c.height*scale);
+  const p=$('sourcePreview'),wrap=$('sourceWrap'),src=activeJob?.render?.sourceCanvas||c;
+  const scale=Math.min(1,900/src.width);
+  p.width=Math.round(src.width*scale);p.height=Math.round(src.height*scale);
   p.style.width=p.width+'px';p.style.height=p.height+'px';
   wrap.style.width=p.width+'px';wrap.style.height=p.height+'px';
-  const x=p.getContext('2d');x.clearRect(0,0,p.width,p.height);x.drawImage(c,0,0,p.width,p.height);
+  const x=p.getContext('2d');x.clearRect(0,0,p.width,p.height);x.drawImage(src,0,0,p.width,p.height);
   renderCropBoxes(det,scale,activeSide);
 }
 function renderCropBoxes(det,scale,activeSide){
@@ -191,7 +276,7 @@ function showCropPreview(job){
   $('modalTitle').textContent=`Crop Review — Card ${job.index+1} — ${job.det.type}`;
   $('modalSub').textContent=`${job.det.source} • ${Math.round(job.det.confidence*100)}% confidence`;
   previewSource(job.render.canvas,job.det,activeEditSide);updateModalPreviews();
-  $('modalNote').textContent='Drag either crop box to move it. Drag a corner handle to resize it while keeping the CR80 ratio. The front and back boxes are edited independently.';
+  $('modalNote').textContent=job.det.twoPage?'Ayushman template: page 1 is the front and page 2 is the back. Drag either box to reposition; corner handles resize while keeping the CR80 output ratio.':'Drag either crop box to move it. Drag a corner handle to resize it while keeping the CR80 ratio. The front and back boxes are edited independently.';
   $('modal').classList.add('open');
 }
 function bindModal(){
@@ -206,14 +291,14 @@ function bindModal(){
     syncModalSliders(activeJob);rebuildJobCrop(activeJob);previewSource(activeJob.render.canvas,activeJob.det,activeEditSide);updateModalPreviews();drawSheet();
   };
   $('reDetectBtn').onclick=()=>{
-    if(!activeJob)return;activeJob.det=detectDocument(activeJob.render.canvas,activeJob.docOverride||'auto');activeJob.detBase=cloneDet(activeJob.det);activeJob.adjust={x:0,y:0,w:0,h:0};showCropPreview(activeJob)
+    if(!activeJob)return;activeJob.det=detectDocument(activeJob.render.canvas,activeJob.docOverride||'auto',activeJob.render.text||'',activeJob.render.pages||[]);if(activeJob.det.twoPage&&activeJob.render.pages?.length>1){const p1=activeJob.render.pages[0].canvas,p2=activeJob.render.pages[1].canvas,gap=activeJob.det.gap||Math.max(20,Math.round(p1.height*.035));const comp=document.createElement('canvas');comp.width=Math.max(p1.width,p2.width);comp.height=p1.height+gap+p2.height;const cc=comp.getContext('2d');cc.fillStyle='#fff';cc.fillRect(0,0,comp.width,comp.height);cc.drawImage(p1,0,0);cc.drawImage(p2,0,p1.height+gap);activeJob.render.sourceCanvas=comp}else{activeJob.render.sourceCanvas=activeJob.render.canvas}activeJob.detBase=cloneDet(activeJob.det);activeJob.adjust={x:0,y:0,w:0,h:0};showCropPreview(activeJob)
   };
   $('closeModal').onclick=()=>{$('modal').classList.remove('open')};
   $('useBtn').onclick=()=>{$('modal').classList.remove('open');if(activeJob){cards[activeJob.index].front=activeJob.previewFront;cards[activeJob.index].back=activeJob.previewBack;cards[activeJob.index].status=`${activeJob.det.type} • crop manually reviewed and aligned`;drawSheet();renderSlots()}};
 }
 bindModal();
-async function loadPdf(file,password=''){progress.style.width='7%';const pdfjsLib=await ensurePdfJs();const data=new Uint8Array(await file.arrayBuffer());let pdf;try{const task=pdfjsLib.getDocument(password?{data,password}:{data});pdf=await task.promise}catch(e){if(e&&e.name==='PasswordException')throw{kind:'password',msg:(e.code===pdfjsLib.PasswordResponses.NEED_PASSWORD||!password)?'Password required':'Incorrect password'};try{const task=pdfjsLib.getDocument(password?{data,password,disableWorker:true}:{data,disableWorker:true});pdf=await task.promise}catch(e2){if(e2&&e2.name==='PasswordException')throw{kind:'password',msg:'Password required'};throw new Error((e2&&e2.message)||'Unable to read PDF')}}progress.style.width='35%';const page=await pdf.getPage(1);const base=page.getViewport({scale:1});const scale=Math.min(3.6,Math.max(2.5,2400/base.width));const vp=page.getViewport({scale});const c=document.createElement('canvas');c.width=Math.round(vp.width);c.height=Math.round(vp.height);await page.render({canvasContext:c.getContext('2d',{alpha:false}),viewport:vp}).promise;progress.style.width='85%';return{pdf,page,canvas:c,base,scale}}
-async function processFile(file,index,password=''){ready.textContent=`Opening ${file.name}…`;const render=await loadPdf(file,password);const docOverride='auto';const det=detectDocument(render.canvas,docOverride);const job={index,render,det,detBase:cloneDet(det),adjust:{x:0,y:0,w:0,h:0},file,docOverride};cards[index]={job,front:null,back:null,det,file,status:'PDF rendered • preparing crop'};rebuildJobCrop(job);cards[index].front=job.previewFront;cards[index].back=job.previewBack;cards[index].status=`${det.type} detected • front and back aligned automatically`;ready.textContent=`${file.name} ready • ${det.type}`;progress.style.width='100%';drawSheet();renderSlots();setTimeout(()=>progress.style.width='0',600);showCropPreview(job)}
+async function loadPdf(file,password=''){progress.style.width='7%';const pdfjsLib=await ensurePdfJs();const data=new Uint8Array(await file.arrayBuffer());let pdf;try{const task=pdfjsLib.getDocument(password?{data,password}:{data});pdf=await task.promise}catch(e){if(e&&e.name==='PasswordException')throw{kind:'password',msg:(e.code===pdfjsLib.PasswordResponses.NEED_PASSWORD||!password)?'Password required':'Incorrect password'};try{const task=pdfjsLib.getDocument(password?{data,password,disableWorker:true}:{data,disableWorker:true});pdf=await task.promise}catch(e2){if(e2&&e2.name==='PasswordException')throw{kind:'password',msg:'Password required'};throw new Error((e2&&e2.message)||'Unable to read PDF')}}progress.style.width='25%';const pages=[];const maxPages=Math.min(pdf.numPages,8);let textAll='';for(let n=1;n<=maxPages;n++){const page=await pdf.getPage(n);const base=page.getViewport({scale:1});const scale=Math.min(3.6,Math.max(2.5,2400/base.width));const vp=page.getViewport({scale});const c=document.createElement('canvas');c.width=Math.round(vp.width);c.height=Math.round(vp.height);await page.render({canvasContext:c.getContext('2d',{alpha:false}),viewport:vp}).promise;let text='';try{const tc=await page.getTextContent();text=tc.items.map(it=>it.str||'').join(' ')}catch(e){}textAll+=' '+text;pages.push({page,canvas:c,base,scale,text});progress.style.width=(25+Math.round((n/maxPages)*50))+'%'}return{pdf,pages,canvas:pages[0]?.canvas||null,base:pages[0]?.base||null,scale:pages[0]?.scale||1,text:textAll.trim()}}
+async function processFile(file,index,password=''){ready.textContent=`Opening ${file.name}…`;const render=await loadPdf(file,password);const docOverride=cards[index]?.docOverride||'auto';const det=detectDocument(render.canvas,docOverride,render.text,render.pages);if(det.twoPage&&render.pages.length>1){const p1=render.pages[0].canvas,p2=render.pages[1].canvas,gap=det.gap||Math.max(20,Math.round(p1.height*.035));const comp=document.createElement('canvas');comp.width=Math.max(p1.width,p2.width);comp.height=p1.height+gap+p2.height;const cc=comp.getContext('2d');cc.fillStyle='#fff';cc.fillRect(0,0,comp.width,comp.height);cc.drawImage(p1,0,0);cc.drawImage(p2,0,p1.height+gap);render.sourceCanvas=comp;render.sourcePages=[p1,p2]}else{render.sourceCanvas=render.canvas}const job={index,render,det,detBase:cloneDet(det),adjust:{x:0,y:0,w:0,h:0},file,docOverride};cards[index]={job,front:null,back:null,det,file,status:'PDF rendered • preparing crop',docOverride};rebuildJobCrop(job);cards[index].front=job.previewFront;cards[index].back=job.previewBack;cards[index].status=`${det.type} detected • front and back aligned automatically`;ready.textContent=`${file.name} ready • ${det.type}`;progress.style.width='100%';drawSheet();renderSlots();setTimeout(()=>progress.style.width='0',600);showCropPreview(job)}
 async function addFiles(files){for(const file of files){if(!file||!(file.type==='application/pdf'||file.name.toLowerCase().endsWith('.pdf'))){ready.textContent='Please choose a PDF file.';continue}if(cards.length>=5){alert('Five card slots are already full.');break}const index=cards.length;cards.push({status:'Reading PDF…',file});renderSlots();try{await processFile(file,index)}catch(e){if(e.kind==='password'){pendingPassword={file,index};openPasswordModal(e.msg)}else{cards[index]={file,status:`PDF error: ${e.message||'Unable to read PDF'}`};renderSlots();ready.textContent=`Could not process ${file.name}`;progress.style.width='0'}}}}
 drop.onclick=()=>fileInput.click();fileInput.onchange=async e=>{const files=[...e.target.files];e.target.value='';if(files.length)await addFiles(files)};['dragenter','dragover'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.add('active')}));['dragleave','drop'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.remove('active')}));drop.addEventListener('drop',e=>addFiles([...e.dataTransfer.files]));$('addBtn').onclick=()=>fileInput.click();$('clearBtn').onclick=()=>{cards=[];renderSlots();drawSheet();ready.textContent='Ready';progress.style.width='0'};
 function openPasswordModal(msg){$('passwordError').textContent=msg;$('passwordError').classList.remove('hidden');$('passwordInput').value='';$('passwordModal').classList.add('open');setTimeout(()=>$('passwordInput').focus(),50)}$('passwordCancel').onclick=()=>{$('passwordModal').classList.remove('open');pendingPassword=null};$('passwordOk').onclick=async()=>{if(!pendingPassword)return;const pw=$('passwordInput').value;try{$('passwordError').classList.add('hidden');$('passwordModal').classList.remove('open');await processFile(pendingPassword.file,pendingPassword.index,pw)}catch(e){if(e.kind==='password'){openPasswordModal(e.msg)}else{cards[pendingPassword.index]={file:pendingPassword.file,status:`PDF error: ${e.message||'Unable to read PDF'}`};renderSlots();ready.textContent='Could not process PDF'} }finally{pendingPassword=null}};$('passwordInput').addEventListener('keydown',e=>{if(e.key==='Enter')$('passwordOk').click()});
