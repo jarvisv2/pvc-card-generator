@@ -1,278 +1,610 @@
 <!doctype html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta name="description" content="Clearcut removes image backgrounds in your browser and exports transparent PNGs.">
-	<title>Clearcut - background removal, made simple</title>
-	<style>
-		@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap');
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PVC Card Maker Pro</title>
+<style>
+:root{--blue:#1769ff;--blue2:#0f59df;--ink:#10243d;--muted:#65768d;--line:#d9e2ee;--bg:#eef4fb;--panel:#fff;--soft:#f5f8fc;--good:#0a9b6f;--bad:#d92d20;--warn:#a96800;--shadow:0 14px 40px rgba(22,50,85,.10)}
+*{box-sizing:border-box}
+html,body{
+  height:100%;
+  margin:0;
+  font-family:Inter,Segoe UI,Arial,sans-serif;
+  color:var(--ink);
+  background:var(--bg);
+  overscroll-behavior:none
+}
+body{overflow:hidden}
+button,input,select{font:inherit}
 
-		:root {
-			--ink: #202322;
-			--muted: #717774;
-			--paper: #f7f7f3;
-			--white: #fff;
-			--lime: #d8f45a;
-			--lime-dark: #b7d538;
-			--line: #dedfd9;
-			--soft: #eceee8;
-			--shadow: 0 24px 70px rgba(31, 37, 32, .10);
-		}
+.app{
+  height:100vh;
+  display:grid;
+  grid-template-columns:370px minmax(0,1fr);
+  min-width:1180px
+}
 
-		* { box-sizing: border-box; }
-		body {
-			margin: 0;
-			color: var(--ink);
-			background: var(--paper);
-			font-family: Manrope, sans-serif;
-			min-width: 320px;
-		}
-		button, input { font: inherit; }
-		button { cursor: pointer; }
-		.shell { max-width: 1240px; margin: auto; padding: 0 32px; }
-		header {
-			height: 84px; display: flex; align-items: center; justify-content: space-between;
-			border-bottom: 1px solid var(--line);
-		}
-		.brand { display: flex; gap: 11px; align-items: center; font-weight: 800; letter-spacing: -.05em; font-size: 20px; }
-		.brand-mark { width: 25px; height: 25px; background: var(--lime); border-radius: 50%; position: relative; }
-		.brand-mark::after { content: ''; position: absolute; width: 9px; height: 9px; border: 2px solid var(--ink); border-radius: 50%; left: 6px; top: 6px; }
-		nav { display: flex; gap: 28px; align-items: center; font-size: 13px; font-weight: 700; }
-		nav a { color: inherit; text-decoration: none; }
-		.status { color: var(--muted); font-family: 'DM Mono', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: .08em; }
+.side{
+  background:#fff;
+  border-right:1px solid var(--line);
+  overflow:auto
+}
 
-		.hero { text-align: center; padding: 76px 0 46px; }
-		.eyebrow { color: #6c7c27; font: 500 11px 'DM Mono', monospace; text-transform: uppercase; letter-spacing: .16em; }
-		h1 { font-size: clamp(42px, 6vw, 76px); line-height: .98; letter-spacing: -.075em; max-width: 760px; margin: 18px auto 20px; }
-		h1 em { font-style: normal; color: #778920; }
-		.hero p { color: var(--muted); max-width: 480px; margin: auto; font-size: 16px; line-height: 1.6; }
+/* ── Product branding ───────────────────────────────────────────── */
+.brand{
+  padding:18px 20px 14px;
+  border-bottom:1px solid var(--line);
+  background:
+    linear-gradient(180deg,#ffffff 0%,#fbfcff 100%);
+}
 
-		.workspace { background: var(--white); border: 1px solid var(--line); border-radius: 10px; box-shadow: var(--shadow); overflow: hidden; }
-		.dropzone { min-height: 370px; margin: 12px; border: 1.5px dashed #bfc5b8; border-radius: 6px; display: grid; place-items: center; text-align: center; transition: .2s ease; }
-		.dropzone.dragging { border-color: #819a1e; background: #f5fadf; transform: scale(.995); }
-		.drop-inner { padding: 42px 20px; }
-		.upload-icon { width: 58px; height: 58px; margin: 0 auto 22px; border-radius: 50%; background: var(--lime); display: grid; place-items: center; font-size: 27px; font-weight: 500; }
-		.dropzone h2 { font-size: 20px; margin: 0 0 8px; letter-spacing: -.04em; }
-		.dropzone p { color: var(--muted); font-size: 13px; margin: 0 0 24px; }
-		.primary { background: var(--ink); color: var(--white); border: 0; border-radius: 5px; padding: 14px 21px; font-weight: 800; font-size: 13px; transition: .18s ease; }
-		.primary:hover { background: #414742; transform: translateY(-1px); }
-		.hint { margin-top: 15px !important; font: 10px 'DM Mono', monospace; text-transform: uppercase; letter-spacing: .08em; }
-		.privacy { border-top: 1px solid var(--line); padding: 14px 20px; display: flex; justify-content: center; gap: 8px; color: var(--muted); font-size: 11px; }
-		.privacy b { color: #5f7515; }
+.brand-title{
+  display:flex;
+  align-items:center;
+  width:100%;
+  min-height:30px;
+  gap:8px;
+}
 
-		.editor { display: none; }
-		.editor.active { display: block; }
-		.editor-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 16px 20px; border-bottom: 1px solid var(--line); }
-		.file-meta { display: flex; align-items: center; gap: 12px; min-width: 0; }
-		.file-meta strong { display: block; font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 310px; }
-		.file-meta span { color: var(--muted); font: 10px 'DM Mono', monospace; }
-		.ghost { background: transparent; color: var(--ink); border: 1px solid var(--line); border-radius: 5px; padding: 11px 14px; font-size: 12px; font-weight: 700; }
-		.editor-body { padding: 20px; display: grid; grid-template-columns: minmax(0, 1fr) 250px; gap: 20px; }
-		.preview { min-height: 430px; border-radius: 5px; overflow: hidden; display: grid; place-items: center; background-color: #f1f2ed; background-image: linear-gradient(45deg, #e0e2da 25%, transparent 25%), linear-gradient(-45deg, #e0e2da 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #e0e2da 75%), linear-gradient(-45deg, transparent 75%, #e0e2da 75%); background-size: 24px 24px; background-position: 0 0, 0 12px, 12px -12px, -12px 0; position: relative; }
-		.canvas-wrap { position: relative; width: min(92%, 760px); line-height: 0; filter: drop-shadow(0 14px 18px rgba(0,0,0,.12)); }
-		.canvas-wrap canvas { width: 100%; height: auto; display: block; }
-		#brushCanvas { position: absolute; inset: 0; cursor: crosshair; touch-action: none; }
-		.preview img { max-width: 92%; max-height: 430px; object-fit: contain; filter: drop-shadow(0 14px 18px rgba(0,0,0,.12)); }
-		.preview.loading::after { content: 'PROCESSING IMAGE'; position: absolute; inset: 0; display: grid; place-items: center; background: rgba(247,247,243,.76); font: 11px 'DM Mono', monospace; letter-spacing: .14em; }
-		.controls { border: 1px solid var(--line); border-radius: 5px; padding: 18px; align-self: start; }
-		.controls h3 { font-size: 13px; margin: 0 0 17px; }
-		.magic-tools { border-top: 1px solid var(--line); margin-top: 20px; padding-top: 16px; }
-		.magic-tools h4 { margin: 0 0 11px; font-size: 12px; }
-		.tool-row { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
-		.tool-button { border: 1px solid var(--line); background: #fafaf8; color: var(--ink); border-radius: 4px; padding: 9px 7px; font-size: 11px; font-weight: 800; }
-		.tool-button.active { background: var(--ink); border-color: var(--ink); color: var(--white); }
-		.selection-row { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 7px; }
-		.selection-row .tool-button { font-weight: 700; }
-		.selection-row .tool-button.active { background: #edf7bd; border-color: #b7d538; color: var(--ink); }
-		.brush-size { display: flex; align-items: center; gap: 8px; margin-top: 12px; color: var(--muted); font: 10px 'DM Mono', monospace; text-transform: uppercase; }
-		.brush-size input { flex: 1; accent-color: #819a1e; }
-		.brush-actions { display: flex; gap: 6px; margin-top: 10px; }
-		.brush-actions button { flex: 1; padding: 8px 4px; font-size: 10px; }
-		.tool-note { color: var(--muted); font-size: 10px; line-height: 1.45; margin: 10px 0 0; }
-		.smart-tolerance { display: none; }
-		.smart-tolerance.active { display: flex; }
-		.control-label { display: flex; justify-content: space-between; color: var(--muted); font: 10px 'DM Mono', monospace; text-transform: uppercase; letter-spacing: .06em; margin: 18px 0 8px; }
-		select { width: 100%; border: 1px solid var(--line); background: #fafaf8; border-radius: 4px; padding: 10px; color: var(--ink); font-size: 12px; }
-		.download { width: 100%; margin-top: 22px; background: var(--lime); color: var(--ink); border: 0; border-radius: 5px; padding: 14px 10px; font-weight: 800; font-size: 12px; }
-		.download:hover { background: var(--lime-dark); }
-		.note { color: var(--muted); font-size: 10px; line-height: 1.5; margin: 13px 0 0; }
-		footer { display: flex; justify-content: space-between; color: var(--muted); font: 10px 'DM Mono', monospace; padding: 25px 0 45px; text-transform: uppercase; letter-spacing: .06em; }
-		#error { display: none; color: #ad3c26; background: #fff0ec; border: 1px solid #f2c6ba; border-radius: 5px; padding: 12px; margin: 12px; font-size: 12px; }
-		@media (max-width: 700px) {
-			.shell { padding: 0 16px; } header { height: 70px; } nav a { display: none; }
-			.hero { padding: 54px 0 30px; } h1 { font-size: 48px; }
-			.dropzone { min-height: 330px; } .editor-body { grid-template-columns: 1fr; padding: 12px; }
-			.preview { min-height: 310px; } .preview img { max-height: 310px; }
-			.editor-toolbar { padding: 13px; } .file-meta strong { max-width: 170px; } footer { padding-bottom: 26px; }
-		}
-	</style>
+.brand h1{
+  margin:0;
+  padding:0;
+  color:#17345d;
+  font-size:27px;
+  line-height:30px;
+  font-weight:800;
+  letter-spacing:-1px;
+  white-space:nowrap;
+}
+
+.brand h1 .title-accent{
+  background:linear-gradient(90deg,#1769ff 0%,#4357ee 55%,#7c3aed 100%);
+  -webkit-background-clip:text;
+  background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+.brand h1 .pro{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  flex:0 0 auto;
+  height:19px;
+  padding:0 7px;
+  margin:0;
+  border-radius:6px;
+  color:#fff;
+  background:linear-gradient(135deg,#1769ff,#6846ee);
+  font-size:10px;
+  line-height:1;
+  font-weight:900;
+  letter-spacing:.45px;
+  -webkit-text-fill-color:#fff;
+  box-shadow:0 4px 12px rgba(82,78,238,.18);
+  white-space:nowrap;
+}
+
+.brand-social{
+  display:grid;
+  grid-template-columns:max-content 1px max-content;
+  align-items:center;
+  justify-content:start;
+  column-gap:10px;
+  width:100%;
+  min-height:20px;
+  margin-top:9px;
+  overflow:hidden;
+}
+
+.brand-social a{
+  display:inline-flex;
+  align-items:center;
+  justify-content:flex-start;
+  gap:6px;
+  width:max-content;
+  min-width:max-content;
+  flex:0 0 auto;
+  color:#66768b;
+  text-decoration:none;
+  font-size:11.5px;
+  font-weight:600;
+  line-height:18px;
+  letter-spacing:0;
+  white-space:nowrap;
+  transition:color .15s ease,transform .15s ease;
+}
+
+.brand-social a:hover{
+  color:#1769ff;
+  transform:translateY(-1px);
+}
+
+.brand-social svg{
+  display:block;
+  width:15px;
+  height:15px;
+  flex:0 0 15px;
+}
+
+.brand-social .instagram svg{
+  stroke:url(#igGradient);
+}
+
+.brand-social .github svg{
+  fill:#26364d;
+}
+
+.brand-social .divider{
+  display:block;
+  width:1px;
+  height:13px;
+  margin:0;
+  background:#dfe5ed;
+}
+
+.brand-social .brand-handle{
+  display:inline-block;
+  position:static;
+  font-family:Inter,Segoe UI,Arial,sans-serif;
+  font-size:11.5px;
+  font-weight:600;
+  line-height:18px;
+  letter-spacing:0;
+  white-space:nowrap;
+}
+
+@media(max-width:430px){
+  .brand{padding-left:16px;padding-right:16px}
+  .brand h1{font-size:24px}
+  .brand-social{column-gap:8px}
+  .brand-social .brand-handle{font-size:10.5px}
+}
+/* ───────────────────────────────────────────────────────────────── */
+
+.toolbar{display:flex;gap:8px;padding:12px 18px;border-bottom:1px solid var(--line)}.btn{border:0;border-radius:11px;padding:11px 15px;font-weight:700;cursor:pointer}.primary{background:var(--blue);color:#fff}.primary:hover{background:var(--blue2)}.softbtn{background:#edf4ff;color:#1554b8}.graybtn{background:#f2f5f8;color:#20324b}.danger{background:#fff0ee;color:#c42d24}.drop{display:block;margin:14px 18px 8px;border:2px dashed #8eb0db;border-radius:16px;padding:27px 16px;text-align:center;background:#fbfdff;cursor:pointer;transition:.15s}.drop.active,.drop:hover{background:#f3f8ff;border-color:#4e87eb}.drop strong{display:block;font-size:16px}.drop small{display:block;margin-top:7px;color:var(--muted)}#fileInput{display:none}.progress{height:5px;margin:0 18px;background:#e8edf4;border-radius:99px;overflow:hidden}.progress>i{display:block;height:100%;width:0;background:var(--blue);transition:width .18s}.files{padding:0 18px 25px}.ready{font-size:12px;color:var(--muted);padding:10px 4px}.slot{border:1px solid var(--line);border-radius:16px;padding:15px;margin:10px 0;background:#fff;box-shadow:0 3px 10px rgba(36,59,90,.04)}.slothead{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.slothead b{font-size:15px}.pill{font-size:10px;font-weight:800;padding:5px 9px;border-radius:99px;background:#eef2ff;color:#3558b8}.pill.good{background:#e6f8f1;color:#07835e}.pill.bad{background:#fff0ef;color:#c62d23}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:11px}.field label,.smalllabel{display:block;font-size:10px;font-weight:800;text-transform:uppercase;color:#61738b;margin-bottom:6px}.field select,.field input{width:100%;height:43px;border:1px solid #cbd8e7;border-radius:10px;padding:0 11px;font-size:14px;background:#fff;outline:none}.field input:focus,.field select:focus{border-color:#80a7f8;box-shadow:0 0 0 3px #1769ff12}.status{margin-top:12px;font-size:12px;color:var(--muted);line-height:1.45}.status.good{color:var(--good)}.status.bad{color:var(--bad)}.slotactions{display:flex;gap:8px;margin-top:11px}.mini{padding:8px 10px;border-radius:9px;font-size:12px}.slottools{display:flex;gap:8px;margin-top:11px}.slottools button{flex:1}.settings{margin-top:10px;border-top:1px solid var(--line);padding-top:10px}.settings summary{cursor:pointer;font-size:12px;font-weight:800;color:#52647c}.adjustgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.range label{font-size:10px;font-weight:800;color:#64748b;display:block}.range input{width:100%}.note{padding:10px 12px;border-radius:10px;background:#fff8e9;color:#875900;font-size:12px;line-height:1.4;margin-top:10px}.workspace{display:flex;flex-direction:column;min-width:0;min-height:0;height:100vh;overflow:hidden}.topbar{height:68px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 18px 0 22px}.meta{font-size:13px;color:var(--muted)}.meta b{color:var(--ink)}.viewtools{display:flex;align-items:center;gap:10px}.zoomlabel{font-size:12px;color:var(--muted);min-width:46px;text-align:center}.iconbtn{width:42px;height:42px;border:1px solid #d1dceb;background:#fff;border-radius:11px;font-weight:800;cursor:pointer}.stage{position:relative;overflow-x:auto;overflow-y:scroll;flex:1;min-height:0;min-width:0;padding:35px 35px 80px;background:#dfe9f5;scroll-behavior:auto;overscroll-behavior:contain;scrollbar-gutter:stable both-edges}.sheetwrap{position:relative;margin:0 auto;width:max-content;min-width:max-content;padding-bottom:25px}.sheet{display:block;background:#fff;box-shadow:0 18px 45px rgba(24,50,78,.18)}.fabrow{position:fixed;right:18px;top:14px;z-index:8;display:flex;gap:8px}.fabrow .on{background:#e9f2ff;color:#0e55c8;border-color:#b7cff7}.bottomhint{position:fixed;left:470px;bottom:15px;z-index:5;background:rgba(255,255,255,.9);border:1px solid var(--line);border-radius:9px;padding:7px 11px;font-size:11px;color:var(--muted)}
+.modal{position:fixed;inset:0;background:rgba(12,27,47,.52);display:none;align-items:center;justify-content:center;padding:20px;z-index:50}.modal.open{display:flex}.modalcard{background:#fff;border-radius:20px;max-width:1250px;width:100%;max-height:94vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 30px 85px rgba(12,30,55,.35)}.modalhead{padding:17px 22px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}.modalbody{padding:18px 20px;overflow:auto}.modalgrid{display:grid;grid-template-columns:1.05fr 1fr;gap:16px}.sourcebox{border:1px solid var(--line);border-radius:15px;background:#f5f8fc;padding:12px}.sourcewrap{position:relative;width:100%;line-height:0;background:#fff;border-radius:7px;overflow:hidden}
+.sourcecanvas{display:block;width:100%;height:auto;background:#fff;border-radius:7px}
+.crop-overlay{position:absolute;inset:0;pointer-events:none}
+.cropbox{position:absolute;border:2px solid #1769ff;background:rgba(23,105,255,.08);box-shadow:0 0 0 1px rgba(255,255,255,.9);pointer-events:auto;cursor:move;touch-action:none}
+.cropbox.backbox{border-color:#0a9b6f;background:rgba(10,155,111,.08)}
+.cropbox.active{box-shadow:0 0 0 2px #fff,0 0 0 4px #1769ff;z-index:3}
+.cropbox.backbox.active{box-shadow:0 0 0 2px #fff,0 0 0 4px #0a9b6f}
+.cropbox .tag{position:absolute;left:4px;top:4px;font:800 10px/1.2 Inter,Segoe UI,Arial,sans-serif;color:#fff;background:#1769ff;padding:4px 6px;border-radius:5px;pointer-events:none}
+.cropbox.backbox .tag{background:#0a9b6f}
+.handle{position:absolute;width:10px;height:10px;border:2px solid #fff;background:#1769ff;border-radius:2px;box-shadow:0 0 0 1px #1769ff;z-index:4}
+.cropbox.backbox .handle{background:#0a9b6f;box-shadow:0 0 0 1px #0a9b6f}
+.handle.tl{left:-6px;top:-6px;cursor:nwse-resize}.handle.tr{right:-6px;top:-6px;cursor:nesw-resize}
+.handle.bl{left:-6px;bottom:-6px;cursor:nesw-resize}.handle.br{right:-6px;bottom:-6px;cursor:nwse-resize}
+.sourceactions{display:flex;gap:8px;align-items:center;margin-top:8px;flex-wrap:wrap}
+.sourceactions .btn{padding:7px 10px;font-size:11px}
+.edithelp{font-size:11px;color:#66778d}.legend{display:flex;align-items:center;gap:10px;margin-top:8px;font-size:11px;color:var(--muted)}.dot{width:10px;height:10px;border-radius:2px;background:#1769ff}.previewgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.previewbox{border:1px solid var(--line);border-radius:15px;padding:12px;background:#fff}.previewbox h3{margin:0 0 9px;font-size:12px}.previewbox canvas{display:block;width:100%;height:auto;background:#fff;border:1px solid #edf1f6;border-radius:8px}.cropcontrols{margin-top:14px;padding:12px;border:1px solid var(--line);border-radius:14px;background:#fafcff}.cropcontrols .row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.modalfoot{padding:14px 20px;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:10px}.modalfoot .left,.modalfoot .right{display:flex;gap:9px}.kbd{font-size:10px;padding:2px 6px;background:#edf1f6;border-radius:5px;color:#586a80}.hidden{display:none!important}
+@media(max-width:980px){.app{grid-template-columns:1fr}.side{position:absolute;z-index:20;width:min(455px,94vw);height:100%;box-shadow:20px 0 50px rgba(0,0,0,.14)}.bottomhint{display:none}.modalgrid{grid-template-columns:1fr}.fabrow{right:10px}}
+</style>
+<style>
+.desktop-settings{padding:10px 18px 14px;border-bottom:1px solid var(--line);background:#fbfdff}.custom-size-box{margin-top:9px;padding:10px;background:#f7faff;border:1px solid var(--line);border-radius:10px}.custom-size-title{font-size:10px;font-weight:800;color:#60748d;text-transform:uppercase;margin-bottom:8px}.custom-size-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.custom-size-grid .field label{font-size:9px}.custom-size-grid .field input{height:36px}.custom-size-note{margin-top:7px;font-size:10px;line-height:1.35;color:#6c7d92}
+.desktop-settings .settings-title{font-size:11px;font-weight:800;color:#60748d;text-transform:uppercase;margin-bottom:8px}.desktop-settings .setting-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}.desktop-settings select,.desktop-settings input{width:100%;height:38px;border:1px solid #cbd8e7;border-radius:9px;background:#fff;padding:0 9px;font-size:12px}.toggleline{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:9px;padding:9px 10px;background:#fff;border:1px solid var(--line);border-radius:9px;font-size:12px;font-weight:700;color:#31465f}.toggleline button{border:1px solid #cbd8e7;background:#f4f7fb;border-radius:8px;padding:6px 9px;font-size:11px;font-weight:800;cursor:pointer}.toggleline button.on{background:#e8f3ff;color:#0f59df;border-color:#a8c8fa}.mirror-group{display:flex;gap:8px;margin-top:9px}.mirror-group button{flex:1}.desktop-note{margin-top:8px;font-size:10px;line-height:1.35;color:#6c7d92}.back-align{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}.back-align label{display:block;font-size:10px;font-weight:800;color:#64778d;margin-bottom:4px}.back-align input{height:32px}.printmode{font-size:10px;color:#55708f;margin-top:7px}
+@media(min-width:1500px){.app{grid-template-columns:400px minmax(0,1fr)}.brand h1{font-size:27px}.slot{padding:14px}.stage{padding:28px 28px 72px}.modalcard{max-width:1380px}}
+.stage::-webkit-scrollbar{width:12px;height:12px}.stage::-webkit-scrollbar-track{background:#d5e0ed}.stage::-webkit-scrollbar-thumb{background:#9fb2c8;border-radius:10px;border:3px solid #d5e0ed}.stage::-webkit-scrollbar-thumb:hover{background:#8198b2}
+</style>
 </head>
 <body>
-	<div class="shell">
-		<header>
-			<div class="brand"><span class="brand-mark"></span> clearcut</div>
-			<nav><a href="#how">How it works</a><span class="status">● browser-powered</span></nav>
-		</header>
+<div class="app">
+  <aside class="side">
+    <div class="brand">
+      <div class="brand-title">
+        <h1><span class="title-accent">PVC Card Maker</span></h1>
+        <span class="pro">PRO</span>
+      </div>
 
-		<main>
-			<section class="hero">
-				<div class="eyebrow">Image utility / 01</div>
-				<h1>Keep the subject.<br><em>Lose the background.</em></h1>
-				<p>Professional cutouts in seconds. Your image stays in your browser, and your transparent PNG is ready to download in full quality.</p>
-			</section>
+      <div class="brand-social" aria-label="Creator links">
+        <a
+          class="instagram"
+          href="https://instagram.com/darkshadeoflove"
+          target="_blank"
+          rel="noopener noreferrer"
+         
+        >
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <defs>
+              <linearGradient id="igGradient" x1="3" y1="21" x2="21" y2="3">
+                <stop offset="0%" stop-color="#f58529"/>
+                <stop offset="45%" stop-color="#dd2a7b"/>
+                <stop offset="75%" stop-color="#8134af"/>
+                <stop offset="100%" stop-color="#515bd4"/>
+              </linearGradient>
+            </defs>
+            <rect x="3" y="3" width="18" height="18" rx="5" stroke-width="2"/>
+            <circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="2"/>
+            <circle cx="17.2" cy="6.8" r="1" fill="currentColor"/>
+          </svg>
+          <span class="brand-handle">darkshadeoflove</span>
+        </a>
 
-			<section class="workspace" aria-label="Background removal workspace">
-				<div id="uploadView">
-					<div class="dropzone" id="dropzone">
-						<div class="drop-inner">
-							<div class="upload-icon">↑</div>
-							<h2>Drop an image here</h2>
-							<p>JPG, PNG, or WebP up to 10 MB</p>
-							<button class="primary" id="chooseButton">Choose image</button>
-							<input id="fileInput" type="file" accept="image/png,image/jpeg,image/webp" hidden>
-							<p class="hint">No account · no upload · no watermark</p>
-						</div>
-					</div>
-					<div id="error" role="alert"></div>
-					<div class="privacy"><b>✓ Private by design</b><span>Processing happens locally on your device.</span></div>
-				</div>
+        <span class="divider" aria-hidden="true"></span>
 
-				<div class="editor" id="editorView">
-					<div class="editor-toolbar">
-						<div class="file-meta"><span>IMG</span><div><strong id="fileName">image.png</strong><span id="fileSize">Original</span></div></div>
-						<button class="ghost" id="newImage">＋ New image</button>
-					</div>
-					<div class="editor-body">
-						<div class="preview" id="preview"><div class="canvas-wrap"><canvas id="resultCanvas" aria-label="Background removed image"></canvas><canvas id="brushCanvas" aria-label="Magic brush editing area"></canvas></div></div>
-						<aside class="controls">
-							<h3>Export settings</h3>
-							<label class="control-label" for="format">Format</label>
-							<select id="format"><option value="image/png">PNG · transparent</option><option value="image/webp">WebP · transparent</option></select>
-							<label class="control-label" for="quality">Quality <span id="qualityValue">100%</span></label>
-							<input id="quality" type="range" min="70" max="100" value="100" style="width:100%; accent-color:#819a1e">
-							<div class="magic-tools">
-								<h4>Magic brush</h4>
-								<div class="tool-row"><button class="tool-button active" id="removeMode" type="button">Remove</button><button class="tool-button" id="keepMode" type="button">Keep</button></div>
-								<div class="selection-row"><button class="tool-button active" id="brushMode" type="button">Brush</button><button class="tool-button" id="smartMode" type="button">Smart select</button></div>
-								<label class="brush-size" for="brushSize">Size <input id="brushSize" type="range" min="8" max="180" value="55"><span id="brushSizeValue">55</span></label>
-								<label class="brush-size smart-tolerance" id="toleranceRow" for="tolerance">Tolerance <input id="tolerance" type="range" min="10" max="110" value="42"><span id="toleranceValue">42</span></label>
-								<div class="brush-actions"><button class="ghost" id="undoBrush" type="button">Undo</button><button class="ghost" id="resetBrush" type="button">Reset</button></div>
-								<p class="tool-note">Paint over edges to remove distractions or restore details. Changes stay on your device.</p>
-							</div>
-							<button class="download" id="downloadButton">↓ Download high quality</button>
-							<p class="note">Exports at the original image dimensions. PNG keeps every transparent pixel.</p>
-						</aside>
-					</div>
-				</div>
-			</section>
-		</main>
-		<footer id="how"><span>Clearcut / v1.0</span><span>Made for the open web</span></footer>
-	</div>
+        <a
+          class="github"
+          href="https://github.com/jarvisv2"
+          target="_blank"
+          rel="noopener noreferrer"
+         
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 .7A11.3 11.3 0 0 0 8.4 22.8c.57.1.78-.25.78-.55v-2.13c-3.17.69-3.84-1.34-3.84-1.34-.52-1.32-1.27-1.67-1.27-1.67-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.02 1.75 2.67 1.25 3.32.96.1-.74.4-1.25.72-1.54-2.53-.29-5.2-1.27-5.2-5.65 0-1.25.45-2.27 1.18-3.07-.12-.29-.51-1.45.11-3.02 0 0 .96-.31 3.14 1.17a10.9 10.9 0 0 1 5.72 0c2.18-1.48 3.13-1.17 3.13-1.17.63 1.57.24 2.73.12 3.02.73.8 1.17 1.82 1.17 3.07 0 4.39-2.67 5.35-5.21 5.64.41.36.78 1.07.78 2.16v3.2c0 .3.21.66.79.55A11.3 11.3 0 0 0 12 .7Z"/>
+          </svg>
+          <span class="brand-handle">jarvisv2</span>
+        </a>
+      </div>
+    </div>
 
-	<script type="module">
-		import { removeBackground } from 'https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.7.0/+esm';
+    <div class="toolbar"><button class="btn primary" id="addBtn">＋ Add PDF</button><button class="btn softbtn" id="clearBtn">Clear All</button><button class="btn graybtn" id="printBtn">Print</button></div>
+    <div class="desktop-settings"><div class="settings-title">Print setup</div><div class="setting-row"><div class="field"><label>Card size</label><select id="cardSize"><option value="85.6x54">CR80 • 85.6 × 54 mm</option><option value="86x54">Preset • 86 × 54 mm</option><option value="custom">Custom • enter size</option></select></div><div class="field"><label>Print mode</label><button class="btn mini graybtn" id="dragonSetup" style="width:100%;height:38px">Dragon Sheet: OFF</button></div></div><div id="customSizeBox" class="custom-size-box hidden"><div class="custom-size-title">Custom card size (mm)</div><div class="custom-size-grid"><div class="field"><label>Width</label><input id="customW" type="number" min="40" max="100" step="0.1" value="85.6"></div><div class="field"><label>Height</label><input id="customH" type="number" min="30" max="70" step="0.1" value="54"></div></div><div class="custom-size-note">Enter the physical PVC cutting size. The preview, crop ratio and A4 layout update automatically.</div></div><div class="back-align"><div><label>Back X offset (mm)</label><input id="backX" type="number" min="-5" max="5" step="0.1" value="0"></div><div><label>Back Y offset (mm)</label><input id="backY" type="number" min="-5" max="5" step="0.1" value="0"></div></div><div class="mirror-group"><button class="btn mini graybtn" id="mirrorBackSetup">Mirror Back: OFF</button><button class="btn mini graybtn" id="mirrorSheetSetup">Mirror Sheet: OFF</button></div><div class="desktop-note">The black A4 center line is always printed as a fold/cutting guide. Turn on Dragon Sheet to mirror the back side. Use Back X/Y for cutter registration adjustment.</div></div>
+    <label class="drop" id="drop"><strong>Drop PDF here</strong><small>or click to choose a government ID PDF</small></label>
+    <input id="fileInput" type="file" accept="application/pdf,.pdf" multiple>
+    <div class="progress"><i id="progress"></i></div>
+    <div class="files"><div class="ready" id="ready">Ready</div><div id="slots"></div></div>
+  </aside>
+  <main class="workspace">
+    <div class="topbar"><div class="meta">A4 • <b>300 DPI</b> • <b id="sizeMeta">85.6 × 54 mm</b> PVC • <b>2 × 5 cards</b></div><div class="viewtools"><button class="iconbtn" id="minus" title="Zoom out">−</button><div class="zoomlabel" id="zoomLabel">Fit</div><button class="iconbtn" id="plus" title="Zoom in">＋</button><button class="btn graybtn" id="fitBtn">Fit</button></div></div>
+    <div class="stage" id="stage"><div class="fabrow"><button class="btn graybtn" id="mirrorBackBtn" title="Dragon Sheet: mirror the back side">Dragon Sheet: OFF</button><button class="btn graybtn" id="mirrorSheetBtn" title="Mirror the complete A4 sheet">Sheet ↔</button></div><div class="sheetwrap" id="sheetwrap"><canvas class="sheet" id="sheet" width="2480" height="3508"></canvas></div></div>
+  </main>
+</div>
+<div class="bottomhint">Auto template detection is used first; advanced correction is available per card.</div>
 
-		const fileInput = document.querySelector('#fileInput');
-		const dropzone = document.querySelector('#dropzone');
-		const chooseButton = document.querySelector('#chooseButton');
-		const uploadView = document.querySelector('#uploadView');
-		const editorView = document.querySelector('#editorView');
-		const preview = document.querySelector('#preview');
-		const resultCanvas = document.querySelector('#resultCanvas');
-		const brushCanvas = document.querySelector('#brushCanvas');
-		const resultContext = resultCanvas.getContext('2d');
-		const brushContext = brushCanvas.getContext('2d');
-		const errorBox = document.querySelector('#error');
-		const quality = document.querySelector('#quality');
-		const brushSize = document.querySelector('#brushSize');
-		const brushSizeValue = document.querySelector('#brushSizeValue');
-		const tolerance = document.querySelector('#tolerance');
-		const toleranceValue = document.querySelector('#toleranceValue');
-		const toleranceRow = document.querySelector('#toleranceRow');
-		let originalPixels = null;
-		let brushMode = 'remove';
-		let selectionMode = 'brush';
-		let brushHistory = [];
-		let drawing = false;
-		let processedBlob = null;
+<div class="modal" id="modal">
+  <div class="modalcard">
+    <div class="modalhead"><div><b id="modalTitle">Crop Review</b><div id="modalSub" style="font-size:12px;color:#64748b;margin-top:4px"></div></div><button class="btn graybtn" id="closeModal">Close</button></div>
+    <div class="modalbody">
+      <div class="modalgrid">
+        <div>
+          <div class="smalllabel">Source PDF • detected boundaries</div>
+          <div class="sourcebox"><div class="sourcewrap" id="sourceWrap"><canvas class="sourcecanvas" id="sourcePreview"></canvas><div class="crop-overlay" id="cropOverlay"></div></div><div class="sourceactions"><button class="btn softbtn" id="editFrontBtn">Edit Front</button><button class="btn softbtn" id="editBackBtn">Edit Back</button><span class="edithelp">Drag a box to move • drag a corner to resize</span></div><div class="legend"><span class="dot"></span> Blue = Front • Green = Back • Selected card ratio locked</div></div>
+        </div>
+        <div>
+          <div class="previewgrid"><div class="previewbox"><h3>FRONT</h3><canvas id="frontPreview"></canvas></div><div class="previewbox"><h3>BACK</h3><canvas id="backPreview"></canvas></div></div>
+          <div class="cropcontrols">
+            <div class="smalllabel">Quick correction</div>
+            <div class="row">
+              <div class="range"><label>Horizontal</label><input id="adjX" type="range" min="-4" max="4" step=".1" value="0"></div>
+              <div class="range"><label>Vertical</label><input id="adjY" type="range" min="-4" max="4" step=".1" value="0"></div>
+              <div class="range"><label>Width</label><input id="adjW" type="range" min="-3" max="3" step=".1" value="0"></div>
+              <div class="range"><label>Height</label><input id="adjH" type="range" min="-3" max="3" step=".1" value="0"></div>
+            </div>
+          </div>
+          <div class="note" id="modalNote">The crop uses a calibrated document template first, then normalizes to CR80. Review the source boxes and front/back previews before applying.</div>
+        </div>
+      </div>
+    </div>
+    <div class="modalfoot"><div class="left"><button class="btn softbtn" id="reDetectBtn">Re-detect</button><button class="btn graybtn" id="resetCropBtn">Reset correction</button></div><div class="right"><button class="btn primary" id="useBtn">Use These Crops</button></div></div>
+  </div>
+</div>
 
-		chooseButton.addEventListener('click', () => fileInput.click());
-		fileInput.addEventListener('change', event => handleFile(event.target.files[0]));
-		['dragenter', 'dragover'].forEach(type => dropzone.addEventListener(type, event => { event.preventDefault(); dropzone.classList.add('dragging'); }));
-		['dragleave', 'drop'].forEach(type => dropzone.addEventListener(type, event => { event.preventDefault(); dropzone.classList.remove('dragging'); }));
-		dropzone.addEventListener('drop', event => handleFile(event.dataTransfer.files[0]));
-		document.querySelector('#newImage').addEventListener('click', () => { processedBlob = null; originalPixels = null; brushHistory = []; editorView.classList.remove('active'); uploadView.style.display = ''; fileInput.value = ''; });
-		quality.addEventListener('input', event => document.querySelector('#qualityValue').textContent = `${event.target.value}%`);
-		brushSize.addEventListener('input', event => brushSizeValue.textContent = event.target.value);
-		tolerance.addEventListener('input', event => toleranceValue.textContent = event.target.value);
-		document.querySelector('#removeMode').addEventListener('click', () => setBrushMode('remove'));
-		document.querySelector('#keepMode').addEventListener('click', () => setBrushMode('keep'));
-		document.querySelector('#brushMode').addEventListener('click', () => setSelectionMode('brush'));
-		document.querySelector('#smartMode').addEventListener('click', () => setSelectionMode('smart'));
-		document.querySelector('#undoBrush').addEventListener('click', undoBrush);
-		document.querySelector('#resetBrush').addEventListener('click', resetBrush);
-		brushCanvas.addEventListener('pointerdown', event => { brushCanvas.setPointerCapture(event.pointerId); saveBrushState(); if (selectionMode === 'smart') smartSelect(event); else { drawing = true; paint(event); } });
-		brushCanvas.addEventListener('pointermove', event => { if (drawing) paint(event); });
-		brushCanvas.addEventListener('pointerup', () => { drawing = false; brushContext.clearRect(0, 0, brushCanvas.width, brushCanvas.height); });
-		brushCanvas.addEventListener('pointercancel', () => { drawing = false; });
-		document.querySelector('#downloadButton').addEventListener('click', downloadResult);
+<div class="modal" id="passwordModal"><div class="modalcard" style="max-width:450px"><div class="modalhead"><div><b>Password protected PDF</b><div style="font-size:12px;color:#64748b;margin-top:4px">Enter the PDF password to continue.</div></div></div><div class="modalbody"><div class="field"><label class="smalllabel">PDF password</label><input id="passwordInput" type="password" style="width:100%;height:44px;border:1px solid #cbd8e7;border-radius:10px;padding:0 11px"></div><div class="status bad hidden" id="passwordError"></div></div><div class="modalfoot"><div></div><div class="right"><button class="btn graybtn" id="passwordCancel">Cancel</button><button class="btn primary" id="passwordOk">Open PDF</button></div></div></div></div>
 
-		async function handleFile(file) {
-			if (!file) return;
-			errorBox.style.display = 'none';
-			if (!['image/png', 'image/jpeg', 'image/webp'].includes(file.type)) return showError('Please choose a JPG, PNG, or WebP image.');
-			if (file.size > 10 * 1024 * 1024) return showError('That image is larger than 10 MB.');
-			uploadView.style.display = 'none'; editorView.classList.add('active'); preview.classList.add('loading');
-			document.querySelector('#fileName').textContent = file.name;
-			document.querySelector('#fileSize').textContent = `${formatBytes(file.size)} original`;
-			try {
-				processedBlob = await removeBackground(file, { model: 'medium', output: { format: 'image/png', quality: 1 } });
-				await setupCanvases(file, processedBlob);
-			} catch (error) {
-				editorView.classList.remove('active'); uploadView.style.display = '';
-				showError('The image could not be processed. Please try another image or refresh and try again.');
-				console.error(error);
-			} finally { preview.classList.remove('loading'); }
-		}
+<script>
+const PDFJS_URLS=[
+  'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js',
+  'https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.min.js'
+];
+const PDF_WORKERS=[
+  'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js',
+  'https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js'
+];
+let pdfPromise=null;
+function loadScript(src){return new Promise((resolve,reject)=>{const s=document.createElement('script');s.src=src;s.async=true;s.onload=resolve;s.onerror=()=>reject(new Error('CDN load failed'));document.head.appendChild(s)})}
+async function ensurePdfJs(){if(window.pdfjsLib)return window.pdfjsLib;if(!pdfPromise){pdfPromise=(async()=>{let last=null;for(const u of PDFJS_URLS){try{await loadScript(u);if(window.pdfjsLib)break}catch(e){last=e}}if(!window.pdfjsLib)throw new Error('PDF engine could not load. Check internet/CDN access.');let workerSet=false;for(const u of PDF_WORKERS){try{window.pdfjsLib.GlobalWorkerOptions.workerSrc=u;workerSet=true;break}catch(e){}}window.pdfjsLib.__workerConfigured=workerSet;return window.pdfjsLib})().catch(e=>{pdfPromise=null;throw e})}return pdfPromise}
 
-		function downloadResult() {
-			if (!processedBlob) return;
-			const format = document.querySelector('#format').value;
-			resultCanvas.toBlob(blob => { const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = `clearcut-${Date.now()}.${format === 'image/png' ? 'png' : 'webp'}`; link.click(); URL.revokeObjectURL(link.href); }, format, Number(quality.value) / 100);
-		}
-		async function setupCanvases(sourceFile, resultBlob) {
-			const source = await loadImage(sourceFile); const cutout = await loadImage(resultBlob);
-			resultCanvas.width = cutout.naturalWidth; resultCanvas.height = cutout.naturalHeight;
-			brushCanvas.width = cutout.naturalWidth; brushCanvas.height = cutout.naturalHeight;
-			resultContext.clearRect(0, 0, resultCanvas.width, resultCanvas.height); resultContext.drawImage(cutout, 0, 0);
-			originalPixels = document.createElement('canvas'); originalPixels.width = resultCanvas.width; originalPixels.height = resultCanvas.height;
-			originalPixels.getContext('2d').drawImage(source, 0, 0, resultCanvas.width, resultCanvas.height);
-			brushHistory = [];
-		}
-		function loadImage(source) { return new Promise((resolve, reject) => { const image = new Image(); image.onload = () => resolve(image); image.onerror = reject; image.src = URL.createObjectURL(source); }); }
-		function setBrushMode(mode) { brushMode = mode; document.querySelector('#removeMode').classList.toggle('active', mode === 'remove'); document.querySelector('#keepMode').classList.toggle('active', mode === 'keep'); }
-		function setSelectionMode(mode) { selectionMode = mode; document.querySelector('#brushMode').classList.toggle('active', mode === 'brush'); document.querySelector('#smartMode').classList.toggle('active', mode === 'smart'); toleranceRow.classList.toggle('active', mode === 'smart'); brushCanvas.style.cursor = mode === 'smart' ? 'cell' : 'crosshair'; }
-		function saveBrushState() { brushHistory.push(resultContext.getImageData(0, 0, resultCanvas.width, resultCanvas.height)); if (brushHistory.length > 12) brushHistory.shift(); }
-		function undoBrush() { const state = brushHistory.pop(); if (state) resultContext.putImageData(state, 0, 0); }
-		function resetBrush() { if (!processedBlob) return; loadImage(processedBlob).then(image => { resultContext.clearRect(0, 0, resultCanvas.width, resultCanvas.height); resultContext.drawImage(image, 0, 0); brushHistory = []; }); }
-		function paint(event) {
-			const bounds = brushCanvas.getBoundingClientRect(); const x = (event.clientX - bounds.left) * resultCanvas.width / bounds.width; const y = (event.clientY - bounds.top) * resultCanvas.height / bounds.height; const radius = Number(brushSize.value) / 2;
-			resultContext.save(); resultContext.beginPath(); resultContext.arc(x, y, radius, 0, Math.PI * 2); resultContext.clip();
-			if (brushMode === 'remove') resultContext.clearRect(x - radius, y - radius, radius * 2, radius * 2); else resultContext.drawImage(originalPixels, 0, 0);
-			resultContext.restore();
-			brushContext.clearRect(0, 0, brushCanvas.width, brushCanvas.height); brushContext.beginPath(); brushContext.arc(x, y, radius, 0, Math.PI * 2); brushContext.fillStyle = brushMode === 'remove' ? 'rgba(32,35,34,.22)' : 'rgba(216,244,90,.25)'; brushContext.fill();
-		}
-		function smartSelect(event) {
-			const bounds = brushCanvas.getBoundingClientRect(); const width = resultCanvas.width; const height = resultCanvas.height;
-			const startX = Math.max(0, Math.min(width - 1, Math.floor((event.clientX - bounds.left) * width / bounds.width))); const startY = Math.max(0, Math.min(height - 1, Math.floor((event.clientY - bounds.top) * height / bounds.height)));
-			const pixels = originalPixels.getContext('2d').getImageData(0, 0, width, height).data; const selected = new Uint8Array(width * height); const visited = new Uint8Array(width * height); const queue = new Int32Array(width * height); let head = 0; let tail = 0; const start = (startY * width + startX) * 4; const red = pixels[start]; const green = pixels[start + 1]; const blue = pixels[start + 2]; const limit = Number(tolerance.value) * Number(tolerance.value) * 3;
-			const startIndex = startY * width + startX; queue[tail++] = startIndex; visited[startIndex] = 1;
-			while (head < tail) { const index = queue[head++]; const offset = index * 4; const distance = (pixels[offset] - red) ** 2 + (pixels[offset + 1] - green) ** 2 + (pixels[offset + 2] - blue) ** 2; if (distance > limit) continue; selected[index] = 1; const x = index % width; const y = Math.floor(index / width); if (x > 0 && !visited[index - 1]) { visited[index - 1] = 1; queue[tail++] = index - 1; } if (x < width - 1 && !visited[index + 1]) { visited[index + 1] = 1; queue[tail++] = index + 1; } if (y > 0 && !visited[index - width]) { visited[index - width] = 1; queue[tail++] = index - width; } if (y < height - 1 && !visited[index + width]) { visited[index + width] = 1; queue[tail++] = index + width; } }
-			const edited = resultContext.getImageData(0, 0, width, height); for (let index = 0; index < selected.length; index++) { if (!selected[index]) continue; const offset = index * 4; if (brushMode === 'remove') edited.data[offset + 3] = 0; else { edited.data[offset] = pixels[offset]; edited.data[offset + 1] = pixels[offset + 1]; edited.data[offset + 2] = pixels[offset + 2]; edited.data[offset + 3] = 255; } } resultContext.putImageData(edited, 0, 0);
-		}
-		function showError(message) { errorBox.textContent = message; errorBox.style.display = 'block'; }
-		function formatBytes(bytes) { return `${(bytes / 1024 / 1024).toFixed(2)} MB`; }
-	</script>
+const $=id=>document.getElementById(id);const fileInput=$('fileInput'),drop=$('drop'),progress=$('progress'),ready=$('ready'),slotsEl=$('slots');
+const sheet=$('sheet'),ctx=sheet.getContext('2d');const A4W=2480,A4H=3508,DPI=300;let CARD_W_MM=85.6,CARD_H_MM=54;let CARD_W=Math.round(CARD_W_MM*DPI/25.4),CARD_H=Math.round(CARD_H_MM*DPI/25.4);let LEFT=140,TOP=50,GAP_X=158,GAP_Y=48;let cards=[];let mirrorBack=false,mirrorSheet=false,zoom=1;let pendingPassword=null;
+function mmToPx(mm){return Math.round(mm*DPI/25.4)}
+function updateCardGeometry(){CARD_W=Math.max(120,mmToPx(CARD_W_MM));CARD_H=Math.max(120,mmToPx(CARD_H_MM));if(CARD_W+GAP_X+CARD_W>A4W-120)GAP_X=Math.max(8,A4W-120-CARD_W*2);if(TOP+5*CARD_H+4*GAP_Y>A4H-50)GAP_Y=Math.max(8,Math.floor((A4H-50-TOP-5*CARD_H)/4));document.getElementById('sizeMeta').textContent=`${CARD_W_MM.toFixed(1).replace(/\.0$/,'')} × ${CARD_H_MM.toFixed(1).replace(/\.0$/,'')} mm`}
+function drawImageMaybeMirrored(img,x,y,w,h,doMirror){if(!doMirror){ctx.drawImage(img,x,y,w,h);return}ctx.save();ctx.translate(x+w,y);ctx.scale(-1,1);ctx.drawImage(img,0,0,w,h);ctx.restore()}
+function drawSheet(){
+  ctx.clearRect(0,0,A4W,A4H);
+  ctx.fillStyle='#fff';
+  ctx.fillRect(0,0,A4W,A4H);
+  ctx.save();
+  if(mirrorSheet){ctx.translate(A4W,0);ctx.scale(-1,1)}
+  const bxOffset=mmToPx(parseFloat(document.getElementById('backX')?.value||0));
+  const byOffset=mmToPx(parseFloat(document.getElementById('backY')?.value||0));
+  const totalW=(CARD_W*2)+GAP_X;
+  const left=Math.max(30,Math.round((A4W-totalW)/2));
+  for(let i=0;i<5;i++){
+    const y=TOP+i*(CARD_H+GAP_Y),fx=left,bx=left+CARD_W+GAP_X+bxOffset,by=y+byOffset;
+    const c=cards[i];
+    if(c?.front)ctx.drawImage(c.front,fx,y,CARD_W,CARD_H);
+    if(c?.back)drawImageMaybeMirrored(c.back,bx,by,CARD_W,CARD_H,mirrorBack);
+    ctx.strokeStyle='#b9c5d4';ctx.lineWidth=2;ctx.setLineDash([10,10]);
+    ctx.strokeRect(fx,y,CARD_W,CARD_H);ctx.strokeRect(bx,by,CARD_W,CARD_H);ctx.setLineDash([]);
+  }
+  // Physical center-fold guide: always visible for easy cutting/folding.
+  ctx.strokeStyle='#111';ctx.lineWidth=4;ctx.setLineDash([]);
+  ctx.beginPath();ctx.moveTo(A4W/2,20);ctx.lineTo(A4W/2,A4H-20);ctx.stroke();
+  ctx.restore();
+}
+defaultProfiles={};
+function renderSlots(){slotsEl.innerHTML='';for(let i=0;i<5;i++){const c=cards[i];const el=document.createElement('div');el.className='slot';const readyClass=c?.front?'good':'';const label=c?.front?'READY':'EMPTY';el.innerHTML=`<div class="slothead"><b>Card ${i+1}</b><span class="pill ${readyClass}">${label}</span></div><div class="grid2"><div class="field"><label>Document</label><select class="doc"><option value="auto">Auto detect</option><option value="aadhaar">e-Aadhaar</option><option value="abha">ABHA Card</option><option value="eration">e-Ration Card</option><option value="pan">e-PAN</option><option value="ayushman">Ayushman</option></select></div><div class="field"><label>Password</label><input class="pass" type="password" placeholder="PDF password"></div></div><div class="status ${c?.front?'good':''}">${c?.status||'Waiting for PDF'}</div><details class="settings"><summary>Advanced crop correction</summary><div class="adjustgrid"><div class="range"><label>Horizontal</label><input data-k="x" type="range" min="-4" max="4" step=".1" value="0"></div><div class="range"><label>Vertical</label><input data-k="y" type="range" min="-4" max="4" step=".1" value="0"></div><div class="range"><label>Width</label><input data-k="w" type="range" min="-3" max="3" step=".1" value="0"></div><div class="range"><label>Height</label><input data-k="h" type="range" min="-3" max="3" step=".1" value="0"></div></div></details><div class="slottools"><button class="btn softbtn mini review">Review crop</button><button class="btn graybtn mini remove">Remove</button></div>`;el.querySelector('.doc').value=c?.job?.docOverride||'auto';el.querySelector('.doc').onchange=()=>{if(cards[i]?.job){cards[i].job.docOverride=el.querySelector('.doc').value;cards[i].job.det=detectDocument(cards[i].job.render.canvas,cards[i].job.docOverride,cards[i].job.render.text||'',cards[i].job.render.pages||[]);if(cards[i].job.det.twoPage&&cards[i].job.render.pages?.length>1){const p1=cards[i].job.render.pages[0].canvas,p2=cards[i].job.render.pages[1].canvas,gap=cards[i].job.det.gap||Math.max(20,Math.round(p1.height*.035));const comp=document.createElement('canvas');comp.width=Math.max(p1.width,p2.width);comp.height=p1.height+gap+p2.height;const cc=comp.getContext('2d');cc.fillStyle='#fff';cc.fillRect(0,0,comp.width,comp.height);cc.drawImage(p1,0,0);cc.drawImage(p2,0,p1.height+gap);cards[i].job.render.sourceCanvas=comp}else{cards[i].job.render.sourceCanvas=cards[i].job.render.canvas}cards[i].job.detBase=cloneDet(cards[i].job.det);cards[i].job.adjust={x:0,y:0,w:0,h:0};rebuildJobCrop(cards[i].job);cards[i].status=`${cards[i].job.det.type} detected • template updated`;drawSheet();renderSlots();showCropPreview(cards[i].job)}};el.querySelector('.review').onclick=()=>{if(cards[i]?.job)showCropPreview(cards[i].job)};el.querySelector('.remove').onclick=()=>{cards.splice(i,1);drawSheet();renderSlots()};el.querySelectorAll('[data-k]').forEach(inp=>inp.oninput=()=>{if(cards[i]?.job){cards[i].job.adjust[inp.dataset.k]=parseFloat(inp.value);rebuildJobCrop(cards[i].job);drawSheet();}});slotsEl.appendChild(el)}}
+
+function pageBorderLines(c){const im=c.getContext('2d').getImageData(0,0,c.width,c.height).data,w=c.width,h=c.height;function colScore(x){let n=0;for(let y=0;y<h;y+=2){const i=(y*w+x)*4;if(im[i]<75&&im[i+1]<75&&im[i+2]<75)n++}return n}function rowScore(y){let n=0;for(let x=0;x<w;x+=2){const i=(y*w+x)*4;if(im[i]<75&&im[i+1]<75&&im[i+2]<75)n++}return n}let lx=0,rx=w-1;for(let x=0;x<Math.min(280,w);x++)if(colScore(x)>h*.35){lx=x;break}for(let x=w-1;x>Math.max(w-280,0);x--)if(colScore(x)>h*.35){rx=x;break}let center=w/2;let best=0,bscore=0;for(let x=Math.floor(w*.42);x<Math.ceil(w*.58);x++)if(colScore(x)>bscore){bscore=colScore(x);best=x}if(best===0)best=center;let top=0,bottom=h-1;for(let y=0;y<Math.min(400,h);y++)if(rowScore(y)>w*.35){top=y;break}for(let y=h-1;y>Math.max(h-400,0);y--)if(rowScore(y)>w*.35){bottom=y;break}return{lx,rx,center:best,top,bottom}}
+function rowSignals(c){const w=c.width,h=c.height,im=c.getContext('2d').getImageData(0,0,w,h).data;const dark=new Uint32Array(h),red=new Uint32Array(h);for(let y=0;y<h;y+=2){for(let x=0;x<w;x+=2){const i=(y*w+x)*4,r=im[i],g=im[i+1],b=im[i+2];if(r<95&&g<95&&b<95)dark[y]++;if(r>150&&r>g*1.25&&r>b*1.15)red[y]++}}return{dark,red}}
+function clustersAbove(arr,threshold){const out=[];let s=-1;for(let y=0;y<arr.length;y+=2){if(arr[y]>=threshold){if(s<0)s=y}else if(s>=0){out.push([s,y-2]);s=-1}}if(s>=0)out.push([s,arr.length-2]);return out}
+function detectAadhaar(c){
+  const w=c.width,h=c.height;
+  // Calibrated to the supplied one-page e-Aadhaar sample:
+  // lower-left panel = front, lower-right panel = back.
+  const front={x:w*0.07824,y:h*0.72227,w:w*0.41412,h:h*0.20455};
+  const back ={x:w*0.50647,y:h*0.72227,w:w*0.41471,h:h*0.20455};
+  return {type:'e-Aadhaar',confidence:.99,front,back,source:'Aadhaar one-page template (calibrated)',mode:'stretch'};
+}
+function detectABHA(c){
+  const w=c.width,h=c.height;
+  const front={x:w*0.02043,y:h*0.01736,w:w*0.95914,h:h*0.47396};
+  const back ={x:w*0.02043,y:h*0.50694,w:w*0.95914,h:h*0.47656};
+  return {type:'ABHA Card',confidence:.99,front,back,source:'ABHA two-panel template (calibrated)',mode:'stretch'};
+}
+function detectERation(c){
+  const w=c.width,h=c.height;
+  const front={x:w*0.09076,y:h*0.79216,w:w*0.39496,h:h*0.16746};
+  const back ={x:w*0.51933,y:h*0.79216,w:w*0.39496,h:h*0.16746};
+  return {type:'e-Ration Card',confidence:.99,front,back,source:'West Bengal e-Ration lower-card template (calibrated)',mode:'stretch'};
+}
+function detectAyushman(c,pages){
+  // The supplied Ayushman sample is a genuine two-page document:
+  // page 1 = the member card/front, page 2 = the information/back.
+  // Keep the entire page artwork for each side; the selected physical
+  // card size is applied only at the final output stage.
+  const p1=(pages&&pages[0]?.canvas)||c;
+  const p2=(pages&&pages[1]?.canvas)||p1;
+  const gap=Math.max(20,Math.round(p1.height*0.035));
+  const front={x:0,y:0,w:p1.width,h:p1.height};
+  const back ={x:0,y:p1.height+gap,w:p2.width,h:p2.height};
+  return {type:'Ayushman Card',confidence:1,front,back,source:'Ayushman two-page template (calibrated)',mode:'stretch',twoPage:!!(pages&&pages.length>1),gap};
+}
+function fallbackAadhaar(c){const b=pageBorderLines(c),h=c.height;const y=Math.round(h*.705),hh=Math.round(h*.19);return{type:'e-Aadhaar',confidence:.72,front:{x:b.lx+2,y,w:b.center-b.lx-7,h:hh},back:{x:b.center+5,y,w:b.rx-b.center-7,h:hh},source:'Aadhaar calibrated fallback',mode:'stretch'}}
+function detectGeneric(c){const b=pageBorderLines(c);return{type:'Government ID',confidence:.55,front:{x:b.lx+8,y:Math.round(c.height*.66),w:b.center-b.lx-16,h:Math.round(c.height*.20)},back:{x:b.center+8,y:Math.round(c.height*.66),w:b.rx-b.center-16,h:Math.round(c.height*.20)},source:'Generic lower-panel fallback',mode:'stretch'}}
+function detectDocument(c,override='auto',text='',pages=[]){
+  const t=String(text||'').toLowerCase();
+  if(override==='aadhaar')return detectAadhaar(c)||fallbackAadhaar(c);
+  if(override==='abha')return detectABHA(c);
+  if(override==='eration')return detectERation(c);
+  if(override==='ayushman')return detectAyushman(c,pages);
+  if(override==='pan')return detectGeneric(c);
+  // Text-first detection. The uploaded Ayushman sample contains these terms.
+  if(/ayushman bharat|pradhan mantri jan arogya|pm-jay|ayushman card/.test(t))return detectAyushman(c,pages);
+  if(/ayushman bharat health account|\babha\b|abha address|abha number/.test(t))return detectABHA(c);
+  if(/e-ration card|digital ration card|department of food.*supplies|food & supplies/.test(t))return detectERation(c);
+  if(/aadhaar|uidai|unique identification authority/.test(t))return detectAadhaar(c)||fallbackAadhaar(c);
+  const visual=estimateGovernmentBand(c);
+  if(visual==='abha')return detectABHA(c);
+  if(visual==='eration')return detectERation(c);
+  if(visual==='ayushman')return detectAyushman(c,pages);
+  return detectGeneric(c);
+}
+function estimateGovernmentBand(c){
+  const im=c.getContext('2d').getImageData(0,0,c.width,c.height).data,w=c.width,h=c.height;
+  let orange=0,blue=0,total=0,step=Math.max(1,Math.floor(Math.min(w,h)/500));
+  for(let y=0;y<Math.min(h,Math.floor(h*.32));y+=step*2){
+    for(let x=0;x<w;x+=step*2){
+      const i=(y*w+x)*4,r=im[i],g=im[i+1],b=im[i+2];
+      if(r>180&&g>75&&g<190&&b<80)orange++;
+      if(b>120&&b>r*1.25&&b>g*.95&&r<110)blue++;
+      total++;
+    }
+  }
+  if(orange>total*.05 && w/h>1.6)return 'ayushman';
+  if(blue>total*.05)return 'abha';
+  return null;
+}
+function cloneRect(r){return {x:r.x,y:r.y,w:r.w,h:r.h}}
+function cloneDet(d){return {type:d.type,confidence:d.confidence,front:cloneRect(d.front),back:cloneRect(d.back),source:d.source,mode:d.mode||'cover',twoPage:!!d.twoPage,gap:d.gap||0}}
+function adjustRect(r,a,c){
+  const dx=(a.x||0)/100*c.width,dy=(a.y||0)/100*c.height,dw=(a.w||0)/100*c.width,dh=(a.h||0)/100*c.height;
+  return{x:r.x+dx-dw/2,y:r.y+dy-dh/2,w:r.w+dw,h:r.h+dh}
+}
+function clampRect(r,c){
+  const minW=Math.max(80,c.width*.08);
+  r.w=Math.max(minW,Math.min(c.width,r.w)); r.h=r.w/(CARD_W/CARD_H);
+  r.x=Math.max(0,Math.min(c.width-r.w,r.x)); r.y=Math.max(0,Math.min(c.height-r.h,r.y));
+  return r;
+}
+function cropCover(src,r,mode='cover'){
+  const out=document.createElement('canvas');out.width=CARD_W;out.height=CARD_H;
+  const o=out.getContext('2d');o.imageSmoothingEnabled=true;o.imageSmoothingQuality='high';
+  if(mode==='stretch'){
+    const rr={...r};
+    rr.x=Math.max(0,Math.min(src.width-1,rr.x)); rr.y=Math.max(0,Math.min(src.height-1,rr.y));
+    rr.w=Math.max(1,Math.min(src.width-rr.x,rr.w)); rr.h=Math.max(1,Math.min(src.height-rr.y,rr.h));
+    o.drawImage(src,rr.x,rr.y,rr.w,rr.h,0,0,CARD_W,CARD_H);
+    return out;
+  }
+  r=clampRect({...r},src);
+  o.drawImage(src,r.x,r.y,r.w,r.h,0,0,CARD_W,CARD_H);return out;
+}
+function rebuildJobCrop(job){
+  const a=job.adjust||{x:0,y:0,w:0,h:0};
+  const src=job.render.sourceCanvas||job.render.canvas;
+  const f=adjustRect(job.det.front,a,src),b=adjustRect(job.det.back,a,src);
+  const mode=job.det.mode||'cover';
+  job.previewFront=cropCover(src,f,mode);job.previewBack=cropCover(src,b,mode);
+  cards[job.index].front=job.previewFront;cards[job.index].back=job.previewBack;
+}
+function previewSource(c,det,activeSide){
+  const p=$('sourcePreview'),wrap=$('sourceWrap'),scale=Math.min(1,900/c.width);
+  p.width=Math.round(c.width*scale);p.height=Math.round(c.height*scale);
+  p.style.width=p.width+'px';p.style.height=p.height+'px';
+  wrap.style.width=p.width+'px';wrap.style.height=p.height+'px';
+  const x=p.getContext('2d');x.clearRect(0,0,p.width,p.height);x.drawImage(c,0,0,p.width,p.height);
+  renderCropBoxes(det,scale,activeSide);
+}
+function renderCropBoxes(det,scale,activeSide){
+  const ov=$('cropOverlay');ov.innerHTML='';
+  [['front','FRONT'],['back','BACK']].forEach(([side,label])=>{
+    const r=det[side],b=document.createElement('div');b.className='cropbox '+(side==='back'?'backbox ':'')+(side===activeSide?'active':'');
+    b.dataset.side=side;
+    b.style.left=(r.x*scale)+'px';b.style.top=(r.y*scale)+'px';b.style.width=(r.w*scale)+'px';b.style.height=(r.h*scale)+'px';
+    b.innerHTML='<span class="tag">'+label+'</span><i class="handle tl"></i><i class="handle tr"></i><i class="handle bl"></i><i class="handle br"></i>';
+    ov.appendChild(b);bindCropBox(b);
+  });
+}
+function bindCropBox(box){
+  box.onpointerdown=e=>{
+    if(!activeJob)return;
+    e.preventDefault();box.setPointerCapture(e.pointerId);
+    const side=box.dataset.side, c=activeJob.render.sourceCanvas||activeJob.render.canvas,scale=$('sourcePreview').width/c.width;
+    activeEditSide=side; renderCropBoxes(activeJob.det,scale,side);
+    const startX=e.clientX,startY=e.clientY,orig=cloneRect(activeJob.det[side]);
+    const target= e.target.closest('.handle');
+    const handle=target?Array.from(target.classList).find(v=>['tl','tr','bl','br'].includes(v)):null;
+    const ratio=(CARD_W/CARD_H);
+    const move=ev=>{
+      const dx=(ev.clientX-startX)/scale,dy=(ev.clientY-startY)/scale;
+      let r={...orig};
+      if(!handle){
+        r.x=orig.x+dx;r.y=orig.y+dy;
+      }else{
+        if(handle==='tl'||handle==='bl'){r.x=orig.x+dx;r.w=orig.w-dx}else{r.w=orig.w+dx}
+        r.w=Math.max(120,r.w);r.h=r.w/ratio;
+        if(handle==='tl')r.y=orig.y+orig.h-r.h;
+        if(handle==='bl')r.y=orig.y;
+        if(handle==='tr'||handle==='tl'){}
+        if(handle==='br'||handle==='bl'){r.y=orig.y}
+      }
+      r=clampRect(r,c);activeJob.det[side]=r;rebuildJobCrop(activeJob);
+      previewSource(c,activeJob.det,activeEditSide);drawSheet();updateModalPreviews();
+    };
+    const up=()=>{window.removeEventListener('pointermove',move);window.removeEventListener('pointerup',up)};
+    window.addEventListener('pointermove',move);window.addEventListener('pointerup',up,{once:true});
+  };
+}
+function updateModalPreviews(){
+  $('frontPreview').getContext('2d').clearRect(0,0,CARD_W,CARD_H);$('frontPreview').getContext('2d').drawImage(activeJob.previewFront,0,0);
+  $('backPreview').getContext('2d').clearRect(0,0,CARD_W,CARD_H);$('backPreview').getContext('2d').drawImage(activeJob.previewBack,0,0);
+}
+function syncModalSliders(job){$('adjX').value=job.adjust.x;$('adjY').value=job.adjust.y;$('adjW').value=job.adjust.w;$('adjH').value=job.adjust.h}
+let activeJob=null,activeEditSide='front';
+function showCropPreview(job){
+  activeJob=job;syncModalSliders(job);rebuildJobCrop(job);
+  $('modalTitle').textContent=`Crop Review — Card ${job.index+1} — ${job.det.type}`;
+  $('modalSub').textContent=`${job.det.source} • ${Math.round(job.det.confidence*100)}% confidence`;
+  previewSource(job.render.sourceCanvas||job.render.canvas,job.det,activeEditSide);updateModalPreviews();
+  $('modalNote').textContent='Drag either crop box to move it. Drag a corner handle to resize it while keeping the selected card ratio. Front/back can be corrected independently. After Use, Back X/Y offsets control duplex overlap on the A4 sheet. The A4 center line is always shown as the fold/cutting guide. Dragon Sheet mirrors the back.';
+  $('modal').classList.add('open');
+}
+function bindModal(){
+  [['adjX','x'],['adjY','y'],['adjW','w'],['adjH','h']].forEach(([id,k])=>$(id).oninput=()=>{
+    if(!activeJob)return;activeJob.adjust[k]=parseFloat($(id).value);rebuildJobCrop(activeJob);
+    previewSource(activeJob.render.sourceCanvas||activeJob.render.canvas,activeJob.det,activeEditSide);updateModalPreviews();drawSheet();
+  });
+  $('editFrontBtn').onclick=()=>{activeEditSide='front';if(activeJob)previewSource(activeJob.render.sourceCanvas||activeJob.render.canvas,activeJob.det,activeEditSide)};
+  $('editBackBtn').onclick=()=>{activeEditSide='back';if(activeJob)previewSource(activeJob.render.sourceCanvas||activeJob.render.canvas,activeJob.det,activeEditSide)};
+  $('resetCropBtn').onclick=()=>{
+    if(!activeJob)return;activeJob.det=cloneDet(activeJob.detBase);activeJob.adjust={x:0,y:0,w:0,h:0};
+    syncModalSliders(activeJob);rebuildJobCrop(activeJob);previewSource(activeJob.render.sourceCanvas||activeJob.render.canvas,activeJob.det,activeEditSide);updateModalPreviews();drawSheet();
+  };
+  $('reDetectBtn').onclick=()=>{
+    if(!activeJob)return;activeJob.det=detectDocument(activeJob.render.canvas,activeJob.docOverride||'auto',activeJob.render.text||'',activeJob.render.pages||[]);activeJob.detBase=cloneDet(activeJob.det);activeJob.adjust={x:0,y:0,w:0,h:0};showCropPreview(activeJob)
+  };
+  $('closeModal').onclick=()=>{$('modal').classList.remove('open')};
+  $('useBtn').onclick=()=>{$('modal').classList.remove('open');if(activeJob){cards[activeJob.index].front=activeJob.previewFront;cards[activeJob.index].back=activeJob.previewBack;cards[activeJob.index].status=`${activeJob.det.type} • crop manually reviewed and aligned`;drawSheet();renderSlots()}};
+}
+bindModal();
+async function loadPdf(file,password=''){
+  progress.style.width='7%';
+  const pdfjsLib=await ensurePdfJs();
+  const data=new Uint8Array(await file.arrayBuffer());
+  let pdf;
+  try{
+    const task=pdfjsLib.getDocument(password?{data,password}:{data});
+    pdf=await task.promise;
+  }catch(e){
+    if(e&&e.name==='PasswordException')throw{kind:'password',msg:(e.code===pdfjsLib.PasswordResponses.NEED_PASSWORD||!password)?'Password required':'Incorrect password'};
+    try{
+      const task=pdfjsLib.getDocument(password?{data,password,disableWorker:true}:{data,disableWorker:true});
+      pdf=await task.promise;
+    }catch(e2){
+      if(e2&&e2.name==='PasswordException')throw{kind:'password',msg:'Password required'};
+      throw new Error((e2&&e2.message)||'Unable to read PDF');
+    }
+  }
+  progress.style.width='20%';
+  const pages=[];const maxPages=Math.min(pdf.numPages,8);let textAll='';
+  for(let n=1;n<=maxPages;n++){
+    const page=await pdf.getPage(n);
+    const base=page.getViewport({scale:1});
+    const scale=Math.min(3.6,Math.max(2.5,2400/base.width));
+    const vp=page.getViewport({scale});
+    const c=document.createElement('canvas');c.width=Math.round(vp.width);c.height=Math.round(vp.height);
+    await page.render({canvasContext:c.getContext('2d',{alpha:false}),viewport:vp}).promise;
+    let text='';
+    try{const tc=await page.getTextContent();text=tc.items.map(it=>it.str||'').join(' ')}catch(e){}
+    textAll+=' '+text;
+    pages.push({page,canvas:c,base,scale,text});
+    progress.style.width=(20+Math.round((n/maxPages)*60))+'%';
+  }
+  return{pdf,pages,canvas:pages[0]?.canvas||null,base:pages[0]?.base||null,scale:pages[0]?.scale||1,text:textAll.trim()};
+}
+async function processFile(file,index,password=''){
+  ready.textContent=`Opening ${file.name}…`;
+  const render=await loadPdf(file,password);
+  const docOverride=cards[index]?.docOverride||'auto';
+  const det=detectDocument(render.canvas,docOverride,render.text,render.pages);
+  if(det.twoPage&&render.pages.length>1){
+    const p1=render.pages[0].canvas,p2=render.pages[1].canvas;
+    const gap=det.gap||Math.max(20,Math.round(p1.height*.035));
+    const comp=document.createElement('canvas');
+    comp.width=Math.max(p1.width,p2.width);comp.height=p1.height+gap+p2.height;
+    const cc=comp.getContext('2d');cc.fillStyle='#fff';cc.fillRect(0,0,comp.width,comp.height);
+    cc.drawImage(p1,0,0);cc.drawImage(p2,0,p1.height+gap);
+    render.sourceCanvas=comp;render.sourcePages=[p1,p2];
+  }else{
+    render.sourceCanvas=render.canvas;
+  }
+  const job={index,render,det,detBase:cloneDet(det),adjust:{x:0,y:0,w:0,h:0},file,docOverride};
+  cards[index]={job,front:null,back:null,det,file,status:'PDF rendered • preparing crop',docOverride};
+  rebuildJobCrop(job);
+  cards[index].front=job.previewFront;cards[index].back=job.previewBack;
+  cards[index].status=`${det.type} detected • front and back aligned automatically`;
+  ready.textContent=`${file.name} ready • ${det.type}`;
+  progress.style.width='100%';drawSheet();renderSlots();setTimeout(()=>progress.style.width='0',600);showCropPreview(job);
+}
+async function addFiles(files){for(const file of files){if(!file||!(file.type==='application/pdf'||file.name.toLowerCase().endsWith('.pdf'))){ready.textContent='Please choose a PDF file.';continue}if(cards.length>=5){alert('Five card slots are already full.');break}const index=cards.length;cards.push({status:'Reading PDF…',file});renderSlots();try{await processFile(file,index)}catch(e){if(e.kind==='password'){pendingPassword={file,index};openPasswordModal(e.msg)}else{cards[index]={file,status:`PDF error: ${e.message||'Unable to read PDF'}`};renderSlots();ready.textContent=`Could not process ${file.name}`;progress.style.width='0'}}}}
+drop.onclick=()=>fileInput.click();fileInput.onchange=async e=>{const files=[...e.target.files];e.target.value='';if(files.length)await addFiles(files)};['dragenter','dragover'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.add('active')}));['dragleave','drop'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.remove('active')}));drop.addEventListener('drop',e=>addFiles([...e.dataTransfer.files]));$('addBtn').onclick=()=>fileInput.click();$('clearBtn').onclick=()=>{cards=[];renderSlots();drawSheet();ready.textContent='Ready';progress.style.width='0'};
+function openPasswordModal(msg){$('passwordError').textContent=msg;$('passwordError').classList.remove('hidden');$('passwordInput').value='';$('passwordModal').classList.add('open');setTimeout(()=>$('passwordInput').focus(),50)}$('passwordCancel').onclick=()=>{$('passwordModal').classList.remove('open');pendingPassword=null};$('passwordOk').onclick=async()=>{if(!pendingPassword)return;const pw=$('passwordInput').value;try{$('passwordError').classList.add('hidden');$('passwordModal').classList.remove('open');await processFile(pendingPassword.file,pendingPassword.index,pw)}catch(e){if(e.kind==='password'){openPasswordModal(e.msg)}else{cards[pendingPassword.index]={file:pendingPassword.file,status:`PDF error: ${e.message||'Unable to read PDF'}`};renderSlots();ready.textContent='Could not process PDF'} }finally{pendingPassword=null}};$('passwordInput').addEventListener('keydown',e=>{if(e.key==='Enter')$('passwordOk').click()});
+function syncPrintSetup(){
+  const v=$('cardSize').value;
+  if(v==='custom'){
+    const cw=parseFloat($('customW').value), ch=parseFloat($('customH').value);
+    CARD_W_MM=(Number.isFinite(cw)&&cw>0)?cw:85.6;
+    CARD_H_MM=(Number.isFinite(ch)&&ch>0)?ch:54;
+    $('customSizeBox').classList.remove('hidden');
+  }else if(v==='86x54'){
+    CARD_W_MM=86;CARD_H_MM=54;
+    $('customSizeBox').classList.add('hidden');
+  }else{
+    CARD_W_MM=85.6;CARD_H_MM=54;
+    $('customSizeBox').classList.add('hidden');
+  }
+  updateCardGeometry();
+  const dragon=mirrorBack;
+  $('mirrorBackBtn').classList.toggle('on',dragon);$('dragonSetup').classList.toggle('on',dragon);
+  $('mirrorBackBtn').textContent=`Dragon Sheet: ${dragon?'ON':'OFF'}`;$('dragonSetup').textContent=`Dragon Sheet: ${dragon?'ON':'OFF'}`;
+  drawSheet();
+  if(activeJob){syncModalSliders(activeJob);previewSource(activeJob.render.sourceCanvas||activeJob.render.canvas,activeJob.det,activeEditSide);updateModalPreviews();}
+}
+$('cardSize').onchange=syncPrintSetup;
+$('customW').oninput=syncPrintSetup;$('customH').oninput=syncPrintSetup;
+$('backX').oninput=drawSheet;$('backY').oninput=drawSheet;
+$('mirrorBackBtn').onclick=()=>{mirrorBack=!mirrorBack;syncPrintSetup()};
+$('dragonSetup').onclick=()=>{$('mirrorBackBtn').click()};
+$('mirrorSheetBtn').onclick=()=>{mirrorSheet=!mirrorSheet;$('mirrorSheetBtn').classList.toggle('on',mirrorSheet);$('mirrorSheetSetup').classList.toggle('on',mirrorSheet);$('mirrorSheetBtn').textContent=`Sheet ↔ ${mirrorSheet?'ON':'OFF'}`;$('mirrorSheetSetup').textContent=`Mirror Sheet: ${mirrorSheet?'ON':'OFF'}`;drawSheet()};
+$('mirrorSheetSetup').onclick=()=>$('mirrorSheetBtn').click();
+updateCardGeometry();
+function applyZoom(){const w=Math.round(A4W*zoom),h=Math.round(A4H*zoom);sheet.style.width=w+'px';sheet.style.height=h+'px';$('zoomLabel').textContent=Math.abs(zoom-1)<.001?'100%':Math.round(zoom*100)+'%'}function fit(){const st=$('stage');const availW=Math.max(260,st.clientWidth-90),availH=Math.max(260,st.clientHeight-90);zoom=Math.min(availW/A4W,availH/A4H);applyZoom()}function setZoom(next,anchor){const old=zoom;zoom=Math.max(.25,Math.min(2.5,next));if(anchor){const rect=stageEl.getBoundingClientRect();const mx=anchor.x-rect.left+stageEl.scrollLeft;const my=anchor.y-rect.top+stageEl.scrollTop;const ratio=zoom/old;applyZoom();stageEl.scrollLeft=mx*ratio-(anchor.x-rect.left);stageEl.scrollTop=my*ratio-(anchor.y-rect.top)}else applyZoom()}window.addEventListener('resize',()=>{if(!window._zoomManual) fit()});$('fitBtn').onclick=()=>{window._zoomManual=false;fit()};$('plus').onclick=()=>{window._zoomManual=true;setZoom(zoom+.1)};$('minus').onclick=()=>{window._zoomManual=true;setZoom(zoom-.1)};
+const stageEl=$('stage');stageEl.addEventListener('wheel',(e)=>{if(e.ctrlKey||e.metaKey){e.preventDefault();window._zoomManual=true;const dir=e.deltaY<0?1:-1;setZoom(zoom+dir*.1,{x:e.clientX,y:e.clientY});return}if(Math.abs(e.deltaY)>Math.abs(e.deltaX)){stageEl.scrollTop+=e.deltaY;e.preventDefault();}}, {passive:false});stageEl.addEventListener('keydown',(e)=>{if(['PageDown','PageUp','Home','End','ArrowDown','ArrowUp','Space'].includes(e.key)){if(e.key==='PageDown'||e.key==='Space') stageEl.scrollTop+=Math.max(250,stageEl.clientHeight*.85);else if(e.key==='PageUp') stageEl.scrollTop-=Math.max(250,stageEl.clientHeight*.85);else if(e.key==='Home') stageEl.scrollTop=0;else if(e.key==='End') stageEl.scrollTop=stageEl.scrollHeight;else stageEl.scrollTop+=(e.key==='ArrowDown'?80:-80);e.preventDefault();}});stageEl.tabIndex=0;stageEl.addEventListener('keydown',(e)=>{if((e.ctrlKey||e.metaKey)&&['+','=','-','0'].includes(e.key)){e.preventDefault();window._zoomManual=true;if(e.key==='0'){window._zoomManual=false;fit()}else if(e.key==='-'||e.key==='='){setZoom(e.key==='='?zoom+.1:zoom-.1)}}});fit();
+$('printBtn').onclick=()=>{const png=sheet.toDataURL('image/png');const w=window.open('','_blank');if(!w){alert('Please allow popups for printing.');return}w.document.write(`<html><head><title>PVC Card Sheet</title><style>@page{size:A4 portrait;margin:0}html,body{margin:0;padding:0}img{width:210mm;height:297mm;display:block}</style></head><body><img src="${png}"></body></html>`);w.document.close();w.focus();setTimeout(()=>w.print(),500)};
+window.addEventListener('error',e=>{if(e&&e.message)ready.textContent='App error: '+e.message.slice(0,180)});window.addEventListener('unhandledrejection',e=>{const m=e&&e.reason?(e.reason.message||String(e.reason)):'Unexpected error';ready.textContent='Error: '+String(m).slice(0,180)});
+renderSlots();drawSheet();
+</script>
 </body>
 </html>
