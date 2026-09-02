@@ -315,8 +315,6 @@ function drawSheet(){
     const c=cards[i];
     if(c?.front)ctx.drawImage(c.front,fx,y,CARD_W,CARD_H);
     if(c?.back)drawImageMaybeMirrored(c.back,bx,by,CARD_W,CARD_H,mirrorBack);
-    ctx.strokeStyle='#b9c5d4';ctx.lineWidth=2;ctx.setLineDash([10,10]);
-    ctx.strokeRect(fx,y,CARD_W,CARD_H);ctx.strokeRect(bx,by,CARD_W,CARD_H);ctx.setLineDash([]);
   }
   // Physical center-fold guide: always visible for easy cutting/folding.
   ctx.strokeStyle='#111';ctx.lineWidth=4;ctx.setLineDash([]);
