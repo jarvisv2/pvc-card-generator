@@ -195,6 +195,443 @@ button,input,select{font:inherit}
 #mirrorSheetSetup,#mirrorSheetBtn{border:1px solid #b9a5ff;background:linear-gradient(135deg,#fff7ed 0%,#eef8ff 45%,#f4edff 100%);color:#5b35c9;box-shadow:0 5px 14px rgba(104,70,238,.12)}
 #mirrorSheetSetup.on,#mirrorSheetBtn.on{background:linear-gradient(135deg,#1769ff 0%,#6846ee 55%,#d946ef 100%);border-color:transparent;color:#fff;box-shadow:0 7px 18px rgba(104,70,238,.25)}
 </style>
+
+<style id="colorful-ui-upgrade">
+/* ================================================================
+   COLORFUL UI UPGRADE — VISUAL ONLY
+   Core HTML structure, IDs, event handlers and application logic
+   remain untouched. This layer only adds color, motion and polish.
+   ================================================================ */
+:root{
+  --ui-cyan:#22d3ee;
+  --ui-sky:#38bdf8;
+  --ui-blue:#4f46e5;
+  --ui-violet:#8b5cf6;
+  --ui-pink:#ec4899;
+  --ui-orange:#fb923c;
+  --ui-green:#10b981;
+  --ui-glow:rgba(79,70,229,.18);
+}
+
+/* Smooth motion without changing dimensions or functionality. */
+button,.btn,.drop,.slot,.iconbtn,.field input,.field select,.toggleline button,
+.brand-social a,.settings summary,.pill{
+  transition:transform .22s ease, box-shadow .22s ease, border-color .22s ease,
+              background-color .22s ease, filter .22s ease, color .22s ease;
+}
+
+/* Animated ambient color behind the whole app. */
+.app{position:relative;isolation:isolate;}
+.app::before,
+.app::after{
+  content:"";
+  position:fixed;
+  z-index:-2;
+  pointer-events:none;
+  border-radius:50%;
+  filter:blur(70px);
+  opacity:.24;
+  animation:uiFloat 12s ease-in-out infinite alternate;
+}
+.app::before{
+  width:420px;height:420px;
+  left:-170px;top:-150px;
+  background:radial-gradient(circle,#22d3ee 0%,#6366f1 42%,transparent 72%);
+}
+.app::after{
+  width:500px;height:500px;
+  right:-220px;bottom:-190px;
+  background:radial-gradient(circle,#ec4899 0%,#8b5cf6 44%,transparent 72%);
+  animation-delay:-4s;
+}
+
+/* Brand area: richer gradient + moving color highlight. */
+.brand{
+  position:relative;
+  overflow:hidden;
+  background:
+    radial-gradient(circle at 92% 18%,rgba(56,189,248,.15),transparent 27%),
+    radial-gradient(circle at 72% 92%,rgba(139,92,246,.13),transparent 30%),
+    linear-gradient(180deg,#ffffff 0%,#f8fbff 100%);
+}
+.brand::before{
+  content:"";
+  position:absolute;
+  left:-35%;top:0;
+  width:42%;height:3px;
+  background:linear-gradient(90deg,transparent,#22d3ee,#6366f1,#ec4899,transparent);
+  filter:blur(.2px);
+  animation:brandSweep 5.5s linear infinite;
+}
+.brand::after{
+  content:"";
+  position:absolute;
+  width:120px;height:120px;
+  right:-34px;top:8px;
+  border-radius:50%;
+  background:linear-gradient(135deg,rgba(59,130,246,.14),rgba(236,72,153,.06));
+  box-shadow:0 0 40px rgba(99,102,241,.10);
+  animation:uiFloat 7s ease-in-out infinite alternate;
+  pointer-events:none;
+}
+.brand h1 .title-accent{
+  background-size:180% 100%;
+  animation:titleShift 7s ease-in-out infinite alternate;
+}
+.brand h1 .pro{
+  position:relative;
+  overflow:hidden;
+  box-shadow:0 6px 18px rgba(79,70,229,.24);
+  animation:proPulse 3.6s ease-in-out infinite;
+}
+.brand h1 .pro::after{
+  content:"";
+  position:absolute;
+  inset:-20% auto -20% -55%;
+  width:35%;
+  transform:skewX(-20deg);
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent);
+  animation:proShine 4.8s ease-in-out infinite;
+}
+
+.brand-social a:hover{filter:saturate(1.12)}
+.brand-social .divider{position:relative;overflow:hidden}
+.brand-social .divider::after{
+  content:"";position:absolute;inset:-20px 0;
+  background:linear-gradient(180deg,transparent,#8b5cf6,transparent);
+  animation:dividerGlow 2.8s linear infinite;
+}
+
+/* Toolbar gets a colorful glassy surface while preserving button IDs. */
+.toolbar{
+  position:relative;
+  background:linear-gradient(180deg,rgba(255,255,255,.96),rgba(248,251,255,.94));
+  box-shadow:0 8px 24px rgba(38,64,104,.05);
+}
+.toolbar::after{
+  content:"";
+  position:absolute;
+  left:0;right:0;bottom:-1px;height:2px;
+  background:linear-gradient(90deg,#22d3ee,#3b82f6,#8b5cf6,#ec4899,#fb923c);
+  background-size:220% 100%;
+  animation:gradientMove 6s linear infinite;
+  opacity:.78;
+}
+.toolbar .btn{
+  position:relative;
+  overflow:hidden;
+}
+.toolbar .btn::after{
+  content:"";
+  position:absolute;
+  top:-70%;left:-35%;
+  width:24%;height:240%;
+  transform:rotate(22deg);
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.45),transparent);
+  transition:transform .45s ease;
+  pointer-events:none;
+}
+.toolbar .btn:hover::after{transform:translateX(480%) rotate(22deg)}
+.toolbar .primary{
+  background:linear-gradient(135deg,#2563eb 0%,#4f46e5 48%,#8b5cf6 100%);
+  box-shadow:0 10px 22px rgba(79,70,229,.20);
+}
+.toolbar .primary:hover{transform:translateY(-2px);box-shadow:0 14px 28px rgba(79,70,229,.26)}
+.toolbar .softbtn:hover,.toolbar .graybtn:hover{transform:translateY(-2px)}
+.toolbar .downloadbtn{
+  background:linear-gradient(135deg,#06b6d4 0%,#2563eb 45%,#7c3aed 78%,#ec4899 100%);
+  background-size:180% 180%;
+  animation:downloadFlow 6s ease-in-out infinite;
+  box-shadow:0 10px 24px rgba(37,99,235,.18);
+}
+.toolbar .downloadbtn:hover{transform:translateY(-2px) scale(1.01)}
+
+/* Print setup panel becomes a soft multi-color card. */
+.desktop-settings{
+  position:relative;
+  overflow:hidden;
+  background:
+    radial-gradient(circle at 0% 0%,rgba(34,211,238,.10),transparent 24%),
+    radial-gradient(circle at 100% 100%,rgba(139,92,246,.10),transparent 28%),
+    linear-gradient(180deg,#fcfeff,#f7faff);
+}
+.desktop-settings::before{
+  content:"";
+  position:absolute;
+  left:0;top:0;right:0;height:3px;
+  background:linear-gradient(90deg,#22d3ee,#3b82f6,#8b5cf6,#ec4899,#fb923c);
+  background-size:200% 100%;
+  animation:gradientMove 8s linear infinite;
+}
+.desktop-settings .settings-title{
+  color:#405c7f;
+  letter-spacing:.06em;
+}
+.desktop-settings .setting-row .field select,
+.desktop-settings .setting-row .field button,
+.custom-size-box,
+.toggleline,
+.back-align input,
+.mirror-group button{
+  box-shadow:0 5px 14px rgba(37,76,126,.045);
+}
+.desktop-settings select:focus,.desktop-settings input:focus{box-shadow:0 0 0 3px rgba(79,70,229,.10),0 8px 18px rgba(37,76,126,.06)}
+
+/* Upload drop zone: animated color border + subtle breathing glow. */
+.drop{
+  position:relative;
+  overflow:hidden;
+  border:1.5px dashed #9bb7da;
+  background:
+    radial-gradient(circle at 15% 25%,rgba(34,211,238,.10),transparent 28%),
+    radial-gradient(circle at 88% 75%,rgba(139,92,246,.11),transparent 32%),
+    linear-gradient(135deg,#ffffff,#f9fbff 54%,#fbf8ff);
+  box-shadow:0 8px 24px rgba(51,84,130,.05);
+}
+.drop::before{
+  content:"";
+  position:absolute;
+  inset:-2px;
+  border-radius:inherit;
+  padding:1px;
+  background:linear-gradient(90deg,#22d3ee,#3b82f6,#8b5cf6,#ec4899,#fb923c,#22d3ee);
+  background-size:220% 100%;
+  animation:gradientMove 7s linear infinite;
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;
+  mask-composite:exclude;
+  pointer-events:none;
+  opacity:.8;
+}
+.drop::after{
+  content:"";
+  position:absolute;
+  width:80px;height:80px;
+  right:-18px;top:-28px;
+  border-radius:50%;
+  background:rgba(59,130,246,.08);
+  box-shadow:0 0 40px rgba(139,92,246,.12);
+  animation:uiFloat 6s ease-in-out infinite alternate;
+}
+.drop:hover,.drop.active{
+  transform:translateY(-1px);
+  border-color:#6d8df5;
+  box-shadow:0 14px 30px rgba(79,70,229,.12);
+}
+.drop strong{position:relative;z-index:1;color:#263f61}
+.drop small{position:relative;z-index:1}
+
+.progress{
+  position:relative;
+  overflow:hidden;
+  background:linear-gradient(90deg,#eaf1fa,#eef0ff,#fbefff);
+}
+.progress>i{
+  background:linear-gradient(90deg,#22d3ee,#3b82f6,#8b5cf6,#ec4899);
+  background-size:200% 100%;
+  animation:gradientMove 2.8s linear infinite;
+  box-shadow:0 0 14px rgba(79,70,229,.25);
+}
+
+/* File cards: colorful edge glow and lift on hover. */
+.slot{
+  position:relative;
+  overflow:hidden;
+  background:linear-gradient(180deg,rgba(255,255,255,.98),rgba(249,252,255,.98));
+  box-shadow:0 5px 16px rgba(36,59,90,.05);
+}
+.slot::before{
+  content:"";
+  position:absolute;
+  left:0;top:0;bottom:0;width:3px;
+  background:linear-gradient(180deg,#22d3ee,#3b82f6,#8b5cf6,#ec4899);
+  background-size:100% 180%;
+  animation:sideFlow 5s ease-in-out infinite;
+}
+.slot:hover{
+  transform:translateY(-2px);
+  border-color:#bdd1f4;
+  box-shadow:0 12px 28px rgba(44,75,121,.10);
+}
+.slot .pill.good{
+  background:linear-gradient(135deg,#dcfce7,#d1fae5);
+  color:#047857;
+  box-shadow:inset 0 0 0 1px rgba(16,185,129,.10);
+}
+.slot .pill:not(.good):not(.bad){
+  background:linear-gradient(135deg,#eef2ff,#ede9fe);
+}
+.slot .status.good{font-weight:700}
+
+/* Inputs get a crisp neon edge while staying native/compact. */
+.field input:hover,.field select:hover{border-color:#a9bce0;box-shadow:0 6px 15px rgba(55,91,145,.06)}
+.settings summary:hover{color:#5b46cf;transform:translateX(2px)}
+
+/* Workspace: modern animated aurora background around the real A4 canvas. */
+.workspace{position:relative;background:#e9f0fa}
+.topbar{
+  position:relative;
+  overflow:hidden;
+  background:
+    radial-gradient(circle at 12% -30%,rgba(34,211,238,.09),transparent 30%),
+    radial-gradient(circle at 90% 130%,rgba(139,92,246,.09),transparent 34%),
+    #fff;
+}
+.topbar::after{
+  content:"";
+  position:absolute;
+  left:0;right:0;bottom:0;height:2px;
+  background:linear-gradient(90deg,transparent,#22d3ee,#3b82f6,#8b5cf6,#ec4899,transparent);
+  background-size:180% 100%;
+  animation:gradientMove 7s linear infinite;
+  opacity:.55;
+}
+.meta b{position:relative;color:#284d82}
+.meta b::after{content:"";position:absolute;left:0;right:0;bottom:-3px;height:1px;background:linear-gradient(90deg,#22d3ee,#8b5cf6);opacity:.35}
+.iconbtn:hover,.viewtools .graybtn:hover{transform:translateY(-2px);box-shadow:0 8px 18px rgba(43,71,111,.10);border-color:#b8c7e4}
+
+.stage{
+  background:
+    radial-gradient(circle at 12% 10%,rgba(34,211,238,.15),transparent 24%),
+    radial-gradient(circle at 83% 16%,rgba(59,130,246,.13),transparent 22%),
+    radial-gradient(circle at 78% 84%,rgba(139,92,246,.14),transparent 25%),
+    radial-gradient(circle at 18% 80%,rgba(236,72,153,.08),transparent 21%),
+    linear-gradient(135deg,#e9f2fb 0%,#e4ebf8 48%,#eee9fa 100%);
+  background-size:180% 180%;
+  animation:stageAurora 18s ease-in-out infinite alternate;
+}
+.stage::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  opacity:.28;
+  background-image:
+    linear-gradient(rgba(255,255,255,.28) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.28) 1px,transparent 1px);
+  background-size:34px 34px;
+  mask-image:linear-gradient(to bottom,rgba(0,0,0,.42),transparent 72%);
+}
+.sheetwrap{filter:drop-shadow(0 22px 32px rgba(35,57,93,.13))}
+.sheet{box-shadow:0 18px 45px rgba(24,50,78,.16),0 0 0 1px rgba(255,255,255,.65)}
+
+/* Floating utility buttons. */
+.fabrow .btn{
+  backdrop-filter:blur(10px);
+  background:rgba(255,255,255,.84);
+  box-shadow:0 9px 24px rgba(42,68,111,.10);
+}
+.fabrow .btn:hover{transform:translateY(-2px)}
+#mirrorBackBtn.on,#mirrorSheetBtn.on{
+  animation:activeButtonGlow 2.6s ease-in-out infinite;
+}
+
+.bottomhint{
+  backdrop-filter:blur(12px);
+  background:rgba(255,255,255,.74);
+  box-shadow:0 8px 18px rgba(40,68,110,.08);
+}
+
+/* Modal gains a premium glass overlay, with all existing behavior intact. */
+.modal{backdrop-filter:blur(6px);background:rgba(10,26,49,.48)}
+.modalcard{
+  position:relative;
+  border:1px solid rgba(255,255,255,.62);
+  box-shadow:0 35px 100px rgba(14,29,53,.30);
+}
+.modalcard::before{
+  content:"";
+  position:absolute;
+  left:0;right:0;top:0;height:3px;
+  background:linear-gradient(90deg,#22d3ee,#3b82f6,#8b5cf6,#ec4899,#fb923c);
+  background-size:220% 100%;
+  animation:gradientMove 7s linear infinite;
+  z-index:2;
+}
+.modalhead{background:linear-gradient(180deg,#ffffff,#fbfcff)}
+.sourcebox,.previewbox,.cropcontrols{
+  box-shadow:0 7px 18px rgba(39,66,106,.05);
+}
+.cropbox.active{animation:cropPulse 1.9s ease-in-out infinite}
+
+/* Gentle status shimmer. */
+.ready{position:relative}
+.ready::after{
+  content:"";
+  display:inline-block;
+  width:6px;height:6px;
+  margin-left:5px;
+  border-radius:50%;
+  background:linear-gradient(135deg,#22d3ee,#8b5cf6);
+  box-shadow:0 0 10px rgba(99,102,241,.28);
+  animation:statusPulse 2.2s ease-in-out infinite;
+  vertical-align:1px;
+}
+
+@keyframes uiFloat{
+  0%{transform:translate3d(0,0,0) rotate(0deg)}
+  100%{transform:translate3d(18px,-14px,0) rotate(4deg)}
+}
+@keyframes brandSweep{
+  0%{left:-35%}
+  100%{left:110%}
+}
+@keyframes titleShift{
+  0%{background-position:0% 50%}
+  100%{background-position:100% 50%}
+}
+@keyframes proPulse{
+  0%,100%{box-shadow:0 6px 18px rgba(79,70,229,.20)}
+  50%{box-shadow:0 7px 24px rgba(139,92,246,.34)}
+}
+@keyframes proShine{
+  0%,55%{transform:translateX(0) skewX(-20deg);opacity:0}
+  65%{opacity:1}
+  84%,100%{transform:translateX(420%) skewX(-20deg);opacity:0}
+}
+@keyframes dividerGlow{
+  0%{transform:translateY(-35px)}
+  100%{transform:translateY(35px)}
+}
+@keyframes gradientMove{
+  0%{background-position:0% 50%}
+  100%{background-position:200% 50%}
+}
+@keyframes downloadFlow{
+  0%,100%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+}
+@keyframes sideFlow{
+  0%,100%{background-position:50% 0%}
+  50%{background-position:50% 100%}
+}
+@keyframes stageAurora{
+  0%{background-position:0% 0%}
+  100%{background-position:100% 100%}
+}
+@keyframes activeButtonGlow{
+  0%,100%{box-shadow:0 7px 18px rgba(104,70,238,.20)}
+  50%{box-shadow:0 10px 26px rgba(236,72,153,.24)}
+}
+@keyframes cropPulse{
+  0%,100%{filter:drop-shadow(0 0 0 rgba(79,70,229,0))}
+  50%{filter:drop-shadow(0 0 7px rgba(79,70,229,.26))}
+}
+@keyframes statusPulse{
+  0%,100%{transform:scale(.82);opacity:.65}
+  50%{transform:scale(1.18);opacity:1}
+}
+
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{
+    animation-duration:.001ms!important;
+    animation-iteration-count:1!important;
+    transition-duration:.001ms!important;
+    scroll-behavior:auto!important;
+  }
+}
+</style>
+
 </head>
 <body>
 <div class="app">
@@ -259,7 +696,7 @@ button,input,select{font:inherit}
       </div>
     </div>
 
-    <div class="toolbar"><button class="btn primary" id="addBtn">＋ Add PDF</button><button class="btn softbtn" id="clearBtn">Clear All</button><button class="btn graybtn" id="printBtn">Print</button><button class="btn downloadbtn" id="downloadBtn">↓ Download A4</button></div>
+    <div class="toolbar"><button class="btn primary" id="addBtn">Add PDF</button><button class="btn softbtn" id="clearBtn">Clear All</button><button class="btn graybtn" id="printBtn">Print</button><button class="btn downloadbtn" id="downloadBtn">Download A4</button></div>
     <div class="desktop-settings"><div class="settings-title">Print setup</div><div class="setting-row"><div class="field"><label>Card size</label><select id="cardSize"><option value="85.6x54">CR80 • 85.6 × 54 mm</option><option value="86x54">Preset • 86 × 54 mm</option><option value="86.6x54.4">Preset • 86.6 × 54.4 mm</option><option value="87x55">Preset • 87 × 55 mm</option><option value="custom">Custom • enter size</option></select></div><div class="field"><label>Print mode</label><button class="btn mini graybtn" id="dragonSetup" style="width:100%;height:38px">Dragon Sheet: OFF</button></div></div><div id="customSizeBox" class="custom-size-box hidden"><div class="custom-size-title">Custom card size (mm)</div><div class="custom-size-grid"><div class="field"><label>Width</label><input id="customW" type="number" min="40" max="100" step="0.1" value="85.6"></div><div class="field"><label>Height</label><input id="customH" type="number" min="30" max="70" step="0.1" value="54"></div></div><div class="custom-size-note">Enter the physical PVC cutting size. The preview, crop ratio and A4 layout update automatically.</div></div><div class="back-align"><div><label>Back X offset (mm)</label><input id="backX" type="number" min="-5" max="5" step="0.1" value="0"></div><div><label>Back Y offset (mm)</label><input id="backY" type="number" min="-5" max="5" step="0.1" value="0"></div></div><div class="mirror-group"><button class="btn mini graybtn" id="mirrorBackSetup">Mirror Back: OFF</button><button class="btn mini graybtn" id="mirrorSheetSetup">Mirror Sheet: OFF</button></div><div class="desktop-note">The black A4 center line is always printed as a fold/cutting guide. Turn on Dragon Sheet to mirror the back side. Use Back X/Y for cutter registration adjustment.</div></div>
     <label class="drop" id="drop"><strong>Drop PDF here</strong><small>or click to choose a government ID PDF</small></label>
     <input id="fileInput" type="file" accept="application/pdf,.pdf" multiple>
