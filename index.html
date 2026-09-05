@@ -801,9 +801,33 @@ function detectABHA(c){
 }
 function detectERation(c){
   const w=c.width,h=c.height;
-  const front={x:w*0.09076,y:h*0.79216,w:w*0.39496,h:h*0.16746};
-  const back ={x:w*0.51933,y:h*0.79216,w:w*0.39496,h:h*0.16746};
-  return {type:'e-Ration Card',confidence:.99,front,back,source:'West Bengal e-Ration lower-card template (calibrated)',mode:'stretch'};
+
+  // MAIN SOURCE CROP (kept exactly), expanded equally on all four sides.
+  // Change only `pad` if you want a little more or less white margin.
+  const pad=Math.round(Math.min(w,h)*0.008);
+
+  const front={
+    x:w*0.09076-pad,
+    y:h*0.79216-pad,
+    w:w*0.39496+pad*2,
+    h:h*0.16746+pad*2
+  };
+
+  const back={
+    x:w*0.51933-pad,
+    y:h*0.79216-pad,
+    w:w*0.39496+pad*2,
+    h:h*0.16746+pad*2
+  };
+
+  return {
+    type:'e-Ration Card',
+    confidence:.99,
+    front,
+    back,
+    source:'West Bengal e-Ration lower-card template (calibrated)',
+    mode:'stretch'
+  };
 }
 function detectAyushman(c,pages){
   // The supplied Ayushman sample is a genuine two-page document:
