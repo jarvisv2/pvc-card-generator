@@ -1,0 +1,74 @@
+/* =====================================================================
+   THEME SWITCHER — compact topbar studio control
+   Purely visual utility; application logic remains unchanged.
+   ===================================================================== */
+.theme-switcher{
+  position:relative;
+  z-index:4;
+  display:inline-flex;
+  align-items:center;
+  gap:3px;
+  padding:4px;
+  min-height:36px;
+  border:1px solid rgba(116,142,198,.22);
+  border-radius:14px;
+  background:rgba(255,255,255,.58);
+  box-shadow:0 8px 24px rgba(46,70,117,.08), inset 0 1px 0 rgba(255,255,255,.92);
+  backdrop-filter:blur(14px) saturate(145%);
+  -webkit-backdrop-filter:blur(14px) saturate(145%);
+}
+.theme-switcher::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:inherit;
+  background:linear-gradient(120deg,rgba(36,214,236,.10),transparent 35%,rgba(124,86,240,.08) 72%,rgba(237,80,177,.08));
+  pointer-events:none;
+}
+.theme-btn{
+  position:relative;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:5px;
+  height:28px;
+  padding:0 9px;
+  border:1px solid transparent;
+  border-radius:9px;
+  background:transparent;
+  color:#72839c;
+  cursor:pointer;
+  font-size:9px;
+  font-weight:900;
+  letter-spacing:.05em;
+  text-transform:uppercase;
+  white-space:nowrap;
+  transition:transform .22s ease,color .22s ease,background .22s ease,box-shadow .22s ease,border-color .22s ease;
+}
+.theme-btn:hover{transform:translateY(-1px);color:#4057b8}
+.theme-icon{font-size:12px;line-height:1}
+.theme-btn.active{
+  color:#fff;
+  border-color:rgba(255,255,255,.55);
+  background:linear-gradient(135deg,#2b7cff 0%,#6658ed 50%,#bb52e8 100%);
+  box-shadow:0 6px 16px rgba(81,85,226,.22),0 0 16px rgba(95,89,235,.10);
+}
+.theme-btn.active::after{
+  content:"";
+  position:absolute;
+  inset:-1px;
+  border-radius:inherit;
+  background:linear-gradient(105deg,transparent 22%,rgba(255,255,255,.34) 50%,transparent 67%);
+  transform:translateX(-120%);
+  animation:themeTabShine 3.9s ease-in-out infinite;
+  pointer-events:none;
+}
+@keyframes themeTabShine{0%,55%{transform:translateX(-120%);opacity:0}67%{opacity:1}84%,100%{transform:translateX(120%);opacity:0}}
+
+@media(max-width:1200px){
+  .theme-switcher{gap:2px;padding:3px;min-height:33px}
+  .theme-btn{height:26px;padding:0 7px;font-size:8px;gap:4px}
+  .theme-label{display:none}
+  .theme-icon{font-size:12px}
+}
+@media(max-width:980px){.theme-switcher{display:none}}
