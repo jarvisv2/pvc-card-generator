@@ -1,659 +1,360 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>PVC Card Maker Pro — Hardcore Ultra Studio</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upgrading Our Experience</title>
+    <!-- Importing modern, clean font -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #8B5CF6;
+            --accent: #EC4899;
+            --dark-gradient: linear-gradient(135deg, #1e0b36 0%, #0f051d 100%);
+            --light-glass: rgba(255, 255, 255, 0.08);
+            --border-glass: rgba(255, 255, 255, 0.15);
+        }
 
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: radial-gradient(circle at 20% 30%, #431407 0%, transparent 40%),
+                        radial-gradient(circle at 80% 80%, #1e1b4b 0%, transparent 50%),
+                        var(--dark-gradient);
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+            position: relative;
+            padding: 20px;
+        }
 
+        /* Abstract colorful background blobs for depth */
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: 1;
+            opacity: 0.5;
+        }
+        .blob-1 { top: 15%; left: 10%; width: 300px; height: 300px; background: #6366f1; }
+        .blob-2 { bottom: 10%; right: 5%; width: 400px; height: 400px; background: #db2777; }
+        .blob-3 { top: 40%; right: 20%; width: 250px; height: 250px; background: #7c3aed; }
 
+        .container {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            max-width: 540px;
+            background: var(--light-glass);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border-glass);
+            border-radius: 28px;
+            padding: 40px 30px;
+            text-align: center;
+            box-shadow: 0 24px 80px rgba(0, 0, 0, 0.5);
+        }
 
+        /* Responsive scaling */
+        @media (min-width: 480px) {
+            .container { padding: 50px 45px; }
+        }
 
+        /* Vibrant animated custom illustration area */
+        .illustration-box {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 30px;
+        }
 
-<link rel="stylesheet" href="css/core.css">
-<link rel="stylesheet" href="css/legacy-colorful.css">
-<link rel="stylesheet" href="css/manual-crop.css">
-<link rel="stylesheet" href="css/ultra-theme.css">
-<link rel="stylesheet" href="css/ultra-motion.css">
-<link rel="stylesheet" href="css/final-polish.css">
-<link rel="stylesheet" href="css/theme-switcher.css">
-<link rel="stylesheet" href="css/themes.css">
+        /* Glowing background behind illustration */
+        .glow {
+            position: absolute;
+            width: 140px;
+            height: 140px;
+            background: radial-gradient(circle, rgba(139, 92, 246, 0.4) 0%, rgba(236, 72, 153, 0.4) 100%);
+            filter: blur(30px);
+            z-index: -1;
+        }
+
+        /* Modern interactive SVG graphic depicting servers, gears and upgrades */
+        .illustration-svg {
+            width: 180px;
+            height: auto;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(2deg); }
+        }
+
+        .heading-badge {
+            display: inline-block;
+            background: linear-gradient(90deg, #3b82f633, #8b5cf633);
+            border: 1px solid rgba(139, 92, 246, 0.4);
+            color: #a78bfa;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            padding: 8px 16px;
+            border-radius: 50px;
+            margin-bottom: 18px;
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 16px;
+            letter-spacing: -0.5px;
+            background: linear-gradient(to right, #ffffff, #f3e8ff, #fbcfe8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        p {
+            font-size: 15px;
+            color: #d1d5db;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            font-weight: 400;
+        }
+
+        /* Pulse status badge */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #f3f4f6;
+            margin-bottom: 35px;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            background-color: #34d399;
+            border-radius: 50%;
+            margin-right: 10px;
+            box-shadow: 0 0 10px #34d399;
+            animation: pulse 1.8s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.9); box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(52, 211, 153, 0); }
+            100% { transform: scale(0.9); box-shadow: 0 0 0 0 rgba(52, 211, 153, 0); }
+        }
+
+        /* Dynamic Progress / Footer Section */
+        .status-footer {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            text-align: left;
+        }
+
+        @media (min-width: 480px) {
+            .status-footer {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+            }
+        }
+
+        .progress-box {
+            flex: 1;
+        }
+
+        .progress-label {
+            font-size: 12px;
+            color: #9ca3af;
+            font-weight: 600;
+            margin-bottom: 6px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-fill {
+            width: 75%; /* Set status */
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            border-radius: 10px;
+            position: relative;
+        }
+
+        /* Subscribe option */
+        .subscribe-form {
+            display: flex;
+            gap: 8px;
+            width: 100%;
+        }
+
+        @media (min-width: 480px) {
+            .subscribe-form { max-width: 250px; }
+        }
+
+        .subscribe-input {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 10px 14px;
+            border-radius: 12px;
+            color: #fff;
+            font-size: 13px;
+            outline: none;
+            flex-grow: 1;
+            transition: all 0.3s ease;
+        }
+
+        .subscribe-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.3);
+        }
+
+        .subscribe-button {
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            color: #fff;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            transition: transform 0.2s ease, opacity 0.2s ease;
+        }
+
+        .subscribe-button:hover {
+            transform: translateY(-1px);
+            opacity: 0.95;
+        }
+
+        .subscribe-button:active {
+            transform: translateY(1px);
+        }
+    </style>
 </head>
 <body>
-<div class="ultra-scene" aria-hidden="true">
-  <div class="scene-grid"></div>
-  <div class="scene-vignette"></div>
-  <div class="scene-blob blob-1"></div>
-  <div class="scene-blob blob-2"></div>
-  <div class="scene-blob blob-3"></div>
-  <div class="scene-blob blob-4"></div>
-  <div class="scene-beam beam-1"></div>
-  <div class="scene-beam beam-2"></div>
-  <div class="scene-stars"><i class="star s1"></i><i class="star s2"></i><i class="star s3"></i><i class="star s4"></i><i class="star s5"></i><i class="star s6"></i><i class="star s7"></i><i class="star s8"></i><i class="star s9"></i><i class="star s10"></i><i class="star s11"></i><i class="star s12"></i><i class="star s13"></i><i class="star s14"></i><i class="star s15"></i><i class="star s16"></i><i class="star s17"></i><i class="star s18"></i></div>
-</div>
 
-<div class="app">
-  <aside class="side">
-    <div class="brand">
-      <div class="brand-title">
-        <h1><span class="title-accent">PVC Card Maker</span></h1>
-        <span class="pro">PRO</span>
-      </div>
+    <!-- Ambient Glowing Blobs -->
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
 
-      <div class="brand-meta-row">
-        <span class="brand-kicker"><i></i> DESIGN STUDIO</span>
-        <span class="brand-status"><b></b> READY</span>
-      </div>
-      <div class="brand-social" aria-label="Creator links">
-        <a
-          class="instagram"
-          href="https://instagram.com/darkshadeoflove"
-          target="_blank"
-          rel="noopener noreferrer"
-         
-        >
-          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <defs>
-              <linearGradient id="igGradient" x1="3" y1="21" x2="21" y2="3">
-                <stop offset="0%" stop-color="#f58529"/>
-                <stop offset="45%" stop-color="#dd2a7b"/>
-                <stop offset="75%" stop-color="#8134af"/>
-                <stop offset="100%" stop-color="#515bd4"/>
-              </linearGradient>
-            </defs>
-            <rect x="3" y="3" width="18" height="18" rx="5" stroke-width="2"/>
-            <circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="2"/>
-            <circle cx="17.2" cy="6.8" r="1" fill="currentColor"/>
-          </svg>
-          <span class="brand-handle">darkshadeoflove</span>
-        </a>
+    <div class="container">
+        
+        <!-- Illustration -->
+        <div class="illustration-box">
+            <div class="glow"></div>
+            <!-- Interactive Modern Maintenance/Build SVG Graphic -->
+            <svg class="illustration-svg" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <!-- Outer gears & sparkles -->
+                <circle cx="100" cy="100" r="80" stroke="rgba(255,255,255,0.03)" stroke-width="2"/>
+                <path d="M165 50L175 40M175 40L170 40M175 40L175 45" stroke="#EC4899" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+                <path d="M30 160L20 170M20 170L25 170M20 170L20 165" stroke="#8B5CF6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+                
+                <!-- Main playful gear system -->
+                <g transform="translate(60, 55)">
+                    <circle cx="40" cy="40" r="28" fill="#8B5CF6" opacity="0.8"/>
+                    <!-- gear tooth details -->
+                    <rect x="36" y="4" width="8" height="12" rx="3" fill="#8B5CF6"/>
+                    <rect x="36" y="64" width="8" height="12" rx="3" fill="#8B5CF6"/>
+                    <rect x="4" y="36" width="12" height="8" rx="3" fill="#8B5CF6"/>
+                    <rect x="64" y="36" width="12" height="8" rx="3" fill="#8B5CF6"/>
+                    <circle cx="40" cy="40" r="14" fill="#1e0b36"/>
+                </g>
+                <g transform="translate(105, 105)">
+                    <circle cx="20" cy="20" r="15" fill="#EC4899" opacity="0.8"/>
+                    <rect x="17" y="1" width="6" height="7" rx="2" fill="#EC4899"/>
+                    <rect x="17" y="32" width="6" height="7" rx="2" fill="#EC4899"/>
+                    <circle cx="20" cy="20" r="7" fill="#1e0b36"/>
+                </g>
+                
+                <!-- Server box being "upgraded" -->
+                <rect x="55" y="100" width="60" height="45" rx="8" fill="url(#serverGrad)" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>
+                <circle cx="67" cy="112" r="3" fill="#10B981"/>
+                <circle cx="67" cy="122" r="3" fill="#3B82F6"/>
+                <circle cx="67" cy="132" r="3" fill="#EF4444"/>
+                <line x1="77" y1="112" x2="103" y2="112" stroke="rgba(255,255,255,0.3)" stroke-width="3" stroke-linecap="round"/>
+                <line x1="77" y1="122" x2="95" y2="122" stroke="rgba(255,255,255,0.3)" stroke-width="3" stroke-linecap="round"/>
+                <line x1="77" y1="132" x2="105" y2="132" stroke="rgba(255,255,255,0.3)" stroke-width="3" stroke-linecap="round"/>
 
-        <span class="divider" aria-hidden="true"></span>
-
-        <a
-          class="github"
-          href="https://github.com/jarvisv2"
-          target="_blank"
-          rel="noopener noreferrer"
-         
-        >
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M12 .7A11.3 11.3 0 0 0 8.4 22.8c.57.1.78-.25.78-.55v-2.13c-3.17.69-3.84-1.34-3.84-1.34-.52-1.32-1.27-1.67-1.27-1.67-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.02 1.75 2.67 1.25 3.32.96.1-.74.4-1.25.72-1.54-2.53-.29-5.2-1.27-5.2-5.65 0-1.25.45-2.27 1.18-3.07-.12-.29-.51-1.45.11-3.02 0 0 .96-.31 3.14 1.17a10.9 10.9 0 0 1 5.72 0c2.18-1.48 3.13-1.17 3.13-1.17.63 1.57.24 2.73.12 3.02.73.8 1.17 1.82 1.17 3.07 0 4.39-2.67 5.35-5.21 5.64.41.36.78 1.07.78 2.16v3.2c0 .3.21.66.79.55A11.3 11.3 0 0 0 12 .7Z"/>
-          </svg>
-          <span class="brand-handle">jarvisv2</span>
-        </a>
-        <span class="divider" aria-hidden="true"></span>
-
-        <a
-          class="facebook"
-          href="https://www.facebook.com/palu.das.33/"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M13.5 8H16V4.5h-2.5C10.46 4.5 8.5 6.43 8.5 9.36V11H6v3.5h2.5V20h3.5v-5.5H15l.5-3.5H12V9.64C12 8.66 12.46 8 13.5 8Z"/>
-          </svg>
-          <span class="brand-handle">Soumen Kumbhakar</span>
-        </a>
-      </div>
-    </div>
-
-    <div class="ultra-workflow" aria-hidden="true">
-      <div class="ultra-tab active"><span class="tab-icon">✦</span><span>Workspace</span></div>
-      <div class="ultra-tab"><span class="tab-icon">↥</span><span>Import</span></div>
-      <div class="ultra-tab"><span class="tab-icon">⌗</span><span>Crop Studio</span></div>
-      <div class="ultra-tab"><span class="tab-icon">▣</span><span>Print Lab</span></div>
-    </div>
-
-    <div class="toolbar"><button class="btn primary" id="addBtn">Add PDF</button><button class="btn softbtn" id="clearBtn">Clear All</button><button class="btn graybtn" id="printBtn">Print</button><button class="btn downloadbtn" id="downloadBtn">Download A4</button></div>
-    <div class="desktop-settings"><div class="settings-title">Print setup</div><div class="setting-row"><div class="field"><label>Card size</label><select id="cardSize"><option value="85.6x54">CR80 • 85.6 × 54 mm</option><option value="86x54">Preset • 86 × 54 mm</option><option value="86.6x54.4">Preset • 86.6 × 54.4 mm</option><option value="87x55">Preset • 87 × 55 mm</option><option value="custom">Custom • enter size</option></select></div><div class="field"><label>Print mode</label><button class="btn mini graybtn" id="dragonSetup" style="width:100%;height:38px">Dragon Sheet: OFF</button></div></div><div id="customSizeBox" class="custom-size-box hidden"><div class="custom-size-title">Custom card size (mm)</div><div class="custom-size-grid"><div class="field"><label>Width</label><input id="customW" type="number" min="40" max="100" step="0.1" value="85.6"></div><div class="field"><label>Height</label><input id="customH" type="number" min="30" max="70" step="0.1" value="54"></div></div><div class="custom-size-note">Enter the physical PVC cutting size. The preview, crop ratio and A4 layout update automatically.</div></div><div class="back-align"><div><label>Back X offset (mm)</label><input id="backX" type="number" min="-5" max="5" step="0.1" value="0"></div><div><label>Back Y offset (mm)</label><input id="backY" type="number" min="-5" max="5" step="0.1" value="0"></div></div><div class="mirror-group"><button class="btn mini graybtn" id="mirrorBackSetup">Mirror Back: OFF</button><button class="btn mini graybtn" id="mirrorSheetSetup">Mirror Sheet: OFF</button></div><div class="desktop-note">The black A4 center line is always printed as a fold/cutting guide. Turn on Dragon Sheet to mirror the back side. Use Back X/Y for cutter registration adjustment.</div></div>
-    <label class="drop" id="drop"><strong>Drop PDF here</strong><small>or click to choose a government ID PDF</small></label>
-    <input id="fileInput" type="file" accept="application/pdf,.pdf" multiple>
-    <div class="progress"><i id="progress"></i></div>
-    <div class="files"><div class="ready" id="ready">Ready</div><div id="slots"></div></div>
-  </aside>
-  <main class="workspace">
-    <div class="topbar"><div class="topbar-left"><div class="live-pill"><span></span> LIVE PREVIEW</div><div class="meta">A4 • <b>600 DPI</b> • <b id="sizeMeta">85.6 × 54 mm</b> PVC • <b>2 × 5 cards</b></div><div class="theme-switcher" id="themeSwitcher" aria-label="Theme selector" role="group">
-        <button type="button" class="theme-btn active" id="themeDefault" data-theme="default" aria-label="Default theme" title="Default theme"><span class="theme-icon">☼</span><span class="theme-label">Default</span></button>
-        <button type="button" class="theme-btn" id="themeDark" data-theme="dark" aria-label="Dark theme" title="Dark theme"><span class="theme-icon">◐</span><span class="theme-label">Dark</span></button>
-        <button type="button" class="theme-btn" id="themeVivid" data-theme="vivid" aria-label="Vibrant theme" title="Vibrant colorful theme"><span class="theme-icon">✦</span><span class="theme-label">Vivid</span></button>
-      </div></div><div class="viewtools"><button class="iconbtn" id="minus" title="Zoom out">−</button><div class="zoomlabel" id="zoomLabel">Fit</div><button class="iconbtn" id="plus" title="Zoom in">＋</button><button class="btn graybtn" id="fitBtn">Fit</button></div></div>
-    <div class="stage" id="stage"><div class="stage-watermark" aria-hidden="true">PVC • A4 • 600 DPI</div><div class="fabrow"><button class="btn graybtn" id="mirrorBackBtn" title="Dragon Sheet: mirror the back side">Dragon Sheet: OFF</button><button class="btn graybtn" id="mirrorSheetBtn" title="Mirror the complete A4 sheet">Sheet ↔</button></div><div class="sheetwrap" id="sheetwrap"><canvas class="sheet" id="sheet" width="4961" height="7016"></canvas></div></div>
-  </main>
-</div>
-<div class="bottomhint">Auto template detection is used first; advanced correction is available per card.</div>
-
-<div class="modal" id="modal">
-  <div class="modalcard">
-    <div class="modalhead"><div><b id="modalTitle">Crop Review</b><div id="modalSub" style="font-size:12px;color:#64748b;margin-top:4px"></div></div><button class="btn graybtn" id="closeModal">Close</button></div>
-    <div class="modalbody">
-      <div class="modalgrid">
-        <div>
-          <div class="smalllabel">Source PDF • detected boundaries</div>
-          <div class="sourcebox"><div class="sourcewrap" id="sourceWrap"><canvas class="sourcecanvas" id="sourcePreview"></canvas><div class="crop-overlay" id="cropOverlay"></div><div class="manual-select-layer" id="manualSelectLayer"></div></div><div class="sourceactions"><button class="btn softbtn" id="editFrontBtn">Edit Front</button><button class="btn softbtn" id="editBackBtn">Edit Back</button><button class="btn precision-btn" id="precisionCropBtn">Manual Crop</button><span class="edithelp">Drag a box to move • drag a corner to resize • Manual Crop lets you draw a fresh selection using the selected card size</span></div><div class="legend"><span class="dot"></span> Blue = Front • Green = Back • Selected card ratio locked</div><div class="cropstatus" id="cropStatus">Auto-detect runs first. Use <b>Manual Crop</b> when the document is unusual or the automatic box needs a fresh selection.</div></div>
+                <!-- Giant animated wrench -->
+                <g transform="translate(110, 65) rotate(-15)">
+                    <rect x="10" y="2" width="8" height="35" rx="3" fill="#3B82F6"/>
+                    <circle cx="14" cy="5" r="7" fill="#3B82F6"/>
+                    <circle cx="14" cy="5" r="3" fill="#1e0b36"/>
+                    <path d="M7 32 L21 32 L21 36 L7 36 Z" fill="#2563EB"/>
+                </g>
+                
+                <!-- Definition of visual gradients -->
+                <defs>
+                    <linearGradient id="serverGrad" x1="55" y1="100" x2="115" y2="145" gradientUnits="userSpaceOnUse">
+                        <stop offset="0" stop-color="#1F2937"/>
+                        <stop offset="1" stop-color="#111827"/>
+                    </linearGradient>
+                </defs>
+            </svg>
         </div>
-        <div>
-          <div class="previewgrid"><div class="previewbox"><h3>FRONT</h3><canvas id="frontPreview"></canvas></div><div class="previewbox"><h3>BACK</h3><canvas id="backPreview"></canvas></div></div>
-          <div class="cropcontrols">
-            <div class="smalllabel">Quick correction</div>
-            <div class="row">
-              <div class="range"><label>Horizontal</label><input id="adjX" type="range" min="-4" max="4" step=".1" value="0"></div>
-              <div class="range"><label>Vertical</label><input id="adjY" type="range" min="-4" max="4" step=".1" value="0"></div>
-              <div class="range"><label>Width</label><input id="adjW" type="range" min="-3" max="3" step=".1" value="0"></div>
-              <div class="range"><label>Height</label><input id="adjH" type="range" min="-3" max="3" step=".1" value="0"></div>
+
+        <div class="heading-badge">UPGRADING OUR EXPERIENCE</div>
+        <h1>We're building something amazing!</h1>
+        <p>We are busy tinkering behind the scenes to bring you a fresh, fast, and feature-rich upgrade. Hang tight, we'll be back online very soon!</p>
+        
+        <div class="status-badge">
+            <span class="dot"></span> Active Upgrades In Progress
+        </div>
+
+        <!-- Footer containing Progress tracker & newsletter sign-up -->
+        <div class="status-footer">
+            
+            <div class="progress-box">
+                <div class="progress-label">
+                    <span>Estimated Completion</span>
+                    <span>75% Done</span>
+                </div>
+                <div class="progress-bar-container">
+                    <div class="progress-fill"></div>
+                </div>
             </div>
-          </div>
-          <div class="note" id="modalNote">The crop uses a calibrated document template first, then normalizes to CR80. Review the source boxes and front/back previews before applying.</div>
+
+            <div class="subscribe-form-box">
+                <div class="progress-label" style="margin-bottom:6px;">Get Notified On Launch</div>
+                <form class="subscribe-form" onsubmit="event.preventDefault(); alert('We will notify you when we launch!');">
+                    <input type="email" placeholder="Enter your email" class="subscribe-input" required>
+                    <button type="submit" class="subscribe-button">Notify Me</button>
+                </form>
+            </div>
+
         </div>
-      </div>
+
     </div>
-    <div class="modalfoot"><div class="left"><button class="btn softbtn" id="reDetectBtn">Re-detect</button><button class="btn graybtn" id="resetCropBtn">Reset correction</button></div><div class="right"><button class="btn primary" id="useBtn">Use These Crops</button></div></div>
-  </div>
-</div>
-
-<div class="modal" id="passwordModal"><div class="modalcard" style="max-width:450px"><div class="modalhead"><div><b>Password protected PDF</b><div style="font-size:12px;color:#64748b;margin-top:4px">Enter the PDF password to continue.</div></div></div><div class="modalbody"><div class="field"><label class="smalllabel">PDF password</label><input id="passwordInput" type="password" style="width:100%;height:44px;border:1px solid #cbd8e7;border-radius:10px;padding:0 11px"></div><div class="status bad hidden" id="passwordError"></div></div><div class="modalfoot"><div></div><div class="right"><button class="btn graybtn" id="passwordCancel">Cancel</button><button class="btn primary" id="passwordOk">Open PDF</button></div></div></div></div>
-
-<script>
-const PDFJS_URLS=[
-  'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js',
-  'https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.min.js'
-];
-const PDF_WORKERS=[
-  'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js',
-  'https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js'
-];
-let pdfPromise=null;
-function loadScript(src){return new Promise((resolve,reject)=>{const s=document.createElement('script');s.src=src;s.async=true;s.onload=resolve;s.onerror=()=>reject(new Error('CDN load failed'));document.head.appendChild(s)})}
-async function ensurePdfJs(){if(window.pdfjsLib)return window.pdfjsLib;if(!pdfPromise){pdfPromise=(async()=>{let last=null;for(const u of PDFJS_URLS){try{await loadScript(u);if(window.pdfjsLib)break}catch(e){last=e}}if(!window.pdfjsLib)throw new Error('PDF engine could not load. Check internet/CDN access.');let workerSet=false;for(const u of PDF_WORKERS){try{window.pdfjsLib.GlobalWorkerOptions.workerSrc=u;workerSet=true;break}catch(e){}}window.pdfjsLib.__workerConfigured=workerSet;return window.pdfjsLib})().catch(e=>{pdfPromise=null;throw e})}return pdfPromise}
-
-const $=id=>document.getElementById(id);const fileInput=$('fileInput'),drop=$('drop'),progress=$('progress'),ready=$('ready'),slotsEl=$('slots');
-const sheet=$('sheet'),ctx=sheet.getContext('2d');const A4W=4961,A4H=7016,DPI=600;let CARD_W_MM=85.6,CARD_H_MM=54;let CARD_W=Math.round(CARD_W_MM*DPI/25.4),CARD_H=Math.round(CARD_H_MM*DPI/25.4);let LEFT=280,TOP=100,GAP_X=316,GAP_Y=96;let cards=[];let mirrorBack=false,mirrorSheet=false,zoom=1;let pendingPassword=null;
-function mmToPx(mm){return Math.round(mm*DPI/25.4)}
-function updateCardGeometry(){CARD_W=Math.max(120,mmToPx(CARD_W_MM));CARD_H=Math.max(120,mmToPx(CARD_H_MM));if(CARD_W+GAP_X+CARD_W>A4W-120)GAP_X=Math.max(8,A4W-120-CARD_W*2);if(TOP+5*CARD_H+4*GAP_Y>A4H-50)GAP_Y=Math.max(8,Math.floor((A4H-50-TOP-5*CARD_H)/4));document.getElementById('sizeMeta').textContent=`${CARD_W_MM.toFixed(1).replace(/\.0$/,'')} × ${CARD_H_MM.toFixed(1).replace(/\.0$/,'')} mm`}
-function drawImageMaybeMirrored(img,x,y,w,h,doMirror){if(!doMirror){ctx.drawImage(img,x,y,w,h);return}ctx.save();ctx.translate(x+w,y);ctx.scale(-1,1);ctx.drawImage(img,0,0,w,h);ctx.restore()}
-function drawSheet(){
-  ctx.clearRect(0,0,A4W,A4H);
-  ctx.fillStyle='#fff';
-  ctx.fillRect(0,0,A4W,A4H);
-  ctx.save();
-  if(mirrorSheet){ctx.translate(A4W,0);ctx.scale(-1,1)}
-  const bxOffset=mmToPx(parseFloat(document.getElementById('backX')?.value||0));
-  const byOffset=mmToPx(parseFloat(document.getElementById('backY')?.value||0));
-  const totalW=(CARD_W*2)+GAP_X;
-  const left=Math.max(30,Math.round((A4W-totalW)/2));
-  for(let i=0;i<5;i++){
-    const y=TOP+i*(CARD_H+GAP_Y),fx=left,bx=left+CARD_W+GAP_X+bxOffset,by=y+byOffset;
-    const c=cards[i];
-    if(c?.front)ctx.drawImage(c.front,fx,y,CARD_W,CARD_H);
-    if(c?.back)drawImageMaybeMirrored(c.back,bx,by,CARD_W,CARD_H,mirrorBack);
-  }
-  // Physical center-fold guide: always visible for easy cutting/folding.
-  ctx.strokeStyle='#111';ctx.lineWidth=4;ctx.setLineDash([]);
-  ctx.beginPath();ctx.moveTo(A4W/2,20);ctx.lineTo(A4W/2,A4H-20);ctx.stroke();
-  ctx.restore();
-}
-defaultProfiles={};
-function renderSlots(){slotsEl.innerHTML='';for(let i=0;i<5;i++){const c=cards[i];const el=document.createElement('div');el.className='slot';const readyClass=c?.front?'good':'';const label=c?.front?'READY':'EMPTY';el.innerHTML=`<div class="slothead"><b>Card ${i+1}</b><span class="pill ${readyClass}">${label}</span></div><div class="grid2"><div class="field"><label>Document</label><select class="doc"><option value="auto">Auto detect</option><option value="aadhaar">e-Aadhaar</option><option value="abha">ABHA Card</option><option value="eration">e-Ration Card</option><option value="pan">e-PAN</option><option value="ayushman">Ayushman</option></select></div><div class="field"><label>Password</label><input class="pass" type="password" placeholder="PDF password"></div></div><div class="status ${c?.front?'good':''}">${c?.status||'Waiting for PDF'}</div><details class="settings"><summary>Advanced crop correction</summary><div class="adjustgrid"><div class="range"><label>Horizontal</label><input data-k="x" type="range" min="-4" max="4" step=".1" value="0"></div><div class="range"><label>Vertical</label><input data-k="y" type="range" min="-4" max="4" step=".1" value="0"></div><div class="range"><label>Width</label><input data-k="w" type="range" min="-3" max="3" step=".1" value="0"></div><div class="range"><label>Height</label><input data-k="h" type="range" min="-3" max="3" step=".1" value="0"></div></div></details><div class="slottools"><button class="btn softbtn mini review">Review crop</button><button class="btn graybtn mini remove">Remove</button></div>`;el.querySelector('.doc').value=c?.job?.docOverride||'auto';el.querySelector('.doc').onchange=()=>{if(cards[i]?.job){cards[i].job.docOverride=el.querySelector('.doc').value;cards[i].job.det=detectDocument(cards[i].job.render.canvas,cards[i].job.docOverride,cards[i].job.render.text||'',cards[i].job.render.pages||[]);if(cards[i].job.det.twoPage&&cards[i].job.render.pages?.length>1){const p1=cards[i].job.render.pages[0].canvas,p2=cards[i].job.render.pages[1].canvas,gap=cards[i].job.det.gap||Math.max(20,Math.round(p1.height*.035));const comp=document.createElement('canvas');comp.width=Math.max(p1.width,p2.width);comp.height=p1.height+gap+p2.height;const cc=comp.getContext('2d');cc.fillStyle='#fff';cc.fillRect(0,0,comp.width,comp.height);cc.drawImage(p1,0,0);cc.drawImage(p2,0,p1.height+gap);cards[i].job.render.sourceCanvas=comp}else{cards[i].job.render.sourceCanvas=cards[i].job.render.canvas}cards[i].job.detBase=cloneDet(cards[i].job.det);cards[i].job.adjust={x:0,y:0,w:0,h:0};rebuildJobCrop(cards[i].job);cards[i].status=`${cards[i].job.det.type} detected • template updated`;drawSheet();renderSlots();showCropPreview(cards[i].job)}};el.querySelector('.review').onclick=()=>{if(cards[i]?.job)showCropPreview(cards[i].job)};el.querySelector('.remove').onclick=()=>{cards.splice(i,1);drawSheet();renderSlots()};el.querySelectorAll('[data-k]').forEach(inp=>inp.oninput=()=>{if(cards[i]?.job){cards[i].job.adjust[inp.dataset.k]=parseFloat(inp.value);rebuildJobCrop(cards[i].job);drawSheet();}});slotsEl.appendChild(el)}}
-
-function pageBorderLines(c){const im=c.getContext('2d').getImageData(0,0,c.width,c.height).data,w=c.width,h=c.height;function colScore(x){let n=0;for(let y=0;y<h;y+=2){const i=(y*w+x)*4;if(im[i]<75&&im[i+1]<75&&im[i+2]<75)n++}return n}function rowScore(y){let n=0;for(let x=0;x<w;x+=2){const i=(y*w+x)*4;if(im[i]<75&&im[i+1]<75&&im[i+2]<75)n++}return n}let lx=0,rx=w-1;for(let x=0;x<Math.min(280,w);x++)if(colScore(x)>h*.35){lx=x;break}for(let x=w-1;x>Math.max(w-280,0);x--)if(colScore(x)>h*.35){rx=x;break}let center=w/2;let best=0,bscore=0;for(let x=Math.floor(w*.42);x<Math.ceil(w*.58);x++)if(colScore(x)>bscore){bscore=colScore(x);best=x}if(best===0)best=center;let top=0,bottom=h-1;for(let y=0;y<Math.min(400,h);y++)if(rowScore(y)>w*.35){top=y;break}for(let y=h-1;y>Math.max(h-400,0);y--)if(rowScore(y)>w*.35){bottom=y;break}return{lx,rx,center:best,top,bottom}}
-function rowSignals(c){const w=c.width,h=c.height,im=c.getContext('2d').getImageData(0,0,w,h).data;const dark=new Uint32Array(h),red=new Uint32Array(h);for(let y=0;y<h;y+=2){for(let x=0;x<w;x+=2){const i=(y*w+x)*4,r=im[i],g=im[i+1],b=im[i+2];if(r<95&&g<95&&b<95)dark[y]++;if(r>150&&r>g*1.25&&r>b*1.15)red[y]++}}return{dark,red}}
-function clustersAbove(arr,threshold){const out=[];let s=-1;for(let y=0;y<arr.length;y+=2){if(arr[y]>=threshold){if(s<0)s=y}else if(s>=0){out.push([s,y-2]);s=-1}}if(s>=0)out.push([s,arr.length-2]);return out}
-function detectAadhaar(c){
-  const w=c.width,h=c.height;
-  // Calibrated to the supplied one-page e-Aadhaar sample:
-  // lower-left panel = front, lower-right panel = back.
-  const front={x:w*0.07824,y:h*0.72227,w:w*0.41412,h:h*0.20455};
-  const back ={x:w*0.50647,y:h*0.72227,w:w*0.41471,h:h*0.20455};
-  return {type:'e-Aadhaar',confidence:.99,front,back,source:'Aadhaar one-page template (calibrated)',mode:'stretch'};
-}
-function detectABHA(c){
-  const w=c.width,h=c.height;
-  const front={x:w*0.02043,y:h*0.01736,w:w*0.95914,h:h*0.47396};
-  const back ={x:w*0.02043,y:h*0.50694,w:w*0.95914,h:h*0.47656};
-  return {type:'ABHA Card',confidence:.99,front,back,source:'ABHA two-panel template (calibrated)',mode:'stretch'};
-}
-function detectERation(c){
-  const w=c.width,h=c.height;
-
-  // MAIN SOURCE CROP (kept exactly), expanded equally on all four sides.
-  // Change only `pad` if you want a little more or less white margin.
-  const pad=Math.round(Math.min(w,h)*0.008);
-
-  const front={
-    x:w*0.09076-pad,
-    y:h*0.79216-pad,
-    w:w*0.39496+pad*2,
-    h:h*0.16746+pad*2
-  };
-
-  const back={
-    x:w*0.51933-pad,
-    y:h*0.79216-pad,
-    w:w*0.39496+pad*2,
-    h:h*0.16746+pad*2
-  };
-
-  return {
-    type:'e-Ration Card',
-    confidence:.99,
-    front,
-    back,
-    source:'West Bengal e-Ration lower-card template (calibrated)',
-    mode:'stretch'
-  };
-}
-function detectAyushman(c,pages){
-  // The supplied Ayushman sample is a genuine two-page document:
-  // page 1 = the member card/front, page 2 = the information/back.
-  // Keep the entire page artwork for each side; the selected physical
-  // card size is applied only at the final output stage.
-  const p1=(pages&&pages[0]?.canvas)||c;
-  const p2=(pages&&pages[1]?.canvas)||p1;
-  const gap=Math.max(20,Math.round(p1.height*0.035));
-  const front={x:0,y:0,w:p1.width,h:p1.height};
-  const back ={x:0,y:p1.height+gap,w:p2.width,h:p2.height};
-  return {type:'Ayushman Card',confidence:1,front,back,source:'Ayushman two-page template (calibrated)',mode:'stretch',twoPage:!!(pages&&pages.length>1),gap};
-}
-function fallbackAadhaar(c){const b=pageBorderLines(c),h=c.height;const y=Math.round(h*.705),hh=Math.round(h*.19);return{type:'e-Aadhaar',confidence:.72,front:{x:b.lx+2,y,w:b.center-b.lx-7,h:hh},back:{x:b.center+5,y,w:b.rx-b.center-7,h:hh},source:'Aadhaar calibrated fallback',mode:'stretch'}}
-function detectEPan(c){
-  const w=c.width,h=c.height;
-  // Calibrated from the supplied password-protected e-PAN sample:
-  // the actual printable PAN card images are the two bottom panels,
-  // front on the left and back on the right.
-  const front={x:w*0.05714,y:h*0.74347,w:w*0.43361,h:h*0.19537};
-  const back ={x:w*0.51261,y:h*0.74584,w:w*0.42941,h:h*0.19359};
-  return {type:'e-PAN',confidence:.99,front,back,source:'e-PAN bottom-card template (calibrated)',mode:'stretch'};
-}
-function detectGeneric(c){const b=pageBorderLines(c);return{type:'Government ID',confidence:.55,front:{x:b.lx+8,y:Math.round(c.height*.66),w:b.center-b.lx-16,h:Math.round(c.height*.20)},back:{x:b.center+8,y:Math.round(c.height*.66),w:b.rx-b.center-16,h:Math.round(c.height*.20)},source:'Generic lower-panel fallback',mode:'stretch'}}
-function detectDocument(c,override='auto',text='',pages=[]){
-  const t=String(text||'').toLowerCase();
-  if(override==='aadhaar')return detectAadhaar(c)||fallbackAadhaar(c);
-  if(override==='abha')return detectABHA(c);
-  if(override==='eration')return detectERation(c);
-  if(override==='ayushman')return detectAyushman(c,pages);
-  if(override==='pan')return detectEPan(c);
-  // Text-first detection. e-PAN is identified from the distinctive Income Tax / Permanent Account Number wording.
-  if(/income tax department/.test(t) && /permanent account number/.test(t))return detectEPan(c);
-  // Text-first detection. The uploaded Ayushman sample contains these terms.
-  if(/ayushman bharat|pradhan mantri jan arogya|pm-jay|ayushman card/.test(t))return detectAyushman(c,pages);
-  if(/ayushman bharat health account|\babha\b|abha address|abha number/.test(t))return detectABHA(c);
-  if(/e-ration card|digital ration card|department of food.*supplies|food & supplies/.test(t))return detectERation(c);
-  if(/aadhaar|uidai|unique identification authority/.test(t))return detectAadhaar(c)||fallbackAadhaar(c);
-  const visual=estimateGovernmentBand(c);
-  if(visual==='abha')return detectABHA(c);
-  if(visual==='eration')return detectERation(c);
-  if(visual==='ayushman')return detectAyushman(c,pages);
-  return detectGeneric(c);
-}
-function estimateGovernmentBand(c){
-  const im=c.getContext('2d').getImageData(0,0,c.width,c.height).data,w=c.width,h=c.height;
-  let orange=0,blue=0,total=0,step=Math.max(1,Math.floor(Math.min(w,h)/500));
-  for(let y=0;y<Math.min(h,Math.floor(h*.32));y+=step*2){
-    for(let x=0;x<w;x+=step*2){
-      const i=(y*w+x)*4,r=im[i],g=im[i+1],b=im[i+2];
-      if(r>180&&g>75&&g<190&&b<80)orange++;
-      if(b>120&&b>r*1.25&&b>g*.95&&r<110)blue++;
-      total++;
-    }
-  }
-  if(orange>total*.05 && w/h>1.6)return 'ayushman';
-  if(blue>total*.05)return 'abha';
-  return null;
-}
-function cloneRect(r){return {x:r.x,y:r.y,w:r.w,h:r.h}}
-function cloneDet(d){return {type:d.type,confidence:d.confidence,front:cloneRect(d.front),back:cloneRect(d.back),source:d.source,mode:d.mode||'cover',twoPage:!!d.twoPage,gap:d.gap||0}}
-function adjustRect(r,a,c){
-  const dx=(a.x||0)/100*c.width,dy=(a.y||0)/100*c.height,dw=(a.w||0)/100*c.width,dh=(a.h||0)/100*c.height;
-  return{x:r.x+dx-dw/2,y:r.y+dy-dh/2,w:r.w+dw,h:r.h+dh}
-}
-function clampRect(r,c){
-  const minW=Math.max(80,c.width*.08);
-  r.w=Math.max(minW,Math.min(c.width,r.w)); r.h=r.w/(CARD_W/CARD_H);
-  r.x=Math.max(0,Math.min(c.width-r.w,r.x)); r.y=Math.max(0,Math.min(c.height-r.h,r.y));
-  return r;
-}
-function cropCover(src,r,mode='cover'){
-  const out=document.createElement('canvas');out.width=CARD_W;out.height=CARD_H;
-  const o=out.getContext('2d');o.imageSmoothingEnabled=true;o.imageSmoothingQuality='high';
-  if(mode==='stretch'){
-    const rr={...r};
-    rr.x=Math.max(0,Math.min(src.width-1,rr.x)); rr.y=Math.max(0,Math.min(src.height-1,rr.y));
-    rr.w=Math.max(1,Math.min(src.width-rr.x,rr.w)); rr.h=Math.max(1,Math.min(src.height-rr.y,rr.h));
-    o.drawImage(src,rr.x,rr.y,rr.w,rr.h,0,0,CARD_W,CARD_H);
-    return out;
-  }
-  r=clampRect({...r},src);
-  o.drawImage(src,r.x,r.y,r.w,r.h,0,0,CARD_W,CARD_H);return out;
-}
-function rebuildJobCrop(job){
-  const a=job.adjust||{x:0,y:0,w:0,h:0};
-  const src=job.render.sourceCanvas||job.render.canvas;
-  const f=adjustRect(job.det.front,a,src),b=adjustRect(job.det.back,a,src);
-  const mode=job.det.mode||'cover';
-  job.previewFront=cropCover(src,f,mode);job.previewBack=cropCover(src,b,mode);
-  cards[job.index].front=job.previewFront;cards[job.index].back=job.previewBack;
-}
-function previewSource(c,det,activeSide){
-  const p=$('sourcePreview'),wrap=$('sourceWrap'),scale=Math.min(1,900/c.width);
-  p.width=Math.round(c.width*scale);p.height=Math.round(c.height*scale);
-  p.style.width=p.width+'px';p.style.height=p.height+'px';
-  wrap.style.width=p.width+'px';wrap.style.height=p.height+'px';
-  const x=p.getContext('2d');x.clearRect(0,0,p.width,p.height);x.drawImage(c,0,0,p.width,p.height);
-  renderCropBoxes(det,scale,activeSide);
-}
-function renderCropBoxes(det,scale,activeSide){
-  const ov=$('cropOverlay');ov.innerHTML='';
-  [['front','FRONT'],['back','BACK']].forEach(([side,label])=>{
-    const r=det[side],b=document.createElement('div');b.className='cropbox '+(side==='back'?'backbox ':'')+(side===activeSide?'active':'');
-    b.dataset.side=side;
-    b.style.left=(r.x*scale)+'px';b.style.top=(r.y*scale)+'px';b.style.width=(r.w*scale)+'px';b.style.height=(r.h*scale)+'px';
-    b.innerHTML='<span class="tag">'+label+'</span><i class="handle tl"></i><i class="handle tr"></i><i class="handle bl"></i><i class="handle br"></i>';
-    ov.appendChild(b);bindCropBox(b);
-  });
-}
-function bindCropBox(box){
-  box.onpointerdown=e=>{
-    if(!activeJob)return;
-    e.preventDefault();box.setPointerCapture(e.pointerId);
-    const side=box.dataset.side, c=activeJob.render.sourceCanvas||activeJob.render.canvas,scale=$('sourcePreview').width/c.width;
-    activeEditSide=side; renderCropBoxes(activeJob.det,scale,side);
-    const startX=e.clientX,startY=e.clientY,orig=cloneRect(activeJob.det[side]);
-    const target= e.target.closest('.handle');
-    const handle=target?Array.from(target.classList).find(v=>['tl','tr','bl','br'].includes(v)):null;
-    const ratio=(CARD_W/CARD_H);
-    const move=ev=>{
-      const dx=(ev.clientX-startX)/scale,dy=(ev.clientY-startY)/scale;
-      let r={...orig};
-      if(!handle){
-        r.x=orig.x+dx;r.y=orig.y+dy;
-      }else{
-        if(handle==='tl'||handle==='bl'){r.x=orig.x+dx;r.w=orig.w-dx}else{r.w=orig.w+dx}
-        r.w=Math.max(120,r.w);r.h=r.w/ratio;
-        if(handle==='tl')r.y=orig.y+orig.h-r.h;
-        if(handle==='bl')r.y=orig.y;
-        if(handle==='tr'||handle==='tl'){}
-        if(handle==='br'||handle==='bl'){r.y=orig.y}
-      }
-      r=clampRect(r,c);activeJob.det[side]=r;rebuildJobCrop(activeJob);
-      previewSource(c,activeJob.det,activeEditSide);drawSheet();updateModalPreviews();
-    };
-    const up=()=>{window.removeEventListener('pointermove',move);window.removeEventListener('pointerup',up)};
-    window.addEventListener('pointermove',move);window.addEventListener('pointerup',up,{once:true});
-  };
-}
-let precisionCropMode=false,precisionSelecting=false,precisionStart=null,precisionSide='front',precisionBox=null;
-function setPrecisionMode(enabled,side=activeEditSide){
-  precisionCropMode=!!enabled;precisionSide=side||activeEditSide||'front';activeEditSide=precisionSide;
-  const layer=$('manualSelectLayer');
-  if(!layer)return;
-  layer.classList.toggle('active',precisionCropMode);
-  const btn=$('precisionCropBtn');
-  if(btn)btn.textContent=precisionCropMode?`Drawing ${precisionSide==='front'?'Front':'Back'} • drag on PDF`:'Manual Crop';
-  const st=$('cropStatus');
-  if(st)st.innerHTML=precisionCropMode
-    ? `<b>${precisionSide==='front'?'Front':'Back'} manual crop active.</b> Drag across the source PDF to draw a fresh crop using the currently selected card size. The ratio is locked automatically.`
-    : `Auto-detect runs first. Use <b>Manual Crop</b> when the document is unusual or the automatic box needs a fresh selection.`;
-  if(!precisionCropMode){precisionSelecting=false;precisionStart=null;if(precisionBox)precisionBox.remove();precisionBox=null;}
-}
-function sourcePointFromEvent(e){
-  const c=activeJob?.render.sourceCanvas||activeJob?.render.canvas;
-  const p=$('sourcePreview');
-  if(!c||!p)return null;
-  const rect=p.getBoundingClientRect();
-  const sx=p.width/c.width, sy=p.height/c.height;
-  return {
-    x:Math.max(0,Math.min(c.width,(e.clientX-rect.left)/sx)),
-    y:Math.max(0,Math.min(c.height,(e.clientY-rect.top)/sy)),
-    scale:sx
-  };
-}
-function updatePrecisionBox(x,y,w,h,scale){
-  const layer=$('manualSelectLayer');
-  if(!layer)return;
-  if(!precisionBox){precisionBox=document.createElement('div');precisionBox.className='manual-select-box';layer.appendChild(precisionBox);}
-  precisionBox.style.left=(x*scale)+'px';precisionBox.style.top=(y*scale)+'px';
-  precisionBox.style.width=(w*scale)+'px';precisionBox.style.height=(h*scale)+'px';
-  precisionBox.dataset.ratioLabel=`${CARD_W_MM.toFixed(1).replace(/\.0$/,'')} × ${CARD_H_MM.toFixed(1).replace(/\.0$/,'')} mm  •  ${(CARD_W/CARD_H).toFixed(3)}:1`;
-}
-function clampSelection(x,y,w,h,c){
-  w=Math.max(120,Math.min(c.width,w));h=Math.max(120,Math.min(c.height,h));
-  if(x<0)x=0;if(y<0)y=0;if(x+w>c.width)x=c.width-w;if(y+h>c.height)y=c.height-h;
-  return{x,y,w,h};
-}
-function bindPrecisionCropper(){
-  const layer=$('manualSelectLayer');if(!layer)return;
-  layer.onpointerdown=e=>{
-    if(!precisionCropMode||!activeJob)return;
-    e.preventDefault();layer.setPointerCapture?.(e.pointerId);
-    const c=activeJob.render.sourceCanvas||activeJob.render.canvas,p=sourcePointFromEvent(e);if(!p)return;
-    precisionSelecting=true;precisionStart={x:p.x,y:p.y};
-    if(precisionBox)precisionBox.remove();precisionBox=null;
-    updatePrecisionBox(p.x,p.y,1,1,p.scale);
-  };
-  layer.onpointermove=e=>{
-    if(!precisionSelecting||!activeJob||!precisionStart)return;
-    e.preventDefault();const c=activeJob.render.sourceCanvas||activeJob.render.canvas,p=sourcePointFromEvent(e);if(!p)return;
-    const dx=p.x-precisionStart.x,dy=p.y-precisionStart.y,ratio=CARD_W/CARD_H;
-    let w=Math.max(120,Math.abs(dx),Math.abs(dy)*ratio),h=w/ratio;
-    if(w>c.width)w=c.width;h=w/ratio;if(h>c.height){h=c.height;w=h*ratio;}
-    let x=dx<0?precisionStart.x-w:precisionStart.x;
-    let y=dy<0?precisionStart.y-h:precisionStart.y;
-    const r=clampSelection(x,y,w,h,c);updatePrecisionBox(r.x,r.y,r.w,r.h,p.scale);
-  };
-  const finish=e=>{
-    if(!precisionSelecting||!activeJob||!precisionStart)return;
-    const c=activeJob.render.sourceCanvas||activeJob.render.canvas,p=sourcePointFromEvent(e);precisionSelecting=false;
-    if(!p){setPrecisionMode(false);return;}
-    const dx=p.x-precisionStart.x,dy=p.y-precisionStart.y,ratio=CARD_W/CARD_H;
-    let w=Math.max(120,Math.abs(dx),Math.abs(dy)*ratio),h=w/ratio;
-    if(w>c.width)w=c.width;h=w/ratio;if(h>c.height){h=c.height;w=h*ratio;}
-    let x=dx<0?precisionStart.x-w:precisionStart.x;
-    let y=dy<0?precisionStart.y-h:precisionStart.y;
-    const r=clampSelection(x,y,w,h,c);
-    activeJob.det[precisionSide]=r;activeJob.det.source='Manual crop';activeJob.det.mode='cover';
-    activeJob.detBase=cloneDet(activeJob.det);activeJob.adjust={x:0,y:0,w:0,h:0};
-    rebuildJobCrop(activeJob);renderCropBoxes(activeJob.det,p.scale,precisionSide);updateModalPreviews();drawSheet();syncModalSliders(activeJob);
-    const st=$('cropStatus');if(st)st.innerHTML=`<b>${precisionSide==='front'?'Front':'Back'} crop set.</b> Exact card ratio locked to ${CARD_W_MM.toFixed(1).replace(/\\.0$/,'')} × ${CARD_H_MM.toFixed(1).replace(/\\.0$/,'')} mm. You can redraw or drag the box for final alignment.`;
-    setPrecisionMode(false);
-  };
-  layer.addEventListener('pointerup',finish);layer.addEventListener('pointercancel',finish);
-}
-function updateModalPreviews(){
-  $('frontPreview').getContext('2d').clearRect(0,0,CARD_W,CARD_H);$('frontPreview').getContext('2d').drawImage(activeJob.previewFront,0,0);
-  $('backPreview').getContext('2d').clearRect(0,0,CARD_W,CARD_H);$('backPreview').getContext('2d').drawImage(activeJob.previewBack,0,0);
-}
-function syncModalSliders(job){$('adjX').value=job.adjust.x;$('adjY').value=job.adjust.y;$('adjW').value=job.adjust.w;$('adjH').value=job.adjust.h}
-let activeJob=null,activeEditSide='front';
-function showCropPreview(job){
-  setPrecisionMode(false);
-  activeJob=job;syncModalSliders(job);rebuildJobCrop(job);
-  $('modalTitle').textContent=`Crop Review — Card ${job.index+1} — ${job.det.type}`;
-  $('modalSub').textContent=`${job.det.source} • ${Math.round(job.det.confidence*100)}% confidence`;
-  previewSource(job.render.sourceCanvas||job.render.canvas,job.det,activeEditSide);updateModalPreviews();
-  $('modalNote').textContent='Drag either crop box to move it. Drag a corner handle to resize it while keeping the selected card ratio. Front/back can be corrected independently. After Use, Back X/Y offsets control duplex overlap on the A4 sheet. The A4 center line is always shown as the fold/cutting guide. Dragon Sheet mirrors the back.';
-  $('modal').classList.add('open');
-}
-function bindModal(){
-  [['adjX','x'],['adjY','y'],['adjW','w'],['adjH','h']].forEach(([id,k])=>$(id).oninput=()=>{
-    if(!activeJob)return;activeJob.adjust[k]=parseFloat($(id).value);rebuildJobCrop(activeJob);
-    previewSource(activeJob.render.sourceCanvas||activeJob.render.canvas,activeJob.det,activeEditSide);updateModalPreviews();drawSheet();
-  });
-  $('editFrontBtn').onclick=()=>{setPrecisionMode(false,'front');activeEditSide='front';if(activeJob)previewSource(activeJob.render.sourceCanvas||activeJob.render.canvas,activeJob.det,activeEditSide)};
-  $('editBackBtn').onclick=()=>{setPrecisionMode(false,'back');activeEditSide='back';if(activeJob)previewSource(activeJob.render.sourceCanvas||activeJob.render.canvas,activeJob.det,activeEditSide)};
-  $('precisionCropBtn').onclick=()=>{if(!activeJob)return;setPrecisionMode(!precisionCropMode,activeEditSide)};
-  $('resetCropBtn').onclick=()=>{
-    if(!activeJob)return;activeJob.det=cloneDet(activeJob.detBase);activeJob.adjust={x:0,y:0,w:0,h:0};
-    syncModalSliders(activeJob);rebuildJobCrop(activeJob);previewSource(activeJob.render.sourceCanvas||activeJob.render.canvas,activeJob.det,activeEditSide);updateModalPreviews();drawSheet();
-  };
-  $('reDetectBtn').onclick=()=>{
-    if(!activeJob)return;activeJob.det=detectDocument(activeJob.render.canvas,activeJob.docOverride||'auto',activeJob.render.text||'',activeJob.render.pages||[]);activeJob.detBase=cloneDet(activeJob.det);activeJob.adjust={x:0,y:0,w:0,h:0};showCropPreview(activeJob)
-  };
-  $('closeModal').onclick=()=>{$('modal').classList.remove('open')};
-  $('useBtn').onclick=()=>{$('modal').classList.remove('open');if(activeJob){cards[activeJob.index].front=activeJob.previewFront;cards[activeJob.index].back=activeJob.previewBack;cards[activeJob.index].status=`${activeJob.det.type} • crop manually reviewed and aligned`;drawSheet();renderSlots()}};
-}
-bindModal();
-bindPrecisionCropper();
-async function loadPdf(file,password=''){
-  progress.style.width='7%';
-  const pdfjsLib=await ensurePdfJs();
-  const data=new Uint8Array(await file.arrayBuffer());
-  let pdf;
-  try{
-    const task=pdfjsLib.getDocument(password?{data,password}:{data});
-    pdf=await task.promise;
-  }catch(e){
-    if(e&&e.name==='PasswordException')throw{kind:'password',msg:(e.code===pdfjsLib.PasswordResponses.NEED_PASSWORD||!password)?'Password required':'Incorrect password'};
-    try{
-      const task=pdfjsLib.getDocument(password?{data,password,disableWorker:true}:{data,disableWorker:true});
-      pdf=await task.promise;
-    }catch(e2){
-      if(e2&&e2.name==='PasswordException')throw{kind:'password',msg:'Password required'};
-      throw new Error((e2&&e2.message)||'Unable to read PDF');
-    }
-  }
-  progress.style.width='20%';
-  const pages=[];const maxPages=Math.min(pdf.numPages,8);let textAll='';
-  for(let n=1;n<=maxPages;n++){
-    const page=await pdf.getPage(n);
-    const base=page.getViewport({scale:1});
-    const scale=Math.min(8.0,Math.max(3.2,4800/base.width));
-    const vp=page.getViewport({scale});
-    const c=document.createElement('canvas');c.width=Math.round(vp.width);c.height=Math.round(vp.height);
-    await page.render({canvasContext:c.getContext('2d',{alpha:false}),viewport:vp}).promise;
-    let text='';
-    try{const tc=await page.getTextContent();text=tc.items.map(it=>it.str||'').join(' ')}catch(e){}
-    textAll+=' '+text;
-    pages.push({page,canvas:c,base,scale,text});
-    progress.style.width=(20+Math.round((n/maxPages)*60))+'%';
-  }
-  return{pdf,pages,canvas:pages[0]?.canvas||null,base:pages[0]?.base||null,scale:pages[0]?.scale||1,text:textAll.trim()};
-}
-async function processFile(file,index,password=''){
-  ready.textContent=`Opening ${file.name}…`;
-  const render=await loadPdf(file,password);
-  const docOverride=cards[index]?.docOverride||'auto';
-  const det=detectDocument(render.canvas,docOverride,render.text,render.pages);
-  if(det.twoPage&&render.pages.length>1){
-    const p1=render.pages[0].canvas,p2=render.pages[1].canvas;
-    const gap=det.gap||Math.max(20,Math.round(p1.height*.035));
-    const comp=document.createElement('canvas');
-    comp.width=Math.max(p1.width,p2.width);comp.height=p1.height+gap+p2.height;
-    const cc=comp.getContext('2d');cc.fillStyle='#fff';cc.fillRect(0,0,comp.width,comp.height);
-    cc.drawImage(p1,0,0);cc.drawImage(p2,0,p1.height+gap);
-    render.sourceCanvas=comp;render.sourcePages=[p1,p2];
-  }else{
-    render.sourceCanvas=render.canvas;
-  }
-  const job={index,render,det,detBase:cloneDet(det),adjust:{x:0,y:0,w:0,h:0},file,docOverride};
-  cards[index]={job,front:null,back:null,det,file,status:'PDF rendered • preparing crop',docOverride};
-  rebuildJobCrop(job);
-  cards[index].front=job.previewFront;cards[index].back=job.previewBack;
-  cards[index].status=`${det.type} detected • front and back aligned automatically`;
-  ready.textContent=`${file.name} ready • ${det.type}`;
-  progress.style.width='100%';drawSheet();renderSlots();setTimeout(()=>progress.style.width='0',600);showCropPreview(job);
-}
-async function addFiles(files){for(const file of files){if(!file||!(file.type==='application/pdf'||file.name.toLowerCase().endsWith('.pdf'))){ready.textContent='Please choose a PDF file.';continue}if(cards.length>=5){alert('Five card slots are already full.');break}const index=cards.length;cards.push({status:'Reading PDF…',file});renderSlots();try{await processFile(file,index)}catch(e){if(e.kind==='password'){pendingPassword={file,index};openPasswordModal(e.msg)}else{cards[index]={file,status:`PDF error: ${e.message||'Unable to read PDF'}`};renderSlots();ready.textContent=`Could not process ${file.name}`;progress.style.width='0'}}}}
-drop.onclick=()=>fileInput.click();fileInput.onchange=async e=>{const files=[...e.target.files];e.target.value='';if(files.length)await addFiles(files)};['dragenter','dragover'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.add('active')}));['dragleave','drop'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.remove('active')}));drop.addEventListener('drop',e=>addFiles([...e.dataTransfer.files]));$('addBtn').onclick=()=>fileInput.click();$('clearBtn').onclick=()=>{cards=[];renderSlots();drawSheet();ready.textContent='Ready';progress.style.width='0'};
-function openPasswordModal(msg){$('passwordError').textContent=msg;$('passwordError').classList.remove('hidden');$('passwordInput').value='';$('passwordModal').classList.add('open');setTimeout(()=>$('passwordInput').focus(),50)}$('passwordCancel').onclick=()=>{$('passwordModal').classList.remove('open');pendingPassword=null};$('passwordOk').onclick=async()=>{if(!pendingPassword)return;const pw=$('passwordInput').value;try{$('passwordError').classList.add('hidden');$('passwordModal').classList.remove('open');await processFile(pendingPassword.file,pendingPassword.index,pw)}catch(e){if(e.kind==='password'){openPasswordModal(e.msg)}else{cards[pendingPassword.index]={file:pendingPassword.file,status:`PDF error: ${e.message||'Unable to read PDF'}`};renderSlots();ready.textContent='Could not process PDF'} }finally{pendingPassword=null}};$('passwordInput').addEventListener('keydown',e=>{if(e.key==='Enter')$('passwordOk').click()});
-function syncPrintSetup(){
-  const v=$('cardSize').value;
-  if(v==='custom'){
-    const cw=parseFloat($('customW').value), ch=parseFloat($('customH').value);
-    CARD_W_MM=(Number.isFinite(cw)&&cw>0)?cw:85.6;
-    CARD_H_MM=(Number.isFinite(ch)&&ch>0)?ch:54;
-    $('customSizeBox').classList.remove('hidden');
-  }else if(v==='86x54'){
-    CARD_W_MM=86;CARD_H_MM=54;
-    $('customSizeBox').classList.add('hidden');
-  }else if(v==='86.6x54.4'){
-    CARD_W_MM=86.6;CARD_H_MM=54.4;
-    $('customSizeBox').classList.add('hidden');
-  }else if(v==='87x55'){
-    CARD_W_MM=87;CARD_H_MM=55;
-    $('customSizeBox').classList.add('hidden');
-  }else{
-    CARD_W_MM=85.6;CARD_H_MM=54;
-    $('customSizeBox').classList.add('hidden');
-  }
-  updateCardGeometry();
-  const dragon=mirrorBack;
-  $('mirrorBackBtn').classList.toggle('on',dragon);$('dragonSetup').classList.toggle('on',dragon);
-  $('mirrorBackBtn').textContent=`Dragon Sheet: ${dragon?'ON':'OFF'}`;$('dragonSetup').textContent=`Dragon Sheet: ${dragon?'ON':'OFF'}`;
-  drawSheet();
-  if(activeJob){syncModalSliders(activeJob);previewSource(activeJob.render.sourceCanvas||activeJob.render.canvas,activeJob.det,activeEditSide);updateModalPreviews();}
-}
-$('cardSize').onchange=syncPrintSetup;
-$('customW').oninput=syncPrintSetup;$('customH').oninput=syncPrintSetup;
-$('backX').oninput=drawSheet;$('backY').oninput=drawSheet;
-$('mirrorBackBtn').onclick=()=>{mirrorBack=!mirrorBack;syncPrintSetup()};
-$('dragonSetup').onclick=()=>{$('mirrorBackBtn').click()};
-$('mirrorSheetBtn').onclick=()=>{mirrorSheet=!mirrorSheet;$('mirrorSheetBtn').classList.toggle('on',mirrorSheet);$('mirrorSheetSetup').classList.toggle('on',mirrorSheet);$('mirrorSheetBtn').textContent=`Sheet ↔ ${mirrorSheet?'ON':'OFF'}`;$('mirrorSheetSetup').textContent=`Mirror Sheet: ${mirrorSheet?'ON':'OFF'}`;drawSheet()};
-$('mirrorSheetSetup').onclick=()=>$('mirrorSheetBtn').click();
-updateCardGeometry();
-function applyZoom(){const w=Math.round(A4W*zoom),h=Math.round(A4H*zoom);sheet.style.width=w+'px';sheet.style.height=h+'px';$('zoomLabel').textContent=Math.abs(zoom-1)<.001?'100%':Math.round(zoom*100)+'%'}
-function getFitZoom(){const st=$('stage');const availW=Math.max(260,st.clientWidth-90),availH=Math.max(260,st.clientHeight-90);return Math.min(availW/A4W,availH/A4H)}
-function fit(){window._zoomManual=false;zoom=getFitZoom();applyZoom();stageEl.scrollLeft=0;stageEl.scrollTop=0}
-function setZoom(next,anchor){
-  const old=zoom;
-  const fitZoom=getFitZoom();
-  if(next<=fitZoom){fit();return}
-  zoom=Math.max(0.08,Math.min(2.5,next));
-  if(anchor){
-    const rect=stageEl.getBoundingClientRect();
-    const mx=anchor.x-rect.left+stageEl.scrollLeft;
-    const my=anchor.y-rect.top+stageEl.scrollTop;
-    const ratio=zoom/old;
-    applyZoom();
-    stageEl.scrollLeft=mx*ratio-(anchor.x-rect.left);
-    stageEl.scrollTop=my*ratio-(anchor.y-rect.top);
-  }else applyZoom();
-}
-window.addEventListener('resize',()=>{if(!window._zoomManual) fit()});
-$('fitBtn').onclick=()=>fit();
-$('plus').onclick=()=>{window._zoomManual=true;setZoom(zoom+.1)};
-$('minus').onclick=()=>{window._zoomManual=true;setZoom(zoom-.1)};
-const stageEl=$('stage');stageEl.addEventListener('wheel',(e)=>{
-  if(e.ctrlKey||e.metaKey){
-    e.preventDefault();
-    window._zoomManual=true;
-    const dir=e.deltaY<0?1:-1;
-    // Smooth trackpad pinch zoom: use the wheel delta instead of jumping 10% per event.
-    // Cap each event so fast trackpad gestures cannot zoom wildly.
-    const intensity=Math.min(1,Math.abs(e.deltaY)/100);
-    const step=0.01+(0.02*intensity);
-    setZoom(zoom+dir*step,{x:e.clientX,y:e.clientY});
-    return;
-  }
-  if(Math.abs(e.deltaY)>Math.abs(e.deltaX)){stageEl.scrollTop+=e.deltaY;e.preventDefault();}
-}, {passive:false});stageEl.addEventListener('keydown',(e)=>{if(['PageDown','PageUp','Home','End','ArrowDown','ArrowUp','Space'].includes(e.key)){if(e.key==='PageDown'||e.key==='Space') stageEl.scrollTop+=Math.max(250,stageEl.clientHeight*.85);else if(e.key==='PageUp') stageEl.scrollTop-=Math.max(250,stageEl.clientHeight*.85);else if(e.key==='Home') stageEl.scrollTop=0;else if(e.key==='End') stageEl.scrollTop=stageEl.scrollHeight;else stageEl.scrollTop+=(e.key==='ArrowDown'?80:-80);e.preventDefault();}});stageEl.tabIndex=0;stageEl.addEventListener('keydown',(e)=>{if((e.ctrlKey||e.metaKey)&&['+','=','-','0'].includes(e.key)){e.preventDefault();window._zoomManual=true;if(e.key==='0'){fit()}else if(e.key==='-'||e.key==='='){window._zoomManual=true;setZoom(e.key==='='?zoom+.1:zoom-.1)}}});fit();
-async function exportSheetBlob(){return await new Promise((resolve,reject)=>sheet.toBlob(b=>b?resolve(b):reject(new Error('Could not create A4 image')), 'image/png'))}
-$('downloadBtn').onclick=async()=>{
-  try{
-    const blob=await exportSheetBlob();
-    const url=URL.createObjectURL(blob),a=document.createElement('a');
-    a.href=url;a.download=`PVC-A4-Sheet-${CARD_W_MM}x${CARD_H_MM}mm-600dpi.png`;
-    document.body.appendChild(a);a.click();a.remove();
-    setTimeout(()=>URL.revokeObjectURL(url),1000);
-    ready.textContent='A4 sheet downloaded • 600 DPI PNG';
-  }catch(e){ready.textContent='Download error: '+(e.message||'Unable to create image')}
-};
-$('printBtn').onclick=async()=>{
-  try{
-    const w=window.open('','_blank');
-    if(!w){alert('Please allow popups for printing.');return}
-    w.document.write('<html><head><title>PVC Card Sheet</title><style>@page{size:A4 portrait;margin:0}html,body{margin:0;padding:0}img{width:210mm;height:297mm;display:block}</style></head><body><div style="font:14px Arial;padding:20px">Preparing print…</div></body></html>');
-    w.document.close();
-    const blob=await exportSheetBlob(),url=URL.createObjectURL(blob);
-    const img=w.document.createElement('img');img.src=url;
-    w.document.body.innerHTML='';w.document.body.appendChild(img);
-    img.onload=()=>{w.focus();setTimeout(()=>w.print(),150);setTimeout(()=>URL.revokeObjectURL(url),5000)};
-  }catch(e){ready.textContent='Print error: '+(e.message||'Unable to prepare print')}
-};
-window.addEventListener('error',e=>{if(e&&e.message)ready.textContent='App error: '+e.message.slice(0,180)});window.addEventListener('unhandledrejection',e=>{const m=e&&e.reason?(e.reason.message||String(e.reason)):'Unexpected error';ready.textContent='Error: '+String(m).slice(0,180)});
-renderSlots();drawSheet();
-</script>
-<script src="js/visual-motion.js"></script>
 
 </body>
 </html>
