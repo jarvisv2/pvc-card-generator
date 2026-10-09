@@ -1,0 +1,197 @@
+/* =====================================================================
+   NEBULA AURORA MOTION — ambient background only
+   Adds slow aurora ribbons and drifting spectral light without touching
+   card rendering, controls, crop calculations, or print/export output.
+   ===================================================================== */
+
+/* Keep the animated scene behind the application, not above controls. */
+.ultra-scene{
+  z-index:0 !important;
+  isolation:isolate;
+  contain:strict;
+}
+.app{
+  position:relative;
+  z-index:1;
+}
+
+/* A soft, slowly rotating aurora field with several layers of color. */
+.ultra-scene::before{
+  content:"";
+  position:absolute;
+  inset:-42% -32%;
+  pointer-events:none;
+  z-index:0;
+  border-radius:48%;
+  background:
+    radial-gradient(ellipse at 17% 37%,rgba(31,215,235,.20) 0%,transparent 30%),
+    radial-gradient(ellipse at 76% 27%,rgba(119,92,255,.19) 0%,transparent 32%),
+    radial-gradient(ellipse at 56% 71%,rgba(244,78,180,.13) 0%,transparent 31%),
+    radial-gradient(ellipse at 30% 78%,rgba(69,226,192,.12) 0%,transparent 29%),
+    conic-gradient(from 28deg at 50% 50%,transparent 0deg,rgba(36,214,237,.09) 42deg,transparent 78deg,rgba(134,86,255,.12) 132deg,transparent 174deg,rgba(241,79,184,.085) 223deg,transparent 269deg,rgba(39,213,197,.08) 314deg,transparent 360deg);
+  filter:blur(46px) saturate(138%);
+  opacity:.62;
+  mix-blend-mode:multiply;
+  transform-origin:50% 50%;
+  will-change:transform,background-position;
+  animation:nebulaFieldDrift 42s cubic-bezier(.45,0,.55,1) infinite alternate;
+}
+
+/* A pair of wide luminous ribbons that gently travel behind the UI. */
+.ultra-scene::after{
+  content:"";
+  position:absolute;
+  left:-25%;
+  top:21%;
+  width:150%;
+  height:48%;
+  pointer-events:none;
+  z-index:0;
+  border-radius:50%;
+  background:
+    linear-gradient(112deg,transparent 8%,rgba(31,218,235,0) 25%,rgba(31,218,235,.12) 33%,rgba(97,123,255,.13) 39%,rgba(159,83,244,.12) 44%,rgba(237,76,177,.08) 49%,transparent 62%),
+    linear-gradient(108deg,transparent 24%,rgba(81,235,208,0) 42%,rgba(81,235,208,.08) 48%,rgba(105,137,255,.09) 54%,transparent 70%);
+  filter:blur(29px) saturate(145%);
+  opacity:.55;
+  mix-blend-mode:multiply;
+  will-change:transform;
+  animation:nebulaRibbonFlow 31s ease-in-out infinite;
+}
+
+/* Existing grid gets a very slow drift to add depth without distraction. */
+.scene-grid{
+  background-position:0 0,0 0;
+  animation:nebulaGridDrift 105s linear infinite;
+}
+
+/* Theme-aware color grading. */
+body.theme-dark .ultra-scene::before{
+  opacity:.82;
+  filter:blur(54px) saturate(145%);
+  mix-blend-mode:screen;
+  background:
+    radial-gradient(ellipse at 17% 37%,rgba(15,211,235,.20) 0%,transparent 30%),
+    radial-gradient(ellipse at 76% 27%,rgba(112,91,255,.23) 0%,transparent 32%),
+    radial-gradient(ellipse at 56% 71%,rgba(234,63,177,.15) 0%,transparent 31%),
+    radial-gradient(ellipse at 30% 78%,rgba(32,206,180,.11) 0%,transparent 29%),
+    conic-gradient(from 28deg at 50% 50%,transparent 0deg,rgba(20,210,235,.10) 42deg,transparent 78deg,rgba(119,82,255,.14) 132deg,transparent 174deg,rgba(232,66,175,.10) 223deg,transparent 269deg,rgba(24,205,190,.09) 314deg,transparent 360deg);
+}
+body.theme-dark .ultra-scene::after{
+  opacity:.74;
+  mix-blend-mode:screen;
+  filter:blur(34px) saturate(150%);
+}
+body.theme-vivid .ultra-scene::before{
+  opacity:.72;
+  filter:blur(42px) saturate(165%);
+}
+body.theme-vivid .ultra-scene::after{
+  opacity:.66;
+  filter:blur(27px) saturate(160%);
+}
+
+@keyframes nebulaFieldDrift{
+  0%{transform:translate3d(-2.5%,-1.2%,0) rotate(-9deg) scale(.98)}
+  48%{transform:translate3d(1.8%,1.4%,0) rotate(4deg) scale(1.04)}
+  100%{transform:translate3d(-.8%,2.7%,0) rotate(13deg) scale(1.02)}
+}
+@keyframes nebulaRibbonFlow{
+  0%{transform:translate3d(-7%,3%,0) rotate(-17deg) scaleX(.94) scaleY(.92)}
+  50%{transform:translate3d(6%,-2%,0) rotate(-11deg) scaleX(1.06) scaleY(1.08)}
+  100%{transform:translate3d(-3%,4%,0) rotate(-14deg) scaleX(1) scaleY(.96)}
+}
+@keyframes nebulaGridDrift{
+  from{background-position:0 0,0 0}
+  to{background-position:170px 110px,-170px 110px}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .ultra-scene::before,.ultra-scene::after,.scene-grid{
+    animation:none!important;
+    will-change:auto!important;
+  }
+}
+
+/* The stage itself also drifts slowly, so the effect remains visible around
+   the A4 sheet even when a theme uses a darker workspace gradient. */
+body:not(.theme-dark):not(.theme-vivid) .stage{
+  background-image:
+    radial-gradient(ellipse at 18% 14%,rgba(24,211,233,.14),transparent 28%),
+    radial-gradient(ellipse at 82% 12%,rgba(91,112,255,.13),transparent 29%),
+    radial-gradient(ellipse at 76% 82%,rgba(155,83,244,.12),transparent 30%),
+    radial-gradient(ellipse at 18% 84%,rgba(236,79,177,.09),transparent 25%),
+    linear-gradient(135deg,#dfe9f5 0%,#e7e4f3 48%,#dceff2 100%) !important;
+  background-size:150% 150%,150% 150%,150% 150%,150% 150%,100% 100% !important;
+  animation:nebulaStageDrift 38s ease-in-out infinite alternate !important;
+}
+body.theme-dark .stage{
+  background-size:155% 155%,150% 150%,155% 155%,145% 145%,100% 100% !important;
+  animation:nebulaStageDrift 42s ease-in-out infinite alternate !important;
+}
+body.theme-vivid .stage{
+  background-size:170% 170%,165% 165%,170% 170%,160% 160%,100% 100% !important;
+  animation:nebulaStageDrift 32s ease-in-out infinite alternate !important;
+}
+@keyframes nebulaStageDrift{
+  0%{background-position:0% 0%,100% 0%,100% 100%,0% 100%,0% 0%}
+  50%{background-position:100% 36%,0% 100%,46% 0%,100% 0%,100% 100%}
+  100%{background-position:35% 100%,82% 12%,0% 90%,100% 32%,0% 100%}
+}
+
+/* =====================================================================
+   ZOOM-SAFE STAGE BACKGROUND — remove the frame that crossed behind the
+   enlarged A4 page, and keep atmospheric motion behind the sheet canvas.
+   ===================================================================== */
+.stage::after{
+  display:none!important;
+  content:none!important;
+  border:0!important;
+  box-shadow:none!important;
+}
+.stage::before{
+  content:""!important;
+  position:absolute!important;
+  inset:0!important;
+  z-index:1!important;
+  pointer-events:none!important;
+  opacity:.54!important;
+  background-image:
+    linear-gradient(rgba(142,173,222,.055) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(142,173,222,.055) 1px,transparent 1px),
+    radial-gradient(ellipse at 18% 22%,rgba(24,218,236,.17),transparent 35%),
+    radial-gradient(ellipse at 82% 68%,rgba(132,86,255,.16),transparent 39%),
+    radial-gradient(ellipse at 52% 112%,rgba(239,77,181,.11),transparent 36%)!important;
+  background-size:46px 46px,46px 46px,165% 165%,160% 160%,150% 150%!important;
+  background-position:0 0,0 0,0% 0%,100% 0%,50% 100%!important;
+  background-repeat:repeat,repeat,no-repeat,no-repeat,no-repeat!important;
+  -webkit-mask-image:radial-gradient(ellipse at 50% 48%,#000 12%,rgba(0,0,0,.72) 62%,transparent 100%)!important;
+  mask-image:radial-gradient(ellipse at 50% 48%,#000 12%,rgba(0,0,0,.72) 62%,transparent 100%)!important;
+  animation:nebulaStageAtmosphere 36s ease-in-out infinite alternate!important;
+  will-change:background-position,opacity;
+}
+body.theme-dark .stage::before{
+  opacity:.64!important;
+  background-image:
+    linear-gradient(rgba(123,157,222,.065) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(123,157,222,.065) 1px,transparent 1px),
+    radial-gradient(ellipse at 18% 22%,rgba(5,210,239,.20),transparent 35%),
+    radial-gradient(ellipse at 82% 68%,rgba(123,79,255,.22),transparent 39%),
+    radial-gradient(ellipse at 52% 112%,rgba(229,57,177,.15),transparent 36%)!important;
+}
+body.theme-vivid .stage::before{
+  opacity:.58!important;
+  background-image:
+    linear-gradient(rgba(130,119,205,.06) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(130,119,205,.06) 1px,transparent 1px),
+    radial-gradient(ellipse at 18% 22%,rgba(0,211,225,.20),transparent 35%),
+    radial-gradient(ellipse at 82% 68%,rgba(154,63,245,.18),transparent 39%),
+    radial-gradient(ellipse at 52% 112%,rgba(255,53,161,.14),transparent 36%)!important;
+}
+@keyframes nebulaStageAtmosphere{
+  0%{background-position:0 0,0 0,0% 0%,100% 0%,50% 100%;opacity:.44}
+  50%{background-position:0 0,0 0,78% 42%,18% 78%,88% 8%;opacity:.62}
+  100%{background-position:0 0,0 0,22% 100%,100% 10%,12% 90%;opacity:.50}
+}
+@media(prefers-reduced-motion:reduce){
+  .stage::before{animation:none!important;will-change:auto!important}
+}

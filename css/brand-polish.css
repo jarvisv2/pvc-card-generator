@@ -1,0 +1,577 @@
+/* =====================================================================
+   BRAND STUDIO POLISH — refined title, metadata and creator links.
+   Visual-only overrides. No application IDs or behavior are changed.
+   ===================================================================== */
+
+.brand {
+  padding: 20px 18px 17px !important;
+  border-bottom: 1px solid rgba(116, 143, 200, .22) !important;
+}
+
+.brand-title {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: 10px !important;
+  min-height: 36px !important;
+}
+
+.brand h1 {
+  font-size: 28px !important;
+  line-height: 1.08 !important;
+  letter-spacing: -1.25px !important;
+  font-weight: 900 !important;
+  text-shadow: 0 3px 18px rgba(72, 95, 188, .10) !important;
+}
+
+.brand h1 .title-accent {
+  background: linear-gradient(105deg, #38a0ff 0%, #5865ff 34%, #9252f4 68%, #f05aa9 100%) !important;
+  background-size: 220% 100% !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  color: transparent !important;
+  animation: brandTitleShimmer 11s ease-in-out infinite alternate !important;
+}
+
+.brand h1::after {
+  width: min(72%, 164px) !important;
+  height: 3px !important;
+  bottom: -9px !important;
+  border-radius: 999px !important;
+  background: linear-gradient(90deg, #24d7e8 0%, #4e83ff 32%, #9657f4 66%, #ef58b1 88%, transparent 100%) !important;
+  box-shadow: 0 0 16px rgba(88, 112, 245, .22) !important;
+  background-size: 180% 100% !important;
+  animation: brandUnderlineFlow 7s linear infinite !important;
+}
+
+.brand-title > .pro {
+  flex: 0 0 auto !important;
+  align-self: center !important;
+  height: 22px !important;
+  min-width: 38px !important;
+  padding: 0 9px !important;
+  margin-top: -2px !important;
+  border: 1px solid rgba(255, 255, 255, .38) !important;
+  border-radius: 999px !important;
+  font-size: 9px !important;
+  font-weight: 900 !important;
+  letter-spacing: .12em !important;
+  box-shadow: 0 7px 19px rgba(98, 78, 235, .24), inset 0 1px 0 rgba(255,255,255,.24) !important;
+}
+
+.brand-meta-row {
+  margin: 11px 0 13px !important;
+}
+
+.brand-kicker,
+.brand-status {
+  gap: 7px !important;
+  padding: 5px 9px !important;
+  border: 1px solid rgba(130, 153, 204, .16) !important;
+  border-radius: 999px !important;
+  background: rgba(239, 245, 255, .42) !important;
+  font-size: 8.5px !important;
+  line-height: 1 !important;
+  letter-spacing: .12em !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.20) !important;
+}
+
+.brand-kicker i,
+.brand-status b {
+  flex: 0 0 6px !important;
+}
+
+/* Replace sharp rectangular link plates with compact glass capsules. */
+.brand-social {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  flex-wrap: wrap !important;
+  gap: 7px !important;
+  width: 100% !important;
+  min-height: 30px !important;
+  margin-top: 3px !important;
+  overflow: visible !important;
+}
+
+.brand-social .divider {
+  display: none !important;
+}
+
+.brand-social a {
+  position: relative !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: 6px !important;
+  width: auto !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  flex: 0 1 auto !important;
+  padding: 6px 9px 6px 8px !important;
+  border: 1px solid rgba(132, 154, 202, .19) !important;
+  border-radius: 999px !important;
+  background: linear-gradient(135deg, rgba(255,255,255,.64), rgba(237,243,255,.34)) !important;
+  box-shadow: 0 5px 16px rgba(39, 62, 109, .055), inset 0 1px 0 rgba(255,255,255,.62) !important;
+  backdrop-filter: blur(12px) saturate(140%) !important;
+  -webkit-backdrop-filter: blur(12px) saturate(140%) !important;
+  color: #697894 !important;
+  font-size: 10.5px !important;
+  font-weight: 750 !important;
+  line-height: 1.15 !important;
+  letter-spacing: .005em !important;
+  text-decoration: none !important;
+  transition: transform .22s ease, background .22s ease, border-color .22s ease, box-shadow .22s ease, color .22s ease !important;
+}
+
+.brand-social a::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(110deg, transparent 18%, rgba(255,255,255,.20) 49%, transparent 73%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .2s ease;
+}
+
+.brand-social a:hover {
+  transform: translateY(-2px) !important;
+  border-color: rgba(104, 126, 239, .40) !important;
+  background: linear-gradient(135deg, rgba(255,255,255,.86), rgba(235,239,255,.68)) !important;
+  box-shadow: 0 9px 22px rgba(63, 79, 155, .12), inset 0 1px 0 rgba(255,255,255,.82) !important;
+  color: #4358b7 !important;
+}
+
+.brand-social a:hover::after { opacity: 1; }
+.brand-social svg { width: 14px !important; height: 14px !important; flex: 0 0 14px !important; }
+.brand-social .brand-handle { font-size: 10.5px !important; font-weight: 750 !important; line-height: 1.15 !important; }
+.brand-social .github svg { fill: #53678a !important; }
+.brand-social .facebook svg { fill: #1877f2 !important; }
+
+/* Dark theme: luminous but subdued capsules, not outlined name rectangles. */
+body.theme-dark .brand {
+  background:
+    radial-gradient(ellipse at 92% 4%, rgba(113, 76, 255, .14), transparent 38%),
+    radial-gradient(ellipse at 16% 100%, rgba(17, 193, 225, .09), transparent 34%),
+    linear-gradient(180deg, rgba(13, 20, 36, .97), rgba(9, 15, 28, .91)) !important;
+  border-bottom-color: rgba(117, 141, 198, .21) !important;
+}
+
+body.theme-dark .brand h1 .title-accent {
+  background: linear-gradient(105deg, #53c7ff 0%, #7880ff 38%, #bd75ff 72%, #ff85cf 100%) !important;
+  background-size: 220% 100% !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  color: transparent !important;
+}
+
+body.theme-dark .brand-kicker,
+body.theme-dark .brand-status {
+  background: rgba(17, 28, 48, .62) !important;
+  border-color: rgba(127, 152, 211, .18) !important;
+  color: #9eafd0 !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.035) !important;
+}
+
+body.theme-dark .brand-social a {
+  background: linear-gradient(135deg, rgba(20, 32, 54, .88), rgba(17, 22, 40, .72)) !important;
+  border-color: rgba(125, 150, 207, .20) !important;
+  box-shadow: 0 5px 16px rgba(0,0,0,.16), inset 0 1px 0 rgba(255,255,255,.045) !important;
+  color: #c0cce4 !important;
+}
+
+body.theme-dark .brand-social a:hover {
+  background: linear-gradient(125deg, rgba(24, 48, 74, .96), rgba(36, 30, 67, .92)) !important;
+  border-color: rgba(81, 190, 233, .42) !important;
+  box-shadow: 0 9px 22px rgba(0,0,0,.24), 0 0 18px rgba(75, 113, 245, .10) !important;
+  color: #f0f5ff !important;
+}
+
+body.theme-dark .brand-social .github svg { fill: #cbd8f2 !important; }
+body.theme-dark .brand-social .facebook svg { fill: #61a8ff !important; }
+
+/* Vivid theme: brighter glass capsules tuned to the pink-violet backdrop. */
+body.theme-vivid .brand {
+  background:
+    radial-gradient(ellipse at 82% 0%, rgba(244, 80, 184, .13), transparent 38%),
+    radial-gradient(ellipse at 12% 100%, rgba(0, 207, 222, .11), transparent 35%),
+    linear-gradient(180deg, rgba(255,255,255,.96), rgba(250,245,255,.86)) !important;
+}
+
+body.theme-vivid .brand-kicker,
+body.theme-vivid .brand-status {
+  background: rgba(255,255,255,.62) !important;
+  border-color: rgba(156, 105, 214, .16) !important;
+  color: #766b9a !important;
+}
+
+body.theme-vivid .brand-social a {
+  background: linear-gradient(135deg, rgba(255,255,255,.86), rgba(246,238,255,.67)) !important;
+  border-color: rgba(163, 114, 213, .22) !important;
+  box-shadow: 0 5px 16px rgba(116, 70, 165, .07), inset 0 1px 0 rgba(255,255,255,.84) !important;
+  color: #665b8a !important;
+}
+
+body.theme-vivid .brand-social a:hover {
+  border-color: rgba(160, 79, 228, .39) !important;
+  background: linear-gradient(125deg, rgba(255,255,255,.96), rgba(240,235,255,.91)) !important;
+  color: #5738bd !important;
+}
+
+@keyframes brandTitleShimmer {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
+}
+
+@keyframes brandUnderlineFlow {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 180% 50%; }
+}
+
+@media (max-width: 520px) {
+  .brand { padding-left: 15px !important; padding-right: 15px !important; }
+  .brand h1 { font-size: 25px !important; }
+  .brand-social { gap: 6px !important; }
+  .brand-social a { padding: 5px 8px 5px 7px !important; }
+  .brand-social .brand-handle { font-size: 10px !important; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .brand h1 .title-accent,
+  .brand h1::after {
+    animation: none !important;
+  }
+  .brand-social a,
+  .brand-social a::after {
+    transition: none !important;
+  }
+}
+
+/* =====================================================================
+   BRAND STUDIO 2.0 — single-line creator rail + premium animated masthead
+   Visual-only overrides. The original social URLs and app logic are intact.
+   ===================================================================== */
+.brand {
+  padding: 18px 14px 15px !important;
+}
+
+.brand-title {
+  gap: 7px !important;
+  min-height: 38px !important;
+}
+
+.brand h1 {
+  font-size: 27px !important;
+  letter-spacing: -1.35px !important;
+  line-height: 1.05 !important;
+}
+
+.brand h1 .title-accent {
+  background: linear-gradient(105deg, #2f8dff 0%, #5660ff 22%, #8a4cf2 47%, #e64bb7 70%, #ff806f 86%, #2f8dff 100%) !important;
+  background-size: 260% 100% !important;
+  animation: brandTitlePrism 7s ease-in-out infinite alternate, brandTitleLift 5s ease-in-out infinite !important;
+  filter: drop-shadow(0 3px 12px rgba(90, 95, 242, .13));
+}
+
+.brand h1::after {
+  width: min(78%, 182px) !important;
+  height: 3px !important;
+  bottom: -9px !important;
+  background-size: 240% 100% !important;
+  animation: brandUnderlineFlow 5.8s linear infinite, brandUnderlineGlow 3.8s ease-in-out infinite !important;
+  transform-origin: left center;
+}
+
+.brand-title > .pro {
+  position: relative !important;
+  isolation: isolate !important;
+  overflow: hidden !important;
+  height: 21px !important;
+  min-width: 36px !important;
+  padding: 0 7px !important;
+  margin: 0 0 1px 0 !important;
+  border: 1px solid rgba(255,255,255,.56) !important;
+  border-radius: 7px 11px 7px 11px !important;
+  background: linear-gradient(125deg, #18c7e7 0%, #397bff 28%, #7654f4 60%, #d94bbd 100%) !important;
+  background-size: 200% 200% !important;
+  box-shadow: 0 6px 17px rgba(84, 87, 235, .29), inset 0 1px 0 rgba(255,255,255,.38) !important;
+  animation: brandProAura 5s ease-in-out infinite !important;
+  transform: translateZ(0);
+}
+
+.brand-title > .pro::after {
+  content: "" !important;
+  position: absolute !important;
+  top: -30% !important;
+  bottom: -30% !important;
+  left: -70% !important;
+  width: 42% !important;
+  border-radius: inherit !important;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.72), transparent) !important;
+  transform: skewX(-20deg) !important;
+  animation: brandProSweep 4.8s ease-in-out infinite !important;
+  pointer-events: none !important;
+}
+
+.brand-meta-row {
+  margin: 10px 0 9px !important;
+}
+
+/* All three creator links stay on a single clean row. Compact sizing is
+   deliberate so full names remain visible at the normal 370px sidebar width. */
+.brand-social {
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: 5px !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  min-height: 28px !important;
+  margin-top: 5px !important;
+  overflow: visible !important;
+  white-space: nowrap !important;
+}
+
+.brand-social a {
+  position: relative !important;
+  isolation: isolate !important;
+  overflow: hidden !important;
+  display: inline-flex !important;
+  flex: 0 0 auto !important;
+  align-items: center !important;
+  gap: 4px !important;
+  max-width: none !important;
+  min-width: 0 !important;
+  padding: 4px 6px 4px 5px !important;
+  border-radius: 999px !important;
+  border: 1px solid rgba(123, 144, 205, .22) !important;
+  background: linear-gradient(135deg, rgba(255,255,255,.72), rgba(238,242,255,.44)) !important;
+  box-shadow: 0 3px 11px rgba(55, 75, 137, .065), inset 0 1px 0 rgba(255,255,255,.76) !important;
+  font-size: 9.2px !important;
+  font-weight: 800 !important;
+  line-height: 1 !important;
+  letter-spacing: 0 !important;
+  white-space: nowrap !important;
+  text-decoration: none !important;
+  animation: brandCapsuleBreath 8s ease-in-out infinite;
+  transition: transform .24s ease, box-shadow .24s ease, border-color .24s ease, color .24s ease, background .24s ease !important;
+}
+
+.brand-social a:nth-of-type(2) { animation-delay: -2.2s; }
+.brand-social a:nth-of-type(3) { animation-delay: -4.4s; }
+.brand-social .brand-handle {
+  display: inline-block !important;
+  font-size: 9.2px !important;
+  font-weight: 800 !important;
+  line-height: 1 !important;
+  letter-spacing: 0 !important;
+  white-space: nowrap !important;
+}
+
+.brand-social a::after {
+  z-index: 0 !important;
+  inset: 0 auto 0 -75% !important;
+  width: 54% !important;
+  border-radius: inherit !important;
+  opacity: 0 !important;
+  background: linear-gradient(105deg, transparent, rgba(255,255,255,.57), transparent) !important;
+  transform: skewX(-18deg) !important;
+  animation: brandCapsuleSweep 8.5s ease-in-out infinite;
+  pointer-events: none !important;
+}
+.brand-social a > svg,
+.brand-social a > .brand-handle {
+  position: relative !important;
+  z-index: 1 !important;
+}
+.brand-social a:nth-of-type(2)::after { animation-delay: -2.8s; }
+.brand-social a:nth-of-type(3)::after { animation-delay: -5.6s; }
+
+.brand-social a svg {
+  width: 13px !important;
+  height: 13px !important;
+  flex: 0 0 13px !important;
+}
+.brand-social .instagram svg { stroke: url(#igGradient) !important; }
+.brand-social .github svg { fill: #53678a !important; }
+.brand-social .facebook svg { fill: #1877f2 !important; }
+.brand-social a:hover {
+  z-index: 3 !important;
+  transform: translateY(-2px) scale(1.025) !important;
+  border-color: rgba(103, 112, 240, .45) !important;
+  box-shadow: 0 8px 19px rgba(77, 81, 176, .14), 0 0 15px rgba(116, 95, 240, .10), inset 0 1px 0 rgba(255,255,255,.88) !important;
+}
+.brand-social a:hover::after {
+  opacity: .8 !important;
+  animation-duration: 1s !important;
+}
+
+body.theme-dark .brand-social a {
+  border-color: rgba(125, 150, 207, .22) !important;
+  background: linear-gradient(135deg, rgba(22, 35, 60, .92), rgba(18, 23, 42, .82)) !important;
+  box-shadow: 0 4px 13px rgba(0,0,0,.18), inset 0 1px 0 rgba(255,255,255,.06) !important;
+  color: #d2dcf2 !important;
+}
+body.theme-dark .brand-social a:hover {
+  background: linear-gradient(125deg, rgba(29, 53, 83, .98), rgba(44, 33, 76, .94)) !important;
+  border-color: rgba(92, 190, 239, .48) !important;
+  color: #fff !important;
+}
+body.theme-dark .brand-title > .pro {
+  box-shadow: 0 6px 18px rgba(53, 92, 231, .30), 0 0 18px rgba(155, 80, 242, .12), inset 0 1px 0 rgba(255,255,255,.35) !important;
+}
+
+body.theme-vivid .brand-social a {
+  border-color: rgba(149, 105, 216, .23) !important;
+  background: linear-gradient(135deg, rgba(255,255,255,.94), rgba(246,238,255,.78)) !important;
+  color: #5e5486 !important;
+}
+body.theme-vivid .brand-social a:hover {
+  background: linear-gradient(125deg, #fff, rgba(240,233,255,.96)) !important;
+  color: #5139bb !important;
+}
+
+@keyframes brandTitlePrism {
+  0% { background-position: 0% 50%; filter: drop-shadow(0 2px 10px rgba(70,112,255,.10)); }
+  100% { background-position: 100% 50%; filter: drop-shadow(0 4px 15px rgba(201,73,210,.19)); }
+}
+@keyframes brandTitleLift {
+  0%, 100% { letter-spacing: -1.35px; }
+  50% { letter-spacing: -1.25px; }
+}
+@keyframes brandUnderlineGlow {
+  0%, 100% { filter: brightness(1); opacity: .9; }
+  50% { filter: brightness(1.22); opacity: 1; }
+}
+@keyframes brandProAura {
+  0%, 100% { background-position: 0% 45%; box-shadow: 0 6px 17px rgba(84,87,235,.23), inset 0 1px 0 rgba(255,255,255,.38); }
+  50% { background-position: 100% 55%; box-shadow: 0 7px 21px rgba(84,87,235,.34), 0 0 16px rgba(222,76,189,.16), inset 0 1px 0 rgba(255,255,255,.43); }
+}
+@keyframes brandProSweep {
+  0%, 54% { left: -70%; opacity: 0; }
+  64% { opacity: 1; }
+  83%, 100% { left: 140%; opacity: 0; }
+}
+@keyframes brandCapsuleBreath {
+  0%, 100% { box-shadow: 0 3px 11px rgba(55,75,137,.055), inset 0 1px 0 rgba(255,255,255,.72); }
+  50% { box-shadow: 0 4px 13px rgba(88,93,174,.09), inset 0 1px 0 rgba(255,255,255,.82); }
+}
+@keyframes brandCapsuleSweep {
+  0%, 64% { left: -75%; opacity: 0; }
+  70% { opacity: .75; }
+  84%, 100% { left: 135%; opacity: 0; }
+}
+
+@media (max-width: 430px) {
+  .brand { padding-left: 10px !important; padding-right: 10px !important; }
+  .brand h1 { font-size: 24px !important; letter-spacing: -1.15px !important; }
+  .brand-title { gap: 5px !important; }
+  .brand-social { gap: 3px !important; }
+  .brand-social a { padding: 4px 5px 4px 4px !important; gap: 3px !important; font-size: 8.3px !important; }
+  .brand-social .brand-handle { font-size: 8.3px !important; }
+  .brand-social a svg { width: 12px !important; height: 12px !important; flex-basis: 12px !important; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .brand h1 .title-accent,
+  .brand h1::after,
+  .brand-title > .pro,
+  .brand-title > .pro::after,
+  .brand-social a,
+  .brand-social a::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* BRAND STUDIO 2.1 — keep all creator links on one clean row */
+.brand-social {
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: 5px !important;
+  min-width: 0 !important;
+  width: 100% !important;
+  overflow: hidden !important;
+}
+.brand-social a {
+  flex: 0 1 auto !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  gap: 5px !important;
+  padding: 5px 7px !important;
+  font-size: 9.3px !important;
+  white-space: nowrap !important;
+}
+.brand-social .brand-handle {
+  display: inline-block !important;
+  min-width: 0 !important;
+  font-size: 9.3px !important;
+  line-height: 1.1 !important;
+  letter-spacing: 0 !important;
+  white-space: nowrap !important;
+}
+.brand-social a svg {
+  width: 12px !important;
+  height: 12px !important;
+  flex: 0 0 12px !important;
+}
+@media (max-width: 430px) {
+  .brand-social { gap: 4px !important; }
+  .brand-social a { gap: 4px !important; padding: 4px 5px !important; font-size: 8.4px !important; }
+  .brand-social .brand-handle { font-size: 8.4px !important; }
+  .brand-social a svg { width: 11px !important; height: 11px !important; flex-basis: 11px !important; }
+}
+
+/* PRINT BUTTON — polished violet/blue accent, consistent across themes */
+#printBtn {
+  color: #fff !important;
+  background: linear-gradient(125deg, #397bff 0%, #6259f4 48%, #9b4be4 100%) !important;
+  border: 1px solid rgba(255,255,255,.40) !important;
+  box-shadow: 0 8px 20px rgba(91, 86, 230, .24), inset 0 1px 0 rgba(255,255,255,.22) !important;
+  position: relative;
+  overflow: hidden;
+  transition: transform .22s ease, box-shadow .22s ease, filter .22s ease !important;
+}
+#printBtn:hover {
+  color: #fff !important;
+  filter: saturate(1.12) brightness(1.04);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 26px rgba(91, 86, 230, .34), 0 0 18px rgba(132, 81, 236, .16) !important;
+}
+#printBtn:active { transform: translateY(0) scale(.985); }
+#printBtn:focus-visible { outline: 2px solid #a9bfff; outline-offset: 3px; }
+
+
+/* Upload format chooser: PDF or manual-crop image sources */
+.upload-format-actions {
+  display: grid;
+  grid-template-columns: 1fr 1.25fr;
+  gap: 8px;
+  margin: 0 18px 10px;
+}
+.upload-format-actions .btn {
+  min-width: 0;
+  min-height: 36px;
+  padding: 8px 10px;
+  border-radius: 11px;
+  font-size: 11px;
+  font-weight: 850;
+  letter-spacing: .015em;
+  white-space: nowrap;
+  border: 1px solid rgba(109,135,198,.22);
+  box-shadow: 0 5px 14px rgba(46,70,117,.07), inset 0 1px 0 rgba(255,255,255,.5);
+  transition: transform .2s ease, box-shadow .2s ease, filter .2s ease;
+}
+.upload-format-actions .btn:hover { transform: translateY(-1px); filter: saturate(1.08); box-shadow: 0 8px 18px rgba(72,85,177,.13); }
+.upload-pdf-btn { color: #fff !important; background: linear-gradient(120deg,#2377ff,#6559ed 60%,#a34be2) !important; }
+.upload-image-btn { color: #2453a6 !important; background: linear-gradient(120deg,#edfbff,#f0edff 72%,#fff0fa) !important; }
+body.theme-dark .upload-format-actions .btn { border-color: rgba(134,157,217,.22); box-shadow: 0 6px 16px rgba(0,0,0,.19), inset 0 1px 0 rgba(255,255,255,.07); }
+body.theme-dark .upload-image-btn { color: #e0e7ff !important; background: linear-gradient(120deg,#142d48,#252348 72%,#35203d) !important; }
+body.theme-vivid .upload-image-btn { color: #4936a1 !important; background: linear-gradient(120deg,#e2fcff,#ece8ff 58%,#ffe6f5) !important; }
+@media (max-width: 430px) { .upload-format-actions { margin-left: 14px; margin-right: 14px; gap: 6px; } .upload-format-actions .btn { font-size: 10px; padding-inline: 6px; } }

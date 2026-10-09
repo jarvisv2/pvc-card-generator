@@ -144,3 +144,145 @@ body.theme-dark .scene-blob.blob-3{background:var(--scene-c)!important}
 body.theme-dark .scene-blob.blob-4{background:var(--scene-d)!important}
 
 @media (prefers-reduced-motion:reduce){.theme-btn.active::after{display:none!important}}
+
+/* =====================================================================
+   DARK MODE CONTRAST POLISH — UI-only overrides
+   Keep the light A4 print canvas and all application logic untouched.
+   ===================================================================== */
+body.theme-dark .topbar .meta{
+  color:#b8c6df!important;
+  text-shadow:0 1px 12px rgba(67,126,255,.08);
+}
+body.theme-dark .topbar .meta b{
+  color:#eef4ff!important;
+}
+body.theme-dark .topbar .meta b#sizeMeta{
+  color:#ffffff!important;
+  border-bottom-color:rgba(99,181,255,.55)!important;
+}
+
+/* The Print Mode Dragon Sheet control should match the dark controls,
+   not retain the pale gray/white button treatment. */
+body.theme-dark #dragonSetup{
+  color:#e8eeff!important;
+  background:linear-gradient(135deg,#151e31 0%,#172238 52%,#211b35 100%)!important;
+  border:1px solid rgba(145,164,218,.22)!important;
+  box-shadow:0 7px 18px rgba(0,0,0,.20),inset 0 1px 0 rgba(255,255,255,.035)!important;
+}
+body.theme-dark #dragonSetup:hover{
+  color:#ffffff!important;
+  border-color:rgba(100,143,255,.52)!important;
+  box-shadow:0 9px 22px rgba(0,0,0,.28),0 0 18px rgba(82,112,255,.12)!important;
+}
+body.theme-dark #dragonSetup.on{
+  color:#ffffff!important;
+  background:linear-gradient(120deg,#0fbfd2 0%,#496df1 48%,#9450e8 100%)!important;
+  border-color:rgba(155,174,255,.40)!important;
+  box-shadow:0 8px 22px rgba(65,90,225,.24)!important;
+}
+
+/* Card slots: replace the pale panels with layered graphite/navy glass.
+   Improve contrast for titles, labels, status, controls and action buttons. */
+body.theme-dark .slot{
+  color:#e8eeff!important;
+  background:linear-gradient(155deg,rgba(23,32,51,.97) 0%,rgba(15,22,37,.98) 58%,rgba(23,20,42,.97) 100%)!important;
+  border-color:rgba(136,158,213,.24)!important;
+  box-shadow:0 12px 28px rgba(0,0,0,.23),inset 0 1px 0 rgba(255,255,255,.035)!important;
+}
+body.theme-dark .slot:hover{
+  border-color:rgba(111,137,255,.42)!important;
+  box-shadow:0 16px 34px rgba(0,0,0,.30),0 0 22px rgba(75,102,235,.08)!important;
+}
+body.theme-dark .slot .slothead b{
+  color:#f2f6ff!important;
+  text-shadow:0 1px 10px rgba(93,126,255,.12);
+}
+body.theme-dark .slot .field label,
+body.theme-dark .slot .smalllabel{
+  color:#9eafd0!important;
+}
+body.theme-dark .slot .status{
+  color:#a8b7d1!important;
+}
+body.theme-dark .slot .status.good{
+  color:#65e0b7!important;
+}
+body.theme-dark .slot .status.bad{
+  color:#ff9a9e!important;
+}
+body.theme-dark .slot .pill:not(.good):not(.bad){
+  color:#cad5ff!important;
+  background:linear-gradient(135deg,rgba(67,82,158,.38),rgba(85,54,142,.38))!important;
+  border-color:rgba(139,151,255,.20)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.055)!important;
+}
+body.theme-dark .slot .pill.good{
+  color:#7aefc8!important;
+  background:linear-gradient(135deg,rgba(12,115,88,.25),rgba(16,91,91,.28))!important;
+  border-color:rgba(64,214,170,.22)!important;
+}
+body.theme-dark .slot .pill.bad{
+  color:#ffb0b2!important;
+  background:rgba(128,38,54,.28)!important;
+  border-color:rgba(255,112,126,.22)!important;
+}
+body.theme-dark .slot .settings{
+  border-top-color:rgba(139,158,207,.19)!important;
+}
+body.theme-dark .slot .settings summary{
+  color:#b8c6e0!important;
+}
+body.theme-dark .slot .settings summary:hover{
+  color:#e0e7ff!important;
+}
+body.theme-dark .slot .field input,
+body.theme-dark .slot .field select{
+  color:#eef3ff!important;
+  background:linear-gradient(135deg,#0b1322,#111a2c)!important;
+  border-color:rgba(133,155,207,.27)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.025)!important;
+}
+body.theme-dark .slot .field input::placeholder{
+  color:#7585a2!important;
+  opacity:1;
+}
+body.theme-dark .slot .slottools .softbtn{
+  color:#cad8ff!important;
+  background:linear-gradient(135deg,#1a2944,#20213d 58%,#2a2040)!important;
+  border:1px solid rgba(119,145,225,.20)!important;
+  box-shadow:0 6px 16px rgba(0,0,0,.14)!important;
+}
+body.theme-dark .slot .slottools .graybtn{
+  color:#d8e0f2!important;
+  background:linear-gradient(135deg,#202b3e,#182235)!important;
+  border:1px solid rgba(145,160,195,.16)!important;
+  box-shadow:0 6px 16px rgba(0,0,0,.14)!important;
+}
+body.theme-dark .slot .slottools .softbtn:hover,
+body.theme-dark .slot .slottools .graybtn:hover{
+  border-color:rgba(113,144,255,.42)!important;
+  box-shadow:0 9px 20px rgba(0,0,0,.24)!important;
+}
+
+
+/* DARK MODE: keep native select menus legible when the option list opens. */
+body.theme-dark select,
+body.theme-dark .field select {
+  color-scheme: dark;
+  background-color: #0f1728 !important;
+  color: #e9eeff !important;
+}
+body.theme-dark select option,
+body.theme-dark .field select option {
+  background-color: #101a2b !important;
+  color: #e9eeff !important;
+}
+body.theme-dark select option:checked,
+body.theme-dark .field select option:checked {
+  background: #29436b !important;
+  color: #ffffff !important;
+}
+body.theme-dark select optgroup {
+  background-color: #101a2b !important;
+  color: #9fb3d7 !important;
+}

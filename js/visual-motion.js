@@ -57,8 +57,10 @@
   const buttons = [...document.querySelectorAll('.theme-btn[data-theme]')];
   if (!buttons.length) return;
 
+  // Only Dark and Vivid are selectable. Old saved "default" preferences
+  // migrate to Vivid so the removed Default button cannot leave the UI unselected.
   const applyTheme = (theme, persist = true) => {
-    const mode = ['default','dark','vivid'].includes(theme) ? theme : 'default';
+    const mode = ['dark','vivid'].includes(theme) ? theme : 'vivid';
     document.body.classList.toggle('theme-dark', mode === 'dark');
     document.body.classList.toggle('theme-vivid', mode === 'vivid');
     buttons.forEach(btn => {
@@ -71,8 +73,8 @@
     }
   };
 
-  let saved = 'default';
-  try { saved = localStorage.getItem('pvc-card-maker-theme') || 'default'; } catch (_) {}
+  let saved = 'vivid';
+  try { saved = localStorage.getItem('pvc-card-maker-theme') || 'vivid'; } catch (_) {}
   applyTheme(saved, false);
 
   buttons.forEach(btn => {

@@ -180,3 +180,12 @@ body{
 /* Keep title readable at the exact width used by the current app screenshot. */
 @media (max-width:1200px){.app{grid-template-columns:450px minmax(0,1fr)}.brand h1{font-size:24px}.brand-social{column-gap:7px}.toolbar .btn{padding-left:13px;padding-right:13px}.ultra-workflow{padding-left:12px;padding-right:12px}}
 @media (max-width:980px){.app{grid-template-columns:1fr}.ultra-workflow{grid-template-columns:repeat(4,1fr)}}
+
+
+/* Final header alignment: center the two-theme selector between sheet metadata and Dragon Sheet. */
+.topbar{position:relative!important;}
+.topbar-left{flex:0 1 auto!important;max-width:calc(100% - 470px)!important;}
+.theme-switcher.theme-switcher-centered{position:absolute!important;left:50%!important;top:50%!important;transform:translate(-50%,-50%)!important;z-index:6!important;margin:0!important;white-space:nowrap!important;}
+.theme-switcher.theme-switcher-centered .theme-btn{min-width:72px!important;}
+@media(max-width:1200px){.theme-switcher.theme-switcher-centered{left:48%!important;}.topbar-left{max-width:calc(100% - 380px)!important;}}
+@media(max-width:980px){.theme-switcher.theme-switcher-centered{display:inline-flex!important;left:50%!important;top:auto!important;bottom:8px!important;transform:translateX(-50%)!important;min-height:30px!important;}.topbar{height:84px!important;min-height:84px!important;}.topbar-left{max-width:calc(100% - 170px)!important;align-self:flex-start!important;padding-top:10px!important;}.theme-switcher.theme-switcher-centered .theme-label{display:inline!important;}.theme-switcher.theme-switcher-centered .theme-btn{height:24px!important;min-width:64px!important;padding:0 7px!important;font-size:8px!important;}}
