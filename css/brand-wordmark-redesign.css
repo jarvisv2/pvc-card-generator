@@ -1,0 +1,163 @@
+/* PVC Card Maker PRO — unified calligraphy wordmark.
+   Single source of truth for the title in Vivid and Dark modes. */
+.brand .brand-title.brand-title-redesign {
+  position: relative !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  flex-wrap: nowrap !important;
+  gap: 5px !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  min-height: 52px !important;
+  height: auto !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: visible !important;
+  line-height: normal !important;
+}
+
+.brand .brand-title-redesign > h1.brand-wordmark-live {
+  position: relative !important;
+  display: inline-flex !important;
+  flex: 0 1 auto !important;
+  align-items: baseline !important;
+  justify-content: flex-start !important;
+  gap: 0 !important;
+  width: auto !important;
+  min-width: 0 !important;
+  max-width: calc(100% - 49px) !important;
+  height: auto !important;
+  margin: 0 !important;
+  padding: 0 0 1px !important;
+  overflow: visible !important;
+  clip: auto !important;
+  clip-path: none !important;
+  opacity: 1 !important;
+  border: 0 !important;
+  white-space: nowrap !important;
+  font-family: "Alex Brush", "Allura", "Brush Script MT", cursive !important;
+  font-size: clamp(35px, 3vw, 40px) !important;
+  font-weight: 400 !important;
+  font-style: normal !important;
+  line-height: .98 !important;
+  letter-spacing: 0 !important;
+  text-shadow: none !important;
+  filter: none !important;
+  isolation: isolate !important;
+}
+/* No added rectangular glow, block background, or straight underline. The script
+   font's natural descenders provide the flourish from the user's reference. */
+.brand .brand-title-redesign > h1.brand-wordmark-live::before,
+.brand .brand-title-redesign > h1.brand-wordmark-live::after {
+  content: none !important;
+  display: none !important;
+  animation: none !important;
+}
+
+.brand .brand-title-redesign .brand-wordmark-main,
+.brand .brand-title-redesign .brand-wordmark-script {
+  display: inline-block !important;
+  flex: 0 0 auto !important;
+  position: relative !important;
+  top: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  font-family: "Alex Brush", "Allura", "Brush Script MT", cursive !important;
+  font-size: 1em !important;
+  font-style: normal !important;
+  font-weight: 400 !important;
+  letter-spacing: 0 !important;
+  line-height: inherit !important;
+  white-space: nowrap !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
+  filter: none !important;
+}
+.brand .brand-title-redesign .brand-wordmark-main { margin-right: 2px !important; }
+.brand .brand-title-redesign .brand-wordmark-script { margin-left: 0 !important; }
+
+/* PRO badge sits alongside the wordmark, aligned to its upper half. */
+.brand .brand-title-redesign > .brand-pro-badge {
+  position: relative !important;
+  align-self: center !important;
+  isolation: isolate !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex: 0 0 auto !important;
+  gap: 3px !important;
+  min-width: 42px !important;
+  width: auto !important;
+  height: 19px !important;
+  margin: -9px 0 0 0 !important;
+  padding: 0 6px !important;
+  border: 1px solid rgba(255,255,255,.6) !important;
+  border-radius: 999px !important;
+  background: linear-gradient(125deg,#22c8e8 0%,#4279ff 44%,#8650ee 76%,#d94ab9 100%) !important;
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
+  font: 900 9px/1 Inter, "Segoe UI", Arial, sans-serif !important;
+  letter-spacing: .06em !important;
+  white-space: nowrap !important;
+  text-shadow: none !important;
+  box-shadow: 0 2px 5px rgba(66,75,174,.14), inset 0 1px 0 rgba(255,255,255,.38) !important;
+  animation: none !important;
+  overflow: hidden !important;
+}
+.brand .brand-title-redesign > .brand-pro-badge::before,
+.brand .brand-title-redesign > .brand-pro-badge::after { content: none !important; display: none !important; }
+.brand .brand-title-redesign > .brand-pro-badge span,
+.brand .brand-title-redesign > .brand-pro-badge i {
+  position: relative !important;
+  display: inline-block !important;
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
+  font-family: Inter, "Segoe UI", Arial, sans-serif !important;
+  font-size: inherit !important;
+  font-weight: 900 !important;
+  font-style: normal !important;
+  line-height: 1 !important;
+  text-shadow: none !important;
+}
+.brand .brand-title-redesign > .brand-pro-badge i { font-size: 10px !important; }
+
+/* Vivid: deep indigo/blue main lettering that reads clearly on the pale panel. */
+body:not(.theme-dark) .brand .brand-title-redesign .brand-wordmark-main,
+body.theme-vivid .brand .brand-title-redesign .brand-wordmark-main {
+  background-image: linear-gradient(105deg,#142b72 0%,#1c56be 34%,#354fd0 66%,#45308f 100%) !important;
+  text-shadow: 0 .4px 0 rgba(255,255,255,.48), 0 1px .7px rgba(17,44,117,.11) !important;
+}
+body:not(.theme-dark) .brand .brand-title-redesign .brand-wordmark-script,
+body.theme-vivid .brand .brand-title-redesign .brand-wordmark-script {
+  background-image: linear-gradient(105deg,#3c32a9 0%,#7140c7 38%,#b832b0 74%,#d934a4 100%) !important;
+  text-shadow: 0 .35px 0 rgba(255,255,255,.3) !important;
+}
+
+/* Dark: luminous cyan/blue for the phrase and violet-to-rose script. */
+body.theme-dark .brand .brand-title-redesign .brand-wordmark-main {
+  background-image: linear-gradient(105deg,#68eaff 0%,#3fc4f4 32%,#6596ff 63%,#a1a6ff 100%) !important;
+  text-shadow: 0 .45px 0 rgba(2,13,35,.64), 0 0 3px rgba(69,193,255,.11) !important;
+}
+body.theme-dark .brand .brand-title-redesign .brand-wordmark-script {
+  background-image: linear-gradient(105deg,#a5b3ff 0%,#9a75ff 36%,#dc58d1 73%,#ff82c9 100%) !important;
+  text-shadow: 0 .35px 0 rgba(8,8,25,.55), 0 0 3px rgba(206,91,239,.10) !important;
+}
+
+@media (max-width: 430px) {
+  .brand .brand-title.brand-title-redesign { gap: 4px !important; min-height: 46px !important; }
+  .brand .brand-title-redesign > h1.brand-wordmark-live {
+    font-size: clamp(32px, 8.2vw, 36px) !important;
+    max-width: calc(100% - 44px) !important;
+  }
+  .brand .brand-title-redesign > .brand-pro-badge {
+    min-width: 38px !important; height: 18px !important; padding: 0 5px !important;
+    font-size: 8px !important; margin-top: -7px !important;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .brand .brand-title-redesign *, .brand .brand-title-redesign *::before,
+  .brand .brand-title-redesign *::after { animation: none !important; transition: none !important; }
+}

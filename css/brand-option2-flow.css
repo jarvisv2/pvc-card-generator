@@ -1,0 +1,71 @@
+/* Option 2 — Elegant Flow wordmark extracted from the user's approved reference.
+   This is the only active wordmark layer; legacy logo CSS stays unloaded. */
+.brand .brand-title.brand-title-option2 {
+  position: relative !important;
+  display: block !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  height: auto !important;
+  margin: 0 0 8px !important;
+  padding: 0 !important;
+  overflow: visible !important;
+  gap: 0 !important;
+  line-height: 0 !important;
+  align-items: initial !important;
+  justify-content: initial !important;
+}
+.brand .brand-title-option2 > h1.wordmark-accessible {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  clip-path: inset(50%) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+.brand .brand-title-option2 > .brand-wordmark-art {
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  height: auto !important;
+  aspect-ratio: 517 / 132 !important;
+  object-fit: contain !important;
+  object-position: left center !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  filter: none !important;
+  vertical-align: top !important;
+  animation: none !important;
+}
+.brand .brand-title-option2 .brand-wordmark-option2-dark { display: none !important; }
+body.theme-dark .brand .brand-title-option2 .brand-wordmark-option2-vivid { display: none !important; }
+body.theme-dark .brand .brand-title-option2 .brand-wordmark-option2-dark { display: block !important; }
+/* Theme-consistent wordmark sizing: both theme assets occupy the same lockup.
+   Dark artwork gets a restrained brightness/saturation lift, not extra blur. */
+.brand .brand-title-option2 > .brand-wordmark-art {
+  width: 100% !important;
+  max-width: 100% !important;
+  height: auto !important;
+  aspect-ratio: 517 / 132 !important;
+  object-fit: contain !important;
+}
+body.theme-dark .brand .brand-title-option2 .brand-wordmark-option2-dark {
+  filter: brightness(1.12) saturate(1.08) contrast(1.04) !important;
+}
+
+.brand .brand-title-option2::before,
+.brand .brand-title-option2::after { content: none !important; display: none !important; }
+@media (max-width: 430px) {
+  .brand .brand-title.brand-title-option2 { margin-bottom: 7px !important; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .brand .brand-title-option2 > .brand-wordmark-art { animation: none !important; transition: none !important; }
+}

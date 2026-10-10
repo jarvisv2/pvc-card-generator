@@ -1,0 +1,7 @@
+FLOWING WAVE BACKGROUND — REVISED ASSET PASS
+
+Updated the two background SVG assets to more closely match the supplied reference: broad asymmetrical flowing fabric-like ribbons with overlapping folds, soft luminous edges and a pastel ice-blue/lavender/pink treatment for Vivid; deep midnight/navy folds with restrained steel-blue edges for Dark.
+
+These SVG files are the assets directly referenced by css/interactive-mesh-background.css. The stylesheet and index.html references are retained; the visible background artwork itself has been replaced in this build. The fixed scene remains behind the app, and the A4 canvas stays white and separate. Print mode hides the decorative scene; A4 export still comes directly from the white canvas.
+
+No application logic, handlers, PDF/image processing, cropping, card placement, zoom, offsets, print/download routines, or theme switching was changed.

@@ -1,0 +1,220 @@
+/* =====================================================================
+   FLOWING AURORA WAVES — background-only visual layer
+   Matches the supplied flowing-wave reference instead of radial mesh blobs.
+   App controls and logic are untouched. A4 output remains separate and white.
+   ===================================================================== */
+
+html,
+body {
+  background: #f4f8ff !important;
+}
+
+body {
+  position: relative;
+  isolation: isolate;
+}
+
+/* The decorative scene is an independent fixed layer behind all app content. */
+.ultra-scene {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 0 !important;
+  overflow: hidden !important;
+  pointer-events: none !important;
+  background: transparent !important;
+  isolation: isolate !important;
+  contain: strict;
+}
+
+/* Retire legacy grid, twinkles, beams and separate glow-orb elements. */
+.scene-grid,
+.scene-vignette,
+.scene-blob,
+.scene-beam,
+.scene-stars,
+.star {
+  display: none !important;
+  animation: none !important;
+}
+
+.app::before,
+.app::after,
+.brand::after,
+.stage::before,
+.stage::after {
+  display: none !important;
+  content: none !important;
+  animation: none !important;
+  box-shadow: none !important;
+}
+
+.app {
+  position: relative;
+  z-index: 1 !important;
+  background: transparent !important;
+}
+
+.workspace {
+  background: transparent !important;
+}
+
+/* Transparent stage reveals the waves around the sheet only. The canvas itself
+   paints pure white and remains isolated from every decorative background. */
+.stage,
+body.theme-dark .stage,
+body.theme-vivid .stage,
+body:not(.theme-dark):not(.theme-vivid) .stage {
+  position: relative;
+  background: transparent !important;
+  background-image: none !important;
+  animation: none !important;
+}
+
+.sheet,
+#sheet {
+  background: #fff !important;
+}
+
+/* VIVID — flowing ice-blue and sky-blue ribbons fading into lavender and blush. */
+body.theme-vivid,
+body:not(.theme-dark):not(.theme-vivid) {
+  background: #f3f8ff !important;
+}
+
+body.theme-vivid .ultra-scene,
+body:not(.theme-dark):not(.theme-vivid) .ultra-scene {
+  background-color: #f4f8ff !important;
+}
+
+body.theme-vivid .ultra-scene::before,
+body:not(.theme-dark):not(.theme-vivid) .ultra-scene::before {
+  content: "";
+  position: absolute;
+  inset: -1.6%;
+  pointer-events: none;
+  z-index: 0;
+  background-image: url("../assets/vivid-flow-waves.svg");
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 100% 100%;
+  transform: scale(1.02) translate3d(-.2%, 0, 0);
+  transform-origin: 50% 50%;
+  will-change: transform;
+  animation: flowWaveDrift 44s ease-in-out infinite alternate;
+}
+
+body.theme-vivid .ultra-scene::after,
+body:not(.theme-dark):not(.theme-vivid) .ultra-scene::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: radial-gradient(
+    circle 340px at var(--mesh-cursor-x, 50vw) var(--mesh-cursor-y, 42vh),
+    rgba(255, 255, 255, .22) 0%,
+    rgba(190, 225, 255, .16) 30%,
+    rgba(221, 214, 255, .08) 52%,
+    transparent 73%
+  );
+  opacity: .68;
+}
+
+/* DARK — deep midnight contours with restrained blue and steel-blue edges. */
+body.theme-dark {
+  background: #07101e !important;
+}
+
+body.theme-dark .ultra-scene {
+  background-color: #07101e !important;
+}
+
+body.theme-dark .ultra-scene::before {
+  content: "";
+  position: absolute;
+  inset: -1.6%;
+  z-index: 0;
+  pointer-events: none;
+  background-image: url("../assets/dark-flow-waves.svg");
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 100% 100%;
+  transform: scale(1.02) translate3d(.2%, 0, 0);
+  transform-origin: 50% 50%;
+  will-change: transform;
+  animation: flowWaveDriftDark 50s ease-in-out infinite alternate;
+}
+
+body.theme-dark .ultra-scene::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: radial-gradient(
+    circle 365px at var(--mesh-cursor-x, 50vw) var(--mesh-cursor-y, 42vh),
+    rgba(111, 148, 183, .105) 0%,
+    rgba(73, 105, 140, .065) 33%,
+    rgba(46, 72, 101, .025) 54%,
+    transparent 74%
+  );
+  opacity: .74;
+}
+
+@keyframes flowWaveDrift {
+  0%   { transform: scale(1.025) translate3d(-.45%, -.18%, 0); }
+  48%  { transform: scale(1.035) translate3d(.25%, .20%, 0); }
+  100% { transform: scale(1.03) translate3d(.45%, -.12%, 0); }
+}
+
+@keyframes flowWaveDriftDark {
+  0%   { transform: scale(1.025) translate3d(.25%, -.12%, 0); }
+  52%  { transform: scale(1.032) translate3d(-.25%, .15%, 0); }
+  100% { transform: scale(1.028) translate3d(.3%, -.1%, 0); }
+}
+
+/* Keep existing panels readable while allowing the flowing backdrop to breathe
+   around the work area; no controls, sizes, or layout rules are changed. */
+body.theme-vivid .side {
+  background: linear-gradient(180deg, rgba(255,255,255,.84), rgba(249,248,255,.75)) !important;
+}
+body.theme-vivid .brand {
+  background: linear-gradient(180deg, rgba(255,255,255,.88), rgba(252,248,255,.78)) !important;
+}
+body.theme-dark .side {
+  background: linear-gradient(180deg, rgba(8,15,27,.94), rgba(9,17,31,.88)) !important;
+}
+body.theme-dark .brand {
+  background: linear-gradient(180deg, rgba(10,17,30,.95), rgba(9,16,29,.86)) !important;
+}
+
+@media (max-width: 700px) {
+  body.theme-vivid .ultra-scene::after,
+  body:not(.theme-dark):not(.theme-vivid) .ultra-scene::after {
+    background: radial-gradient(circle 235px at var(--mesh-cursor-x, 50vw) var(--mesh-cursor-y, 42vh), rgba(255,255,255,.17), rgba(190,225,255,.08) 43%, transparent 72%);
+  }
+  body.theme-dark .ultra-scene::after {
+    background: radial-gradient(circle 250px at var(--mesh-cursor-x, 50vw) var(--mesh-cursor-y, 42vh), rgba(111,148,183,.075), rgba(73,105,140,.035) 44%, transparent 72%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ultra-scene::before {
+    animation: none !important;
+    will-change: auto !important;
+    transform: none !important;
+  }
+  .ultra-scene::after { display: none !important; }
+}
+
+/* Keep print output free of decorative waves; downloads come from the white canvas. */
+@media print {
+  .ultra-scene { display: none !important; }
+  html, body, .app, .workspace, .stage,
+  body.theme-dark .stage, body.theme-vivid .stage {
+    background: #fff !important;
+    background-image: none !important;
+    animation: none !important;
+  }
+  .stage::before, .stage::after { display: none !important; content: none !important; }
+}

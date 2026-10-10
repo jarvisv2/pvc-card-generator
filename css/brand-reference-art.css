@@ -1,0 +1,61 @@
+/* Exact approved reference artwork for the PVC Card Maker wordmark.
+   Keep this final stylesheet last: avoids stacking conflicting live-text/logo effects. */
+.brand-title {
+  position: relative !important;
+  display: block !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  height: auto !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  gap: 0 !important;
+  overflow: hidden !important;
+  line-height: 0 !important;
+  align-items: initial !important;
+  justify-content: initial !important;
+}
+.brand-title > h1.wordmark-accessible {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  clip-path: inset(50%) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+  opacity: 1 !important;
+}
+/* The reference art already includes its PRO badge, sparkles and underline. */
+.brand-title > .pro,
+.brand-title > h1 .pro {
+  display: none !important;
+}
+.brand-title .brand-wordmark-art {
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  height: auto !important;
+  aspect-ratio: 476 / 83 !important;
+  object-fit: fill !important;
+  object-position: left top !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  filter: none !important;
+  vertical-align: top !important;
+  animation: none !important;
+}
+.brand-title .brand-wordmark-dark-img { display: none !important; }
+body.theme-dark .brand-title .brand-wordmark-vivid-img { display: none !important; }
+body.theme-dark .brand-title .brand-wordmark-dark-img { display: block !important; }
+/* Preserve the surrounding branded panel and original meta/social rows. */
+.brand-title::before,
+.brand-title::after { display: none !important; content: none !important; }
+@media (prefers-reduced-motion: reduce) {
+  .brand-title .brand-wordmark-art { animation: none !important; }
+}

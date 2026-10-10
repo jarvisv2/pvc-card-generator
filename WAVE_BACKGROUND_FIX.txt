@@ -1,0 +1,10 @@
+BACKGROUND FIX
+The previous wave assets were present, but the stage workspace still inherited old theme-specific !important radial backgrounds. The new css/flow-wave-stage-fix.css applies the SVG wave design directly to .stage, so it is visible around the white A4 sheet at all zoom levels.
+
+Files:
+- assets/vivid-flow-waves.svg
+- assets/dark-flow-waves.svg
+- css/flow-wave-stage-fix.css
+- js/interactive-mesh.js (stage-relative, smoothed cursor-light position only)
+
+The printable/downloaded A4 image is still the existing white canvas. Print styles force the stage background white and disable animation. No card or PDF processing logic was changed.

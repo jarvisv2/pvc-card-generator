@@ -1,0 +1,93 @@
+@property --pvc-wave-scale {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 106%;
+}
+
+/* =====================================================================
+   FLOWING WAVE BACKGROUND — ACTIVE WORKSPACE OVERRIDE
+   The wave art is applied directly to .stage because legacy !important
+   theme backgrounds were masking the separate scene layer. Canvas output
+   remains a separate pure-white 2D canvas.
+   ===================================================================== */
+
+.stage,
+body.theme-vivid .stage,
+body:not(.theme-dark):not(.theme-vivid) .stage {
+  position: relative !important;
+  isolation: isolate !important;
+  background-color: #eef7ff !important;
+  background-image:
+    radial-gradient(ellipse at var(--mesh-stage-x, 52%) var(--mesh-stage-y, 42%), rgba(255,255,255,.24) 0%, rgba(174,220,255,.13) 20%, rgba(220,218,255,.06) 34%, transparent 48%),
+    url("../assets/vivid-flow-waves.svg") !important;
+  background-repeat: no-repeat, no-repeat !important;
+  background-size: 100% 100%, var(--pvc-wave-scale, 106%) var(--pvc-wave-scale, 106%) !important;
+  background-position: center center, 50% 50% !important;
+  background-attachment: scroll, scroll !important;
+  animation: pvcVividWaveFlow 48s ease-in-out infinite alternate !important;
+}
+
+body.theme-dark .stage {
+  background-color: #07101d !important;
+  background-image:
+    radial-gradient(ellipse at var(--mesh-stage-x, 52%) var(--mesh-stage-y, 42%), rgba(105,151,190,.13) 0%, rgba(56,93,130,.075) 22%, rgba(29,57,85,.03) 38%, transparent 52%),
+    url("../assets/dark-flow-waves.svg") !important;
+  background-repeat: no-repeat, no-repeat !important;
+  background-size: 100% 100%, var(--pvc-wave-scale, 106%) var(--pvc-wave-scale, 106%) !important;
+  background-position: center center, 50% 50% !important;
+  background-attachment: scroll, scroll !important;
+  animation: pvcDarkWaveFlow 58s ease-in-out infinite alternate !important;
+}
+
+@keyframes pvcVividWaveFlow {
+  from { --pvc-wave-scale: 106%; }
+  to   { --pvc-wave-scale: 112%; }
+}
+
+@keyframes pvcDarkWaveFlow {
+  from { --pvc-wave-scale: 106%; }
+  to   { --pvc-wave-scale: 110%; }
+}
+
+/* Keep the existing white page/canvas visually and functionally separate. */
+.sheet,
+#sheet {
+  background: #fff !important;
+  background-color: #fff !important;
+}
+
+@media (max-width: 700px) {
+  body.theme-vivid .stage,
+  body:not(.theme-dark):not(.theme-vivid) .stage {
+    background-size: 100% 100%, var(--pvc-wave-scale, 112%) var(--pvc-wave-scale, 112%) !important;
+  }
+  body.theme-dark .stage {
+    background-size: 100% 100%, var(--pvc-wave-scale, 110%) var(--pvc-wave-scale, 110%) !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stage,
+  body.theme-dark .stage,
+  body.theme-vivid .stage,
+  body:not(.theme-dark):not(.theme-vivid) .stage {
+    animation: none !important;
+    background-size: 100% 100%, 108% 108% !important;
+  }
+}
+
+@media print {
+  .stage,
+  body.theme-dark .stage,
+  body.theme-vivid .stage,
+  body:not(.theme-dark):not(.theme-vivid) .stage {
+    background: #fff !important;
+    background-image: none !important;
+    animation: none !important;
+  }
+  .sheet,
+  #sheet {
+    background: #fff !important;
+    background-color: #fff !important;
+  }
+}
