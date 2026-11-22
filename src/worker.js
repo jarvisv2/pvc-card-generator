@@ -15,7 +15,7 @@ async function makeSession(env, email) {
 }
 
 // Returns the email only if the cookie is valid AND the user is still "approved" in D1
-async function readSession(env, request) {
+async function readSession(env, request, site) {
   const m = (request.headers.get('cookie') || '').match(/(?:^|;\s*)sid=([^;]+)/);
   if (!m) return null;
   const [p, s] = m[1].split('.');
@@ -25,7 +25,7 @@ async function readSession(env, request) {
     if (!ok) return null;
     const d = JSON.parse(dec.decode(unb64u(p)));
     if (d.x < Date.now()) return null;
-    const row = await env.DB.prepare('SELECT status FROM users WHERE email=?').bind(d.e).first();
+    const row = await env.DB.prepare('SELECT status FROM site_users WHERE site=? AND email=?').bind(site, d.e).first();
     return row && row.status === 'approved' ? d.e : null;
   } catch { return null; }
 }
@@ -50,16 +50,17 @@ async function authGoogle(request, env) {
   try { user = await verifyGoogle(env, (await request.json()).credential); }
   catch { return json({ error: 'Google verification failed' }, 401); }
 
+  const site = new URL(request.url).hostname;
   const owner = user.email === env.OWNER_EMAIL.toLowerCase();
   const now = new Date().toISOString();
-  await env.DB.prepare('INSERT INTO users(email,name,status,created_at,last_login) VALUES(?1,?2,?3,?4,?4) ON CONFLICT(email) DO UPDATE SET name=?2, last_login=?4')
-    .bind(user.email, user.name, owner ? 'approved' : 'pending', now).run();
-  if (owner) await env.DB.prepare("UPDATE users SET status='approved' WHERE email=?").bind(user.email).run();
-  const { status } = await env.DB.prepare('SELECT status FROM users WHERE email=?').bind(user.email).first();
+  await env.DB.prepare('INSERT INTO site_users(site,email,name,status,created_at,last_login) VALUES(?1,?2,?3,?4,?5,?5) ON CONFLICT(site,email) DO UPDATE SET name=?3, last_login=?5')
+    .bind(site, user.email, user.name, owner ? 'approved' : 'pending', now).run();
+  if (owner) await env.DB.prepare("UPDATE site_users SET status='approved' WHERE site=? AND email=?").bind(site, user.email).run();
+  const { status } = await env.DB.prepare('SELECT status FROM site_users WHERE site=? AND email=?').bind(site, user.email).first();
 
   const cf = request.cf || {};
-  await env.DB.prepare('INSERT INTO logins(email,name,result,ip,country,ua,ts) VALUES(?,?,?,?,?,?,?)')
-    .bind(user.email, user.name, status, request.headers.get('cf-connecting-ip') || '', cf.country || '', (request.headers.get('user-agent') || '').slice(0, 200), now).run();
+  await env.DB.prepare('INSERT INTO site_logins(site,email,name,result,ip,country,ua,ts) VALUES(?,?,?,?,?,?,?,?)')
+    .bind(site, user.email, user.name, status, request.headers.get('cf-connecting-ip') || '', cf.country || '', (request.headers.get('user-agent') || '').slice(0, 200), now).run();
 
   const h = {};
   if (status === 'approved') h['set-cookie'] = `sid=${await makeSession(env, user.email)}; Path=/; Max-Age=604800; Secure; HttpOnly; SameSite=Lax`;
@@ -146,9 +147,9 @@ document.addEventListener('mousemove',function(e){
 </script><script src="https://accounts.google.com/gsi/client" async defer></script></body></html>`;
 }
 
-async function adminPage(env) {
-  const users = (await env.DB.prepare("SELECT * FROM users ORDER BY (status='pending') DESC, last_login DESC").all()).results;
-  const logs = (await env.DB.prepare('SELECT * FROM logins ORDER BY id DESC LIMIT 100').all()).results;
+async function adminPage(env, site) {
+  const users = (await env.DB.prepare("SELECT * FROM site_users WHERE site=? ORDER BY (status='pending') DESC, last_login DESC").bind(site).all()).results;
+  const logs = (await env.DB.prepare('SELECT * FROM site_logins WHERE site=? ORDER BY id DESC LIMIT 100').bind(site).all()).results;
   const btn = (e, s, t) => `<button onclick="setS('${esc(e).replace(/'/g, '')}','${s}')">${t}</button>`;
   const rows = users.map((u) => `<tr><td>${esc(u.email)}<br><small>${esc(u.name)}</small></td><td><b class="${esc(u.status)}">${esc(u.status)}</b></td><td>${esc(u.last_login)}</td><td>${btn(u.email, 'approved', 'Approve')} ${btn(u.email, 'blocked', 'Block')}</td></tr>`).join('');
   const lrows = logs.map((l) => `<tr><td>${esc(l.ts)}</td><td>${esc(l.email)}</td><td>${esc(l.result)}</td><td>${esc(l.ip)}</td><td>${esc(l.country)}</td></tr>`).join('');
@@ -156,7 +157,7 @@ async function adminPage(env) {
 body{font-family:Inter,Segoe UI,Arial,sans-serif;background:#eef4fb;color:#10243d;margin:0;padding:20px}h1,h2{color:#17345d}table{width:100%;border-collapse:collapse;background:#fff;margin-bottom:28px}
 td,th{border:1px solid #d9e2ee;padding:8px;font-size:13px;text-align:left;vertical-align:top}.wrap{overflow-x:auto}button{padding:5px 10px;border:0;border-radius:6px;background:#1769ff;color:#fff;cursor:pointer}
 .approved{color:#0a9b6f}.pending{color:#a96800}.blocked{color:#d92d20}</style></head><body>
-<h1>Who can open the site</h1><p><a href="/">Open site</a> · <a href="/logout">Log out</a></p>
+<h1>Who can open ${esc(site)}</h1><p><a href="/">Open site</a> · <a href="/logout">Log out</a></p>
 <h2>Users</h2><div class="wrap"><table><tr><th>Email</th><th>Status</th><th>Last sign-in</th><th>Action</th></tr>${rows}</table></div>
 <h2>Recent sign-ins</h2><div class="wrap"><table><tr><th>Time (UTC)</th><th>Email</th><th>Result</th><th>IP</th><th>Country</th></tr>${lrows}</table></div>
 <script>function setS(e,s){fetch('/admin/set',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({email:e,status:s})}).then(function(){location.reload()})}</script></body></html>`;
@@ -166,6 +167,7 @@ export default {
   async fetch(request, env) {
     const url = new URL(request.url);
     const path = url.pathname;
+    const site = url.hostname;
 
     if (path === '/login') return html(loginPage(env));
     if (path === '/logout') return new Response(null, { status: 302, headers: { location: '/login', 'set-cookie': 'sid=; Path=/; Max-Age=0; Secure; HttpOnly; SameSite=Lax' } });
@@ -174,16 +176,16 @@ export default {
       catch (e) { return json({ error: String((e && e.message) || e) }, 500); }
     }
 
-    const email = await readSession(env, request);
+    const email = await readSession(env, request, site);
     if (!email) return request.method === 'GET' ? Response.redirect(url.origin + '/login', 302) : new Response('Login required', { status: 401 });
 
     if (path === '/admin' || path === '/admin/set') {
       if (email !== env.OWNER_EMAIL.toLowerCase()) return new Response('Not allowed', { status: 403 });
-      if (path === '/admin') return html(await adminPage(env));
+      if (path === '/admin') return html(await adminPage(env, site));
       if (request.method === 'POST' && request.headers.get('origin') === url.origin) {
         const { email: target, status } = await request.json();
         if (['approved', 'blocked', 'pending'].includes(status) && target.toLowerCase() !== env.OWNER_EMAIL.toLowerCase()) {
-          await env.DB.prepare('UPDATE users SET status=? WHERE email=?').bind(status, target).run();
+          await env.DB.prepare('UPDATE site_users SET status=? WHERE site=? AND email=?').bind(status, site, target).run();
         }
         return json({ ok: true });
       }
