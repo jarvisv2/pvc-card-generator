@@ -11,7 +11,7 @@
     { "binding": "DB", "database_name": "login-log", "database_id": "2a6bb83a-53bd-4de3-8783-cb025372d4a6" }
   ],
   "vars": {
-    "GOOGLE_CLIENT_ID": "831844712211-gsjih7mc8uhg5f8hp5ink5783us04vn1.apps.googleusercontent.com",
+    "GOOGLE_CLIENT_ID": "1024056248005-ei3o6vt8s5eu83jrf74il3asg1h74f17.apps.googleusercontent.com",
     "SITE_NAME": "PVC Card Maker Pro"
   }
 }
