@@ -1,0 +1,278 @@
+/*
+  BRAND CLEAN FINAL — compact crisp wordmark for Dark and Vivid themes.
+  This stylesheet deliberately uses solid text colors and layered hard-edge
+  shadows, avoiding clipped-gradient backgrounds that can become rectangles
+  in browsers with conflicting inherited styles. App logic is untouched.
+*/
+.brand-title {
+  position: relative !important;
+  display: flex !important;
+  align-items: flex-start !important;
+  justify-content: flex-start !important;
+  flex-wrap: nowrap !important;
+  gap: 5px !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  min-height: 39px !important;
+  overflow: visible !important;
+}
+.brand-title > h1.wordmark-accessible {
+  position: relative !important;
+  display: block !important;
+  flex: 0 1 auto !important;
+  width: auto !important;
+  max-width: calc(100% - 48px) !important;
+  min-width: 0 !important;
+  height: auto !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: visible !important;
+  clip: auto !important;
+  clip-path: none !important;
+  opacity: 1 !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+  font-family: Inter, "Segoe UI", Arial, sans-serif !important;
+  font-size: clamp(22px, 2vw, 27px) !important;
+  font-weight: 900 !important;
+  line-height: 1.06 !important;
+  letter-spacing: -1.1px !important;
+  text-shadow: none !important;
+  background: none !important;
+}
+.brand h1 .title-accent {
+  position: relative !important;
+  display: inline-flex !important;
+  align-items: baseline !important;
+  justify-content: flex-start !important;
+  flex-wrap: nowrap !important;
+  gap: 2px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  white-space: nowrap !important;
+  line-height: 1.06 !important;
+  letter-spacing: 0 !important;
+  background: none !important;
+  background-image: none !important;
+  background-clip: border-box !important;
+  -webkit-background-clip: border-box !important;
+  color: inherit !important;
+  -webkit-text-fill-color: currentColor !important;
+  filter: none !important;
+  animation: none !important;
+}
+.brand h1 .title-bold {
+  position: relative !important;
+  display: inline-block !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  font-family: Inter, "Segoe UI", Arial, sans-serif !important;
+  font-size: 1em !important;
+  font-weight: 950 !important;
+  font-style: normal !important;
+  letter-spacing: -1.25px !important;
+  line-height: 1.06 !important;
+  background: none !important;
+  background-image: none !important;
+  background-clip: border-box !important;
+  -webkit-background-clip: border-box !important;
+  -webkit-text-fill-color: #246ff0 !important;
+  color: #246ff0 !important;
+  -webkit-text-stroke: .24px rgba(30, 61, 132, .35) !important;
+  text-shadow: 0 -1px 0 rgba(255,255,255,.82), 0 1px 0 rgba(255,255,255,.75), 0 2px 0 rgba(40,65,145,.38), 0 3px 4px rgba(35,55,125,.13) !important;
+  filter: none !important;
+  animation: none !important;
+}
+.brand h1 .title-script {
+  position: relative !important;
+  display: inline-block !important;
+  top: 2px !important;
+  margin: 0 0 0 -2px !important;
+  padding: 0 5px 8px 0 !important;
+  font-family: "Alex Brush", "Allura", "Satisfy", "Segoe Script", "Brush Script MT", cursive !important;
+  font-size: 1.42em !important;
+  font-weight: 400 !important;
+  font-style: normal !important;
+  letter-spacing: -.5px !important;
+  line-height: .82 !important;
+  background: none !important;
+  background-image: none !important;
+  background-clip: border-box !important;
+  -webkit-background-clip: border-box !important;
+  -webkit-text-fill-color: #a13fc9 !important;
+  color: #a13fc9 !important;
+  text-shadow: 0 1px 0 rgba(255,255,255,.68), 0 2px 1px rgba(94,40,147,.13) !important;
+  filter: none !important;
+  animation: none !important;
+}
+/* The small underline under the full wordmark and the script swash remain lines, never blocks. */
+.brand h1::after {
+  content: "" !important;
+  position: absolute !important;
+  left: 0 !important;
+  bottom: -7px !important;
+  width: min(57%, 153px) !important;
+  height: 3px !important;
+  border: 0 !important;
+  border-radius: 99px !important;
+  background: linear-gradient(90deg, #24d7e7 0%, #4e7cff 42%, #8553ed 75%, #df4bb6 100%) !important;
+  box-shadow: 0 1px 3px rgba(70, 88, 175, .16) !important;
+  pointer-events: none !important;
+}
+.brand h1 .title-script::after {
+  content: "" !important;
+  position: absolute !important;
+  left: 2% !important;
+  right: -3% !important;
+  bottom: 2px !important;
+  height: 8px !important;
+  border: 0 !important;
+  border-bottom: 2px solid #c548c5 !important;
+  border-radius: 0 0 82% 56% !important;
+  background: none !important;
+  transform: skewY(-6deg) rotate(-1deg) !important;
+  opacity: .9 !important;
+  pointer-events: none !important;
+}
+.brand h1 .title-bold::before {
+  content: "✦" !important;
+  position: absolute !important;
+  left: -12px !important;
+  top: 2px !important;
+  font-family: Arial, sans-serif !important;
+  font-size: 9px !important;
+  line-height: 1 !important;
+  color: #28c9ef !important;
+  -webkit-text-fill-color: #28c9ef !important;
+  text-shadow: 0 1px 1px rgba(255,255,255,.7) !important;
+  filter: none !important;
+}
+.brand h1 .title-script::before {
+  content: "✦" !important;
+  position: absolute !important;
+  top: -5px !important;
+  right: -4px !important;
+  font-family: Arial, sans-serif !important;
+  font-size: 8px !important;
+  line-height: 1 !important;
+  color: #26c8ef !important;
+  -webkit-text-fill-color: #26c8ef !important;
+  text-shadow: none !important;
+  filter: none !important;
+}
+.brand-title > .pro {
+  position: relative !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex: 0 0 auto !important;
+  align-self: flex-start !important;
+  width: auto !important;
+  min-width: 42px !important;
+  height: 21px !important;
+  margin: 2px 0 0 0 !important;
+  padding: 0 7px !important;
+  overflow: hidden !important;
+  opacity: 1 !important;
+  clip: auto !important;
+  clip-path: none !important;
+  white-space: nowrap !important;
+  border: 1px solid rgba(255,255,255,.6) !important;
+  border-radius: 999px !important;
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
+  background: linear-gradient(135deg,#248cf5 0%,#6552eb 62%,#b83fd0 100%) !important;
+  box-shadow: 0 2px 7px rgba(67,76,180,.2), inset 0 1px 0 rgba(255,255,255,.42) !important;
+  font-family: Inter, "Segoe UI", Arial, sans-serif !important;
+  font-size: 9px !important;
+  font-weight: 900 !important;
+  line-height: 1 !important;
+  letter-spacing: .07em !important;
+  filter: none !important;
+  animation: none !important;
+}
+.brand-title > .pro .pro-label, .brand-title > .pro .pro-spark {
+  position: relative !important;
+  z-index: 2 !important;
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
+}
+.brand-title > .pro .pro-spark {
+  display: inline-block !important;
+  margin-left: 3px !important;
+  font-family: Arial, sans-serif !important;
+  font-size: 12px !important;
+  font-style: normal !important;
+  line-height: 1 !important;
+  text-shadow: none !important;
+}
+/* Vivid theme: royal blue lettering and a rich violet-pink signature. */
+body.theme-vivid .brand h1 .title-bold {
+  background: none !important;
+  background-image: none !important;
+  -webkit-background-clip: border-box !important;
+  background-clip: border-box !important;
+  color: #176df0 !important;
+  -webkit-text-fill-color: #176df0 !important;
+  -webkit-text-stroke: .24px rgba(28,58,130,.36) !important;
+  text-shadow: 0 -1px 0 rgba(255,255,255,.95), 0 1px 0 rgba(255,255,255,.80), 0 2px 0 rgba(47,71,151,.36), 0 3px 4px rgba(49,62,139,.13) !important;
+}
+body.theme-vivid .brand h1 .title-script {
+  background: none !important;
+  background-image: none !important;
+  -webkit-background-clip: border-box !important;
+  background-clip: border-box !important;
+  color: #a02ecb !important;
+  -webkit-text-fill-color: #a02ecb !important;
+  text-shadow: 0 1px 0 rgba(255,255,255,.88), 0 2px 1px rgba(104,40,153,.12) !important;
+}
+body.theme-vivid .brand h1 .title-script::after { border-bottom-color: #d846b8 !important; }
+body.theme-vivid .brand h1 .title-bold::before,
+body.theme-vivid .brand h1 .title-script::before { color: #14bde7 !important; -webkit-text-fill-color: #14bde7 !important; }
+body.theme-vivid .brand-title > .pro {
+  background: linear-gradient(135deg,#287ef0 0%,#6452ea 60%,#ba43d1 100%) !important;
+  border-color: rgba(255,255,255,.78) !important;
+}
+/* Dark theme: cool electric cyan-blue and a brighter lilac-pink signature. */
+body.theme-dark .brand h1 .title-bold {
+  background: none !important;
+  background-image: none !important;
+  -webkit-background-clip: border-box !important;
+  background-clip: border-box !important;
+  color: #51ceff !important;
+  -webkit-text-fill-color: #51ceff !important;
+  -webkit-text-stroke: .18px rgba(2,14,36,.58) !important;
+  text-shadow: 0 -1px 0 rgba(220,250,255,.30), 0 1px 0 rgba(5,24,56,.95), 0 2px 0 rgba(0,0,0,.48), 0 0 8px rgba(51,170,255,.16) !important;
+}
+body.theme-dark .brand h1 .title-script {
+  background: none !important;
+  background-image: none !important;
+  -webkit-background-clip: border-box !important;
+  background-clip: border-box !important;
+  color: #f18be0 !important;
+  -webkit-text-fill-color: #f18be0 !important;
+  text-shadow: 0 1px 0 rgba(7,8,27,.92), 0 0 5px rgba(202,94,255,.12) !important;
+}
+body.theme-dark .brand h1::after {
+  background: linear-gradient(90deg,#21d8ef 0%,#688eff 42%,#b26fff 76%,#f56cc5 100%) !important;
+  box-shadow: 0 0 6px rgba(43,151,255,.18) !important;
+}
+body.theme-dark .brand h1 .title-script::after { border-bottom-color: #e76dd3 !important; }
+body.theme-dark .brand h1 .title-bold::before,
+body.theme-dark .brand h1 .title-script::before { color: #53d9ff !important; -webkit-text-fill-color: #53d9ff !important; text-shadow: 0 0 4px rgba(53,190,255,.24) !important; }
+body.theme-dark .brand-title > .pro {
+  background: linear-gradient(135deg,#117bd5 0%,#485be9 58%,#a43bca 100%) !important;
+  border-color: rgba(127,208,255,.7) !important;
+  box-shadow: 0 2px 8px rgba(19,93,230,.22), inset 0 1px 0 rgba(255,255,255,.24) !important;
+}
+.brand-wordmark-picture { display: none !important; }
+@media (max-width: 520px) {
+  .brand-title { gap: 4px !important; min-height: 37px !important; }
+  .brand-title > h1.wordmark-accessible { font-size: clamp(20px, 5.6vw, 24px) !important; letter-spacing: -.85px !important; max-width: calc(100% - 42px) !important; }
+  .brand h1 .title-bold { letter-spacing: -1.0px !important; }
+  .brand h1 .title-script { font-size: 1.32em !important; letter-spacing: -.4px !important; padding-bottom: 8px !important; }
+  .brand-title > .pro { min-width: 34px !important; height: 18px !important; padding: 0 5px !important; font-size: 8px !important; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .brand h1 .title-bold, .brand h1 .title-script, .brand h1::after { animation: none !important; transition: none !important; }
+}

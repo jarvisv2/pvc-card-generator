@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" preserveAspectRatio="none">
+ <defs>
+  <linearGradient id="base" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#07101d"/><stop offset=".42" stop-color="#0b1728"/><stop offset=".73" stop-color="#0b1626"/><stop offset="1" stop-color="#060d19"/></linearGradient>
+  <linearGradient id="deep" x1="0" y1="0" x2="1" y2=".1"><stop stop-color="#0a1b30"/><stop offset=".28" stop-color="#102641"/><stop offset=".58" stop-color="#142943"/><stop offset=".83" stop-color="#102239"/><stop offset="1" stop-color="#09182b"/></linearGradient>
+  <linearGradient id="mid" x1="0" y1="0" x2="1" y2=".2"><stop stop-color="#102744"/><stop offset=".24" stop-color="#173553"/><stop offset=".52" stop-color="#1a3551"/><stop offset=".8" stop-color="#142c47"/><stop offset="1" stop-color="#0b2039"/></linearGradient>
+  <linearGradient id="steel" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#172d48"/><stop offset=".25" stop-color="#284661"/><stop offset=".52" stop-color="#2c4963"/><stop offset=".78" stop-color="#213a55"/><stop offset="1" stop-color="#122945"/></linearGradient>
+  <linearGradient id="front" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#0c2038"/><stop offset=".27" stop-color="#193553"/><stop offset=".52" stop-color="#1b3550"/><stop offset=".8" stop-color="#142a44"/><stop offset="1" stop-color="#0b1b30"/></linearGradient>
+  <linearGradient id="ridge" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#31516b" stop-opacity=".1"/><stop offset=".25" stop-color="#7392ad" stop-opacity=".55"/><stop offset=".5" stop-color="#8ba4ba" stop-opacity=".34"/><stop offset=".77" stop-color="#527491" stop-opacity=".44"/><stop offset="1" stop-color="#203c59" stop-opacity=".12"/></linearGradient>
+  <radialGradient id="steelBloom" cx=".18" cy=".48" r=".78"><stop stop-color="#16304b" stop-opacity=".55"/><stop offset="1" stop-color="#0a1525" stop-opacity="0"/></radialGradient>
+  <radialGradient id="rightBloom" cx=".9" cy=".6" r=".7"><stop stop-color="#17283f" stop-opacity=".5"/><stop offset="1" stop-color="#08111e" stop-opacity="0"/></radialGradient>
+ </defs>
+ <rect width="1600" height="1000" fill="url(#base)"/><rect width="1600" height="1000" fill="url(#steelBloom)"/><rect width="1600" height="1000" fill="url(#rightBloom)"/>
+ <!-- Large folded midnight-blue waves with muted steel ridges, not neon orbs. -->
+ <path d="M-80 335 C80 380 104 499 206 570 C305 638 371 646 463 579 C559 509 590 430 695 449 C820 472 865 584 992 599 C1128 615 1226 505 1320 425 C1427 334 1525 357 1680 316 L1680 1080 L-80 1080Z" fill="url(#deep)" opacity=".8"/>
+ <path d="M-80 425 C70 442 120 545 221 614 C319 681 381 704 475 638 C566 574 596 495 700 509 C824 526 877 654 1010 666 C1138 677 1242 566 1337 480 C1443 384 1536 414 1680 375 L1680 1080 L-80 1080Z" fill="url(#mid)" opacity=".79"/>
+ <path d="M-80 500 C66 491 132 594 235 655 C338 717 398 748 496 691 C590 636 620 559 724 570 C846 583 896 707 1030 724 C1161 740 1265 635 1362 554 C1462 469 1546 490 1680 454 L1680 1080 L-80 1080Z" fill="url(#steel)" opacity=".40"/>
+ <path d="M-80 580 C66 559 135 644 246 705 C349 763 413 792 512 742 C612 691 650 626 747 632 C874 639 925 761 1060 779 C1198 798 1305 705 1400 633 C1492 565 1560 572 1680 543 L1680 1080 L-80 1080Z" fill="url(#front)" opacity=".92"/>
+ <path d="M-80 675 C72 633 146 706 261 768 C366 825 436 852 536 806 C637 759 680 700 775 706 C901 713 961 836 1096 851 C1232 866 1344 773 1432 718 C1526 659 1594 667 1680 660 L1680 1080 L-80 1080Z" fill="#091729" opacity=".93"/>
+ <path d="M-45 524 C86 513 140 604 235 664 C331 725 399 744 492 684 C583 624 624 554 725 568 C843 582 897 700 1029 713 C1157 725 1266 619 1357 544 C1456 462 1538 482 1655 452" fill="none" stroke="url(#ridge)" stroke-width="5" opacity=".82"/>
+ <path d="M-40 630 C84 613 149 698 252 758 C357 819 422 842 522 793 C624 743 668 682 770 688 C894 695 954 815 1089 831 C1227 847 1337 751 1424 693 C1517 632 1587 639 1658 624" fill="none" stroke="#506d88" stroke-opacity=".38" stroke-width="3"/>
+ <path d="M-35 700 C96 681 162 755 270 813 C378 870 444 884 545 839 C649 793 690 741 785 746 C909 753 970 868 1106 887 C1240 906 1359 813 1442 760 C1528 706 1595 711 1660 701" fill="none" stroke="#304c68" stroke-opacity=".52" stroke-width="2"/>
+</svg>

@@ -1,0 +1,210 @@
+/* ================================================================
+   INTERACTION POLISH — subdued OFF states and coordinated actions
+   Purely visual overrides. Preserve existing IDs and JS handlers.
+   ================================================================ */
+
+/* Mirror Sheet: visibly interactive while OFF, vivid only when ON. */
+#mirrorSheetSetup,
+#mirrorSheetBtn {
+  color: #51489b !important;
+  background: linear-gradient(125deg, #f0f7ff 0%, #f1edff 58%, #f8effb 100%) !important;
+  border: 1px solid rgba(130, 119, 220, .44) !important;
+  box-shadow: 0 4px 12px rgba(84, 91, 170, .10), inset 0 1px 0 rgba(255,255,255,.9) !important;
+  font-weight: 650 !important;
+  letter-spacing: 0 !important;
+  animation: none !important;
+  transition: background .24s ease, color .24s ease, border-color .24s ease,
+              box-shadow .24s ease, transform .24s ease !important;
+}
+#mirrorSheetSetup:hover,
+#mirrorSheetBtn:hover {
+  border-color: rgba(101, 105, 226, .72) !important;
+  box-shadow: 0 6px 16px rgba(84, 91, 170, .16) !important;
+  transform: translateY(-1px) !important;
+}
+#mirrorSheetSetup.on,
+#mirrorSheetBtn.on {
+  color: #fff !important;
+  background: linear-gradient(115deg, #13b9c6 0%, #387af4 52%, #7852dc 100%) !important;
+  border: 1px solid rgba(255,255,255,.65) !important;
+  box-shadow: 0 7px 18px rgba(57, 106, 220, .25), inset 0 1px 0 rgba(255,255,255,.22) !important;
+  animation: interactionOnGlow 3.8s ease-in-out infinite alternate !important;
+}
+#mirrorSheetSetup.on:hover,
+#mirrorSheetBtn.on:hover {
+  filter: brightness(1.045) saturate(1.04) !important;
+  transform: translateY(-1px) !important;
+}
+
+/* Theme-specific OFF state remains readable and softly tinted in Dark Mode. */
+body.theme-dark #mirrorSheetSetup,
+body.theme-dark #mirrorSheetBtn {
+  color: #d5d9ff !important;
+  background: linear-gradient(125deg, #18253b 0%, #232442 60%, #2b223b 100%) !important;
+  border-color: rgba(136, 151, 231, .38) !important;
+  box-shadow: 0 4px 14px rgba(0,0,0,.18), inset 0 1px 0 rgba(255,255,255,.035) !important;
+}
+body.theme-dark #mirrorSheetSetup:hover,
+body.theme-dark #mirrorSheetBtn:hover {
+  border-color: rgba(105, 203, 240, .65) !important;
+  box-shadow: 0 6px 18px rgba(24, 116, 190, .14) !important;
+}
+body.theme-dark #mirrorSheetSetup.on,
+body.theme-dark #mirrorSheetBtn.on {
+  color: #fff !important;
+  background: linear-gradient(115deg, #0d8f9e 0%, #3268d4 52%, #7143c1 100%) !important;
+  border-color: rgba(143, 205, 255, .55) !important;
+  box-shadow: 0 7px 20px rgba(38, 99, 205, .23), inset 0 1px 0 rgba(255,255,255,.13) !important;
+}
+
+/* Keep Dragon Sheet and Mirror Back calm, field-like in both themes. */
+#dragonSetup,
+#mirrorBackSetup,
+#mirrorBackBtn {
+  font-weight: 500 !important;
+  letter-spacing: 0 !important;
+}
+
+/* Quick actions: coordinated soft color rather than competing neon buttons. */
+#addBtn,
+#clearBtn,
+#printBtn,
+#downloadBtn {
+  position: relative !important;
+  overflow: hidden !important;
+  isolation: isolate;
+  font-weight: 650 !important;
+  border: 1px solid rgba(126, 144, 204, .28) !important;
+  box-shadow: 0 4px 12px rgba(57, 76, 130, .075), inset 0 1px 0 rgba(255,255,255,.68) !important;
+  transition: transform .22s ease, background .25s ease, color .25s ease,
+              border-color .25s ease, box-shadow .25s ease !important;
+  animation: none !important;
+}
+#addBtn {
+  color: #3355a5 !important;
+  background: linear-gradient(125deg, #e8f3ff 0%, #e9eaff 62%, #f3eaff 100%) !important;
+}
+#clearBtn {
+  color: #574f91 !important;
+  background: linear-gradient(125deg, #f4f3ff 0%, #f2effb 100%) !important;
+}
+#printBtn {
+  color: #354d87 !important;
+  background: linear-gradient(125deg, #edf4ff 0%, #e8edff 100%) !important;
+}
+#downloadBtn {
+  color: #245f7e !important;
+  background: linear-gradient(125deg, #e5faff 0%, #e5f0ff 58%, #eeeaff 100%) !important;
+}
+#addBtn:hover,
+#clearBtn:hover,
+#printBtn:hover,
+#downloadBtn:hover {
+  transform: translateY(-1px) !important;
+  border-color: rgba(103, 125, 216, .46) !important;
+  box-shadow: 0 7px 16px rgba(57, 76, 130, .12), inset 0 1px 0 rgba(255,255,255,.78) !important;
+}
+#addBtn:active,
+#clearBtn:active,
+#printBtn:active,
+#downloadBtn:active { transform: translateY(0) scale(.99) !important; }
+#addBtn::after,
+#printBtn::after,
+#downloadBtn::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: -40%; bottom: -40%; left: -65%; width: 34%;
+  transform: skewX(-18deg);
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.52), transparent);
+  opacity: 0;
+  pointer-events: none;
+}
+#addBtn:hover::after,
+#printBtn:hover::after,
+#downloadBtn:hover::after { opacity: 1; animation: actionSoftShine .8s ease-out both; }
+
+/* Dark theme quick actions: subtle tinted glass, clearly readable. */
+body.theme-dark #addBtn {
+  color: #dbe8ff !important;
+  background: linear-gradient(125deg, #203754 0%, #2a2b50 66%, #332641 100%) !important;
+  border-color: rgba(110, 155, 230, .28) !important;
+  box-shadow: 0 4px 14px rgba(0,0,0,.20), inset 0 1px 0 rgba(255,255,255,.05) !important;
+}
+body.theme-dark #clearBtn {
+  color: #d4d7fa !important;
+  background: linear-gradient(125deg, #1b263a, #24243c) !important;
+  border-color: rgba(139, 145, 211, .25) !important;
+  box-shadow: 0 4px 14px rgba(0,0,0,.18) !important;
+}
+body.theme-dark #printBtn {
+  color: #dbe5ff !important;
+  background: linear-gradient(125deg, #20324b, #252944) !important;
+  border-color: rgba(118, 159, 223, .28) !important;
+  box-shadow: 0 4px 14px rgba(0,0,0,.18) !important;
+}
+body.theme-dark #downloadBtn {
+  color: #d3f4ff !important;
+  background: linear-gradient(125deg, #173846, #202f4c 58%, #292641) !important;
+  border-color: rgba(89, 194, 220, .28) !important;
+  box-shadow: 0 4px 14px rgba(0,0,0,.18) !important;
+}
+body.theme-dark #addBtn:hover,
+body.theme-dark #clearBtn:hover,
+body.theme-dark #printBtn:hover,
+body.theme-dark #downloadBtn:hover {
+  border-color: rgba(113, 173, 245, .55) !important;
+  box-shadow: 0 7px 18px rgba(0,0,0,.25), 0 0 14px rgba(87, 135, 224, .08) !important;
+}
+
+/* Upload choices: two distinct but understated gradients, for both themes. */
+.upload-pdf-btn {
+  color: #3655a0 !important;
+  background: linear-gradient(120deg, #e7f2ff 0%, #eceaff 66%, #f1e9fa 100%) !important;
+  border-color: rgba(120, 137, 205, .32) !important;
+  box-shadow: 0 4px 12px rgba(62, 83, 150, .07), inset 0 1px 0 rgba(255,255,255,.75) !important;
+}
+.upload-image-btn {
+  color: #28717b !important;
+  background: linear-gradient(120deg, #e4faf5 0%, #e8f5ff 60%, #eef0ff 100%) !important;
+  border-color: rgba(95, 171, 185, .31) !important;
+  box-shadow: 0 4px 12px rgba(62, 120, 150, .06), inset 0 1px 0 rgba(255,255,255,.75) !important;
+}
+.upload-pdf-btn:hover,
+.upload-image-btn:hover {
+  transform: translateY(-1px) !important;
+  box-shadow: 0 7px 15px rgba(62, 83, 150, .11), inset 0 1px 0 rgba(255,255,255,.8) !important;
+}
+body.theme-dark .upload-pdf-btn {
+  color: #d9e5ff !important;
+  background: linear-gradient(120deg, #1e3453, #292a4c 72%, #30263e) !important;
+  border-color: rgba(124, 155, 220, .27) !important;
+}
+body.theme-dark .upload-image-btn {
+  color: #c9f4ed !important;
+  background: linear-gradient(120deg, #173a40, #1d3549 60%, #292a48) !important;
+  border-color: rgba(88, 183, 176, .28) !important;
+}
+body.theme-vivid .upload-pdf-btn {
+  color: #3e579c !important;
+  background: linear-gradient(120deg, #e8f3ff, #e9eaff 66%, #f1e9ff) !important;
+}
+body.theme-vivid .upload-image-btn {
+  color: #2a7179 !important;
+  background: linear-gradient(120deg, #e2faf3, #e8f5ff 58%, #f0edff) !important;
+}
+
+@keyframes actionSoftShine {
+  from { left: -65%; }
+  to { left: 140%; }
+}
+@keyframes interactionOnGlow {
+  0%, 100% { box-shadow: 0 7px 18px rgba(57,106,220,.20), inset 0 1px 0 rgba(255,255,255,.18); }
+  50% { box-shadow: 0 8px 22px rgba(57,106,220,.28), 0 0 14px rgba(82,126,241,.10), inset 0 1px 0 rgba(255,255,255,.22); }
+}
+@media (prefers-reduced-motion: reduce) {
+  #addBtn, #clearBtn, #printBtn, #downloadBtn,
+  #mirrorSheetSetup, #mirrorSheetBtn,
+  .upload-pdf-btn, .upload-image-btn { animation: none !important; transition: none !important; }
+  #addBtn:hover::after, #printBtn:hover::after, #downloadBtn:hover::after { animation: none !important; }
+}

@@ -1,0 +1,207 @@
+/* ================================================================
+   FINAL POLISH — screenshot-driven visual refinements
+   UI ONLY. Existing application logic/IDs are untouched.
+   ================================================================ */
+
+/* ---------- Brand: gradient title + compact glowing PRO badge ---------- */
+.brand-title{
+  display:flex !important;
+  align-items:flex-start !important;
+  justify-content:flex-start !important;
+  gap:8px !important;
+  flex-wrap:nowrap !important;
+  min-height:34px !important;
+}
+.brand h1{
+  flex:0 1 auto !important;
+  width:auto !important;
+  max-width:100% !important;
+  min-width:0 !important;
+  white-space:nowrap !important;
+  font-size:27px !important;
+  line-height:31px !important;
+  letter-spacing:-1.2px !important;
+  font-weight:900 !important;
+  color:#243657 !important;
+}
+.brand h1 .title-accent{
+  background:linear-gradient(100deg,#2c78ff 0%,#5a57ee 34%,#9b4ff1 63%,#e34cae 86%,#ff7564 100%) !important;
+  background-size:220% 100% !important;
+  background-position:0% 50% !important;
+  -webkit-background-clip:text !important;
+  background-clip:text !important;
+  -webkit-text-fill-color:transparent !important;
+  color:transparent !important;
+  animation:finalTitleFlow 7s ease-in-out infinite alternate !important;
+  filter:drop-shadow(0 5px 16px rgba(83,83,237,.08));
+}
+.brand h1::after{
+  width:112px !important;
+  height:3px !important;
+  bottom:-8px !important;
+  background:linear-gradient(90deg,#24d9ec 0%,#507eff 36%,#8b56f0 63%,#df4fb8 84%,#ff836f 100%) !important;
+  box-shadow:0 0 20px rgba(89,105,243,.24),0 0 34px rgba(222,79,184,.10) !important;
+}
+.brand h1 .pro{
+  flex:0 0 auto !important;
+  align-self:flex-start !important;
+  height:19px !important;
+  min-width:34px !important;
+  padding:0 7px !important;
+  margin-top:1px !important;
+  border-radius:7px !important;
+  font-size:9px !important;
+  line-height:1 !important;
+  letter-spacing:.11em !important;
+  background:linear-gradient(135deg,#317dff 0%,#7556ee 56%,#dc4eaf 100%) !important;
+  box-shadow:0 7px 18px rgba(92,79,231,.25),0 0 0 1px rgba(255,255,255,.35) inset,0 0 16px rgba(92,89,244,.16) !important;
+  animation:finalProGlow 3.3s ease-in-out infinite !important;
+}
+.brand h1 .pro::after{
+  animation:finalProShine 4.2s ease-in-out infinite !important;
+}
+
+/* ---------- Remove the decorative workflow band ---------- */
+.ultra-workflow{display:none !important;}
+
+/* ---------- Quick actions: precise one-row fit inside the sidebar ---------- */
+.toolbar{
+  display:grid !important;
+  grid-template-columns:1.05fr 1.05fr .72fr 1.28fr !important;
+  gap:9px !important;
+  flex-wrap:nowrap !important;
+  align-items:center !important;
+  padding:21px 12px 15px !important;
+}
+.toolbar::before{left:12px !important;top:6px !important;}
+.toolbar .btn{
+  width:100% !important;
+  min-width:0 !important;
+  height:48px !important;
+  margin-top:0 !important;
+  padding:0 10px !important;
+  border-radius:14px !important;
+  white-space:nowrap !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  font-size:14px !important;
+  line-height:1 !important;
+}
+.toolbar .downloadbtn{font-size:13.5px !important;}
+
+/* ---------- Mirror Sheet: distinct OFF/ON visual states ---------- */
+#mirrorSheetSetup,
+#mirrorSheetBtn{
+  position:relative !important;
+  overflow:hidden !important;
+  isolation:isolate !important;
+  transition:transform .24s ease,box-shadow .28s ease,border-color .28s ease,background .28s ease,color .28s ease !important;
+}
+#mirrorSheetSetup,
+#mirrorSheetBtn{
+  background:linear-gradient(135deg,#ffffff 0%,#f3f0ff 58%,#eef7ff 100%) !important;
+  color:#5a46d1 !important;
+  border:1px solid rgba(113,88,236,.32) !important;
+  box-shadow:0 7px 18px rgba(91,75,191,.09),inset 0 1px 0 rgba(255,255,255,.95) !important;
+}
+#mirrorSheetSetup::before,
+#mirrorSheetBtn::before{
+  content:"";
+  position:absolute;
+  inset:1px;
+  border-radius:inherit;
+  background:linear-gradient(120deg,transparent 20%,rgba(255,255,255,.55) 48%,transparent 64%);
+  transform:translateX(-140%);
+  transition:transform .72s ease;
+  pointer-events:none;
+  z-index:-1;
+}
+#mirrorSheetSetup:hover,
+#mirrorSheetBtn:hover{
+  transform:translateY(-2px);
+  border-color:rgba(103,82,231,.52) !important;
+  box-shadow:0 12px 24px rgba(91,75,191,.14),0 0 18px rgba(113,92,240,.09) !important;
+}
+#mirrorSheetSetup:hover::before,
+#mirrorSheetBtn:hover::before{transform:translateX(140%);}
+
+#mirrorSheetSetup.on,
+#mirrorSheetBtn.on{
+  color:#fff !important;
+  border-color:transparent !important;
+  background:linear-gradient(120deg,#0fcfe4 0%,#3e78ff 35%,#7b56f1 67%,#df4bad 100%) !important;
+  background-size:220% 220% !important;
+  box-shadow:0 10px 24px rgba(72,83,227,.28),0 0 22px rgba(126,81,239,.28),0 0 44px rgba(225,72,169,.13),inset 0 1px 0 rgba(255,255,255,.30) !important;
+  animation:finalMirrorGlow 2.7s ease-in-out infinite !important;
+}
+#mirrorSheetSetup.on::before,
+#mirrorSheetBtn.on::before{
+  content:"";
+  position:absolute;
+  width:46px;
+  height:160%;
+  top:-30%;
+  left:-55%;
+  transform:rotate(22deg);
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.58),transparent);
+  animation:finalMirrorShine 3.8s ease-in-out infinite;
+  pointer-events:none;
+  z-index:1;
+}
+
+/* The floating control's JS changes its label to "Sheet ↔ ON/OFF".
+   Keep the application logic untouched but show the desired visual label. */
+#mirrorSheetBtn{
+  font-size:0 !important;
+  min-width:174px !important;
+  justify-content:center !important;
+}
+#mirrorSheetBtn::after{
+  content:"Mirror Sheet: OFF";
+  position:relative;
+  z-index:3;
+  font-size:12px;
+  font-weight:900;
+  letter-spacing:.01em;
+}
+#mirrorSheetBtn.on::after{content:"Mirror Sheet: ON";}
+
+/* Setup button has real text; use a slightly stronger ON treatment. */
+#mirrorSheetSetup.on{font-weight:900 !important;}
+
+/* ---------- Slightly tighter brand area at narrower desktop widths ---------- */
+@media (max-width:1200px){
+  .brand h1{font-size:25px !important;}
+  .toolbar{grid-template-columns:1.02fr 1.02fr .72fr 1.24fr !important;gap:7px !important;padding-left:10px !important;padding-right:10px !important;}
+  .toolbar .btn{font-size:13px !important;padding-left:7px !important;padding-right:7px !important;}
+  .toolbar .downloadbtn{font-size:12.7px !important;}
+}
+
+@keyframes finalTitleFlow{
+  0%{background-position:0% 50%}
+  100%{background-position:100% 50%}
+}
+@keyframes finalProGlow{
+  0%,100%{transform:translateY(0);box-shadow:0 7px 18px rgba(92,79,231,.22),0 0 0 1px rgba(255,255,255,.35) inset,0 0 14px rgba(92,89,244,.12)}
+  50%{transform:translateY(-1px);box-shadow:0 9px 22px rgba(92,79,231,.30),0 0 0 1px rgba(255,255,255,.42) inset,0 0 22px rgba(225,73,173,.22)}
+}
+@keyframes finalProShine{
+  0%,58%{transform:translateX(-160%) skewX(-20deg);opacity:0}
+  68%{opacity:1}
+  84%,100%{transform:translateX(420%) skewX(-20deg);opacity:0}
+}
+@keyframes finalMirrorGlow{
+  0%,100%{background-position:0% 50%;box-shadow:0 10px 24px rgba(72,83,227,.25),0 0 20px rgba(126,81,239,.22),0 0 34px rgba(225,72,169,.10),inset 0 1px 0 rgba(255,255,255,.28)}
+  50%{background-position:100% 50%;box-shadow:0 12px 30px rgba(72,83,227,.34),0 0 30px rgba(126,81,239,.32),0 0 54px rgba(225,72,169,.16),inset 0 1px 0 rgba(255,255,255,.38)}
+}
+@keyframes finalMirrorShine{
+  0%,48%{transform:translateX(-140%) rotate(22deg);opacity:0}
+  60%{opacity:1}
+  76%,100%{transform:translateX(420%) rotate(22deg);opacity:0}
+}
+
+@media (prefers-reduced-motion:reduce){
+  .brand h1 .title-accent,.brand h1 .pro,#mirrorSheetSetup.on,#mirrorSheetBtn.on{animation:none !important;}
+  #mirrorSheetSetup::before,#mirrorSheetBtn::before,#mirrorSheetSetup.on::before,#mirrorSheetBtn.on::before{display:none !important;}
+}

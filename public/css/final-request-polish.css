@@ -1,0 +1,75 @@
+/* Final request polish: soft Mirror Sheet OFF, vivid ON, remove helper hint.
+   Visual-only overrides; existing button IDs and click handlers stay intact. */
+
+/* OFF: understated mint/cyan/lavender tint, visually coordinated with Choose JPG / PNG. */
+#mirrorSheetSetup:not(.on),
+#mirrorSheetBtn:not(.on),
+body.theme-vivid .desktop-settings .mirror-group #mirrorSheetSetup:not(.on),
+body.theme-vivid #mirrorSheetBtn:not(.on) {
+  color: #28717b !important;
+  background: linear-gradient(120deg, #e4faf5 0%, #e8f5ff 60%, #eef0ff 100%) !important;
+  border: 1px solid rgba(95,171,185,.34) !important;
+  box-shadow: 0 4px 12px rgba(62,120,150,.065), inset 0 1px 0 rgba(255,255,255,.78) !important;
+  animation: none !important;
+  filter: none !important;
+}
+
+/* Dark theme uses a similarly subtle dark-tinted gradient, not a white control. */
+body.theme-dark #mirrorSheetSetup:not(.on),
+body.theme-dark #mirrorSheetBtn:not(.on),
+body.theme-dark .desktop-settings .mirror-group #mirrorSheetSetup:not(.on) {
+  color: #c9f4ed !important;
+  background: linear-gradient(120deg, #173a40 0%, #1d3549 60%, #292a48 100%) !important;
+  border: 1px solid rgba(88,183,176,.31) !important;
+  box-shadow: 0 4px 14px rgba(0,0,0,.17), inset 0 1px 0 rgba(255,255,255,.035) !important;
+}
+
+#mirrorSheetSetup:not(.on):hover,
+#mirrorSheetBtn:not(.on):hover {
+  border-color: rgba(69,177,190,.62) !important;
+  box-shadow: 0 6px 16px rgba(62,120,150,.12) !important;
+  transform: translateY(-1px) !important;
+}
+body.theme-dark #mirrorSheetSetup:not(.on):hover,
+body.theme-dark #mirrorSheetBtn:not(.on):hover {
+  border-color: rgba(76,207,207,.58) !important;
+  box-shadow: 0 6px 18px rgba(12,140,157,.13) !important;
+}
+
+/* ON: instantly obvious colorful gradient. */
+#mirrorSheetSetup.on,
+#mirrorSheetBtn.on,
+body.theme-vivid .desktop-settings .mirror-group #mirrorSheetSetup.on,
+body.theme-vivid #mirrorSheetBtn.on {
+  color: #fff !important;
+  background: linear-gradient(112deg, #08bfd0 0%, #347dff 43%, #8050e8 74%, #c64bc7 100%) !important;
+  background-size: 210% 210% !important;
+  border: 1px solid rgba(255,255,255,.62) !important;
+  box-shadow: 0 8px 21px rgba(58,105,226,.25), 0 0 18px rgba(117,80,232,.14), inset 0 1px 0 rgba(255,255,255,.22) !important;
+  animation: finalMirrorSheetOn 5s ease-in-out infinite alternate !important;
+}
+body.theme-dark #mirrorSheetSetup.on,
+body.theme-dark #mirrorSheetBtn.on,
+body.theme-dark .desktop-settings .mirror-group #mirrorSheetSetup.on {
+  color: #fff !important;
+  background: linear-gradient(112deg, #0796a8 0%, #3268d4 46%, #7144c7 78%, #ac3e9f 100%) !important;
+  background-size: 210% 210% !important;
+  border-color: rgba(143,205,255,.56) !important;
+  box-shadow: 0 8px 22px rgba(16,106,204,.22), 0 0 18px rgba(113,68,199,.13), inset 0 1px 0 rgba(255,255,255,.15) !important;
+}
+#mirrorSheetSetup.on:hover,
+#mirrorSheetBtn.on:hover {
+  filter: brightness(1.06) saturate(1.08) !important;
+  transform: translateY(-1px) !important;
+}
+@keyframes finalMirrorSheetOn {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
+}
+
+/* The PDF/image helper pill under the upload buttons is no longer needed. */
+.bottomhint { display: none !important; }
+
+@media (prefers-reduced-motion: reduce) {
+  #mirrorSheetSetup.on, #mirrorSheetBtn.on { animation: none !important; transition: none !important; }
+}

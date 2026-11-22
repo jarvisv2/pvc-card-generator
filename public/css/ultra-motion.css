@@ -1,0 +1,34 @@
+
+/* =====================================================================
+   HARDCORE ULTRA MOTION — decorative, non-functional animation layer
+   ===================================================================== */
+@keyframes uBlob1{0%{transform:translate3d(0,0,0) scale(1)}100%{transform:translate3d(120px,70px,0) scale(1.1)}}
+@keyframes uBlob2{0%{transform:translate3d(0,0,0) scale(1)}100%{transform:translate3d(-110px,90px,0) scale(1.12)}}
+@keyframes uBlob3{0%{transform:translate3d(0,0,0) scale(1)}100%{transform:translate3d(100px,-60px,0) scale(1.08)}}
+@keyframes uBlob4{0%{transform:translate3d(0,0,0)}100%{transform:translate3d(-55px,40px,0)}}
+@keyframes uBeam1{0%{transform:translateX(-5%) rotate(-18deg)}100%{transform:translateX(25%) rotate(-18deg)}}
+@keyframes uBeam2{0%{transform:translateX(8%) rotate(20deg)}100%{transform:translateX(-20%) rotate(20deg)}}
+@keyframes uTwinkle{0%,100%{opacity:0;transform:scale(.7)}45%{opacity:.8;transform:scale(1.35)}55%{opacity:.2;transform:scale(.9)}}
+@keyframes uGradient{0%{background-position:0% 50%}100%{background-position:260% 50%}}
+@keyframes uTitle{0%{filter:saturate(.95)}100%{filter:saturate(1.08)}}
+@keyframes uSweep{0%{left:-10%}100%{left:110%}}
+@keyframes uFloat{0%{transform:translate3d(0,0,0)}100%{transform:translate3d(-12px,-18px,0)}}
+@keyframes uPro{0%,100%{box-shadow:0 8px 22px rgba(95,87,235,.22)}50%{box-shadow:0 11px 30px rgba(121,81,240,.36),0 0 22px rgba(221,79,183,.18)}}
+@keyframes uShine{0%,52%{transform:translateX(0);opacity:0}63%{opacity:1}84%,100%{transform:translateX(420%);opacity:0}}
+@keyframes uPulse{0%,100%{transform:scale(.85);opacity:.7}50%{transform:scale(1.2);opacity:1}}
+@keyframes uDownload{0%,100%{background-position:0% 50%}50%{background-position:100% 70%}}
+@keyframes uVertical{0%,100%{background-position:50% 0%}50%{background-position:50% 100%}}
+@keyframes uStage{0%{background-position:0% 0%}100%{background-position:100% 100%}}
+@keyframes uGlow{0%,100%{box-shadow:0 10px 24px rgba(87,84,233,.18)}50%{box-shadow:0 13px 34px rgba(219,76,181,.23)}}
+@keyframes uRotate{to{transform:rotate(360deg)}}
+@keyframes uSpark{0%,100%{transform:translateY(0) rotate(0deg);opacity:.5}50%{transform:translateY(-6px) rotate(25deg);opacity:1}}
+
+.ultra-ripple{position:absolute;border-radius:50%;background:rgba(255,255,255,.55);transform:scale(0);pointer-events:none;animation:uRipple .62s ease-out forwards;z-index:5}
+@keyframes uRipple{to{transform:scale(1);opacity:0}}
+
+.ultra-reveal{animation:uReveal .55s cubic-bezier(.2,.85,.2,1) both;animation-delay:calc(var(--slot-index,0) * 70ms)}
+@keyframes uReveal{from{opacity:0;transform:translateY(10px) scale(.985)}to{opacity:1;transform:none}}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
+}

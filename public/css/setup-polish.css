@@ -1,0 +1,82 @@
+/* ================================================================
+   PRINT SETUP POLISH — compact toggles and high-visibility mirroring
+   Scoped to print setup controls; no application logic is changed.
+   ================================================================ */
+
+/* Dragon Sheet / Mirror Back labels should be readable, not shouty. */
+#dragonSetup,
+#mirrorBackSetup,
+#mirrorBackBtn {
+  font-weight: 500 !important;
+  letter-spacing: 0 !important;
+}
+
+/* Mirror Sheet stays vivid and easy to find in both Dark and Vivid themes. */
+#mirrorSheetSetup,
+#mirrorSheetBtn {
+  color: #ffffff !important;
+  font-weight: 750 !important;
+  border: 1px solid rgba(255,255,255,.48) !important;
+  background: linear-gradient(112deg, #08cfe5 0%, #367dff 35%, #7655f4 68%, #df4bb8 100%) !important;
+  background-size: 220% 220% !important;
+  box-shadow: 0 8px 22px rgba(62,101,237,.26),
+              0 0 0 1px rgba(255,255,255,.08) inset,
+              0 0 22px rgba(119,83,244,.18) !important;
+  transition: transform .22s ease, box-shadow .25s ease, filter .25s ease !important;
+  animation: setupMirrorSheetFlow 7s ease-in-out infinite !important;
+}
+#mirrorSheetSetup:hover,
+#mirrorSheetBtn:hover {
+  transform: translateY(-2px) !important;
+  filter: saturate(1.18) brightness(1.06) !important;
+  box-shadow: 0 12px 27px rgba(62,101,237,.34),
+              0 0 27px rgba(223,75,184,.22) !important;
+}
+#mirrorSheetSetup.on,
+#mirrorSheetBtn.on {
+  color: #ffffff !important;
+  background: linear-gradient(112deg, #10b981 0%, #08b9cd 28%, #3c78ff 61%, #8651e9 100%) !important;
+  background-size: 220% 220% !important;
+  border-color: rgba(255,255,255,.58) !important;
+  box-shadow: 0 9px 24px rgba(17,185,164,.23),
+              0 0 22px rgba(59,130,246,.22),
+              inset 0 1px 0 rgba(255,255,255,.28) !important;
+}
+#mirrorSheetSetup:focus-visible,
+#mirrorSheetBtn:focus-visible,
+#dragonSetup:focus-visible,
+#mirrorBackSetup:focus-visible,
+#mirrorBackBtn:focus-visible {
+  outline: 2px solid #67e8f9 !important;
+  outline-offset: 3px !important;
+}
+@keyframes setupMirrorSheetFlow {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  #mirrorSheetSetup, #mirrorSheetBtn { animation: none !important; }
+}
+
+/* Theme-specific selectors outrank the previous theme button palettes. */
+body.theme-dark .desktop-settings .mirror-group #mirrorSheetSetup,
+body.theme-dark #mirrorSheetBtn,
+body.theme-vivid .desktop-settings .mirror-group #mirrorSheetSetup,
+body.theme-vivid #mirrorSheetBtn {
+  color: #ffffff !important;
+  background: linear-gradient(112deg, #08cfe5 0%, #367dff 35%, #7655f4 68%, #df4bb8 100%) !important;
+  background-size: 220% 220% !important;
+  border: 1px solid rgba(255,255,255,.48) !important;
+  box-shadow: 0 8px 22px rgba(62,101,237,.28),
+              0 0 0 1px rgba(255,255,255,.08) inset,
+              0 0 24px rgba(119,83,244,.20) !important;
+}
+body.theme-dark .desktop-settings .mirror-group #mirrorSheetSetup.on,
+body.theme-dark #mirrorSheetBtn.on,
+body.theme-vivid .desktop-settings .mirror-group #mirrorSheetSetup.on,
+body.theme-vivid #mirrorSheetBtn.on {
+  color: #ffffff !important;
+  background: linear-gradient(112deg, #10b981 0%, #08b9cd 28%, #3c78ff 61%, #8651e9 100%) !important;
+  background-size: 220% 220% !important;
+  border-color: rgba(255,255,255,.58) !important;
+}

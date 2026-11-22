@@ -1,0 +1,95 @@
+/* ================================================================
+   CONTROL POLISH — consistent toggles and clear ON/OFF states
+   Presentation only. Existing IDs and event handlers are preserved.
+   ================================================================ */
+
+/* The setup panel is the single home for these controls. Keep the
+   duplicate floating controls hidden so they never overlap zoom tools. */
+.fabrow {
+  display: none !important;
+}
+
+/* Dragon Sheet and Mirror Back should resemble regular settings fields,
+   not promotional/bold action buttons. Keep the same treatment in both themes. */
+#dragonSetup,
+#mirrorBackSetup,
+#mirrorBackBtn {
+  font-weight: 500 !important;
+  letter-spacing: 0 !important;
+  color: var(--theme-ink, #253b5d) !important;
+  background: var(--theme-panel-strong, rgba(255,255,255,.92)) !important;
+  border: 1px solid var(--theme-border, rgba(126,150,204,.22)) !important;
+  box-shadow: 0 3px 10px rgba(39,64,111,.045) !important;
+  animation: none !important;
+  transform: none;
+}
+
+#dragonSetup:hover,
+#mirrorBackSetup:hover {
+  color: var(--theme-ink, #253b5d) !important;
+  border-color: var(--theme-accent-b, #5579ff) !important;
+  box-shadow: 0 4px 12px rgba(39,64,111,.08) !important;
+}
+
+/* Mirror Sheet OFF = calm field-like control; ON = visible colorful accent. */
+#mirrorSheetSetup,
+#mirrorSheetBtn {
+  color: var(--theme-ink, #253b5d) !important;
+  font-weight: 650 !important;
+  letter-spacing: 0 !important;
+  background: var(--theme-panel-strong, rgba(255,255,255,.92)) !important;
+  border: 1px solid var(--theme-border, rgba(126,150,204,.22)) !important;
+  box-shadow: 0 3px 10px rgba(39,64,111,.05) !important;
+  animation: none !important;
+  transition: background .22s ease, color .22s ease, box-shadow .22s ease,
+              border-color .22s ease, transform .22s ease !important;
+}
+
+#mirrorSheetSetup:hover {
+  border-color: var(--theme-accent-b, #5579ff) !important;
+  transform: translateY(-1px);
+}
+
+body.theme-dark .desktop-settings .mirror-group #mirrorSheetSetup,
+body.theme-dark #mirrorSheetBtn,
+body.theme-vivid .desktop-settings .mirror-group #mirrorSheetSetup,
+body.theme-vivid #mirrorSheetBtn {
+  color: var(--theme-ink, #253b5d) !important;
+  background: var(--theme-panel-strong, rgba(255,255,255,.92)) !important;
+  border: 1px solid var(--theme-border, rgba(126,150,204,.22)) !important;
+  box-shadow: 0 3px 10px rgba(39,64,111,.05) !important;
+}
+
+#mirrorSheetSetup.on,
+#mirrorSheetBtn.on,
+body.theme-dark .desktop-settings .mirror-group #mirrorSheetSetup.on,
+body.theme-dark #mirrorSheetBtn.on,
+body.theme-vivid .desktop-settings .mirror-group #mirrorSheetSetup.on,
+body.theme-vivid #mirrorSheetBtn.on {
+  color: #fff !important;
+  background: linear-gradient(112deg, #08b9c9 0%, #3978f5 48%, #8050e8 100%) !important;
+  border: 1px solid rgba(255,255,255,.55) !important;
+  box-shadow: 0 7px 18px rgba(59,105,220,.22),
+              inset 0 1px 0 rgba(255,255,255,.2) !important;
+  animation: none !important;
+}
+
+#mirrorSheetSetup.on:hover {
+  filter: brightness(1.05) saturate(1.04);
+  transform: translateY(-1px);
+}
+
+#dragonSetup:focus-visible,
+#mirrorBackSetup:focus-visible,
+#mirrorSheetSetup:focus-visible {
+  outline: 2px solid var(--theme-accent-a, #22d9eb) !important;
+  outline-offset: 2px !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #dragonSetup, #mirrorBackSetup, #mirrorSheetSetup,
+  #mirrorBackBtn, #mirrorSheetBtn {
+    animation: none !important;
+    transition: none !important;
+  }
+}

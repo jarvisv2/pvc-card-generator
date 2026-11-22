@@ -1,0 +1,486 @@
+/* =====================================================================
+   BRAND SIGNATURE — high-contrast tech wordmark + sweeping signature
+   Tuned to closely match the approved concept in both themes.
+   Visual-only: no app logic or control IDs changed.
+   ===================================================================== */
+.brand-title {
+  display:flex !important;
+  align-items:center !important;
+  justify-content:flex-start !important;
+  flex-wrap:nowrap !important;
+  gap:8px !important;
+  min-width:0 !important;
+}
+.brand h1 {
+  position:relative !important;
+  overflow:visible !important;
+  flex:0 1 auto !important;
+  min-width:0 !important;
+  max-width:100% !important;
+  font-size:clamp(24px, 2.15vw, 29px) !important;
+  line-height:1.05 !important;
+  letter-spacing:-1.25px !important;
+  white-space:nowrap !important;
+  text-shadow:none !important;
+}
+.brand h1::after {
+  /* Main cyan-to-pink underline beneath the bold tech portion. */
+  content:"" !important;
+  position:absolute !important;
+  left:0 !important;
+  bottom:-8px !important;
+  width: min(66%, 188px) !important;
+  height:3px !important;
+  border-radius:999px !important;
+  background:linear-gradient(90deg,#28dcec 0%,#527cff 38%,#8e53f1 72%,#ed55bd 100%) !important;
+  box-shadow:0 0 15px rgba(89,111,246,.25) !important;
+  pointer-events:none !important;
+}
+.brand h1 .title-accent {
+  display:inline-flex !important;
+  position:relative !important;
+  align-items:baseline !important;
+  justify-content:flex-start !important;
+  gap:4px !important;
+  white-space:nowrap !important;
+  background:none !important;
+  background-clip:border-box !important;
+  -webkit-background-clip:border-box !important;
+  -webkit-text-fill-color:initial !important;
+  color:inherit !important;
+  animation:none !important;
+  filter:none !important;
+  letter-spacing:0 !important;
+  line-height:1.12 !important;
+}
+.brand h1 .title-bold {
+  position:relative !important;
+  display:inline-block !important;
+  font-family:Inter,"Segoe UI",Arial,sans-serif !important;
+  font-size:1em !important;
+  font-weight:950 !important;
+  letter-spacing:-1.45px !important;
+  line-height:1.06 !important;
+  background:linear-gradient(110deg,#087ff5 0%,#3769ff 33%,#654ff1 66%,#8b45eb 100%) !important;
+  background-size:220% 100% !important;
+  -webkit-background-clip:text !important;
+  background-clip:text !important;
+  -webkit-text-fill-color:transparent !important;
+  color:transparent !important;
+  animation:signatureBoldFlow 7s ease-in-out infinite alternate !important;
+  filter:drop-shadow(0 3px 7px rgba(61,88,238,.12)) !important;
+}
+.brand h1 .title-script {
+  display:inline-block !important;
+  position:relative !important;
+  top:3px !important;
+  margin-left:-2px !important;
+  padding:0 3px 10px 0 !important;
+  font-family:"Alex Brush","Allura","Satisfy","Segoe Script","Brush Script MT",cursive !important;
+  font-size:1.52em !important;
+  font-weight:400 !important;
+  font-style:normal !important;
+  letter-spacing:-.5px !important;
+  line-height:.72 !important;
+  background:linear-gradient(108deg,#3e35e8 0%,#7450f2 35%,#b83ee4 68%,#ed3ba7 100%) !important;
+  background-size:190% 100% !important;
+  -webkit-background-clip:text !important;
+  background-clip:text !important;
+  -webkit-text-fill-color:transparent !important;
+  color:transparent !important;
+  filter:drop-shadow(0 3px 6px rgba(137,61,218,.16)) !important;
+  animation:signatureScriptFlow 6.5s ease-in-out infinite alternate !important;
+}
+.brand h1 .title-script::after {
+  /* Graceful signature swash under “Maker”, echoing the approved mockup. */
+  content:"" !important;
+  position:absolute !important;
+  z-index:-1 !important;
+  left:2% !important;
+  right:-10% !important;
+  bottom:3px !important;
+  height:10px !important;
+  border-bottom:2px solid transparent !important;
+  border-radius:0 0 85% 60% !important;
+  border-image:none !important;
+  background:linear-gradient(90deg,#5142ef 0%,#8052f1 45%,#e448bb 90%) bottom/100% 2px no-repeat !important;
+  transform:skewY(-7deg) rotate(-1.2deg) !important;
+  opacity:.92 !important;
+  pointer-events:none !important;
+}
+/* Tiny sparkle next to the script, not a large decorative icon. */
+.brand h1 .title-script::before {
+  content:"✦" !important;
+  position:absolute !important;
+  top:-7px !important;
+  right:-6px !important;
+  font-family:Arial,sans-serif !important;
+  font-size:10px !important;
+  line-height:1 !important;
+  -webkit-text-fill-color:#36c9f5 !important;
+  color:#36c9f5 !important;
+  filter:drop-shadow(0 0 5px rgba(71,143,255,.42)) !important;
+  opacity:.9 !important;
+}
+/* Keep the PRO capsule compact and vertically aligned with the title. */
+.brand-title > .pro,
+.brand h1 .pro {
+  position:relative !important;
+  z-index:3 !important;
+  flex:0 0 auto !important;
+  align-self:flex-start !important;
+  margin:1px 0 0 1px !important;
+  height:20px !important;
+  min-width:36px !important;
+  padding:0 7px !important;
+  border-radius:8px !important;
+  font-size:9px !important;
+  font-weight:900 !important;
+  line-height:1 !important;
+  letter-spacing:.08em !important;
+  gap:4px !important;
+}
+.brand-title > .pro .pro-label { position:relative !important; z-index:2 !important; }
+.brand-title > .pro .pro-spark {
+  position:relative !important;
+  z-index:2 !important;
+  display:inline-block !important;
+  margin-top:-1px !important;
+  color:#fff !important;
+  font-family:Arial,sans-serif !important;
+  font-size:13px !important;
+  font-style:normal !important;
+  line-height:1 !important;
+  -webkit-text-fill-color:#fff !important;
+  text-shadow:0 0 7px rgba(255,255,255,.7) !important;
+}
+
+/* Small glints at the left edge echo the approved banner without enlarging the header. */
+.brand h1 .title-bold::before {
+  content:"✦" !important;
+  position:absolute !important;
+  left:-13px !important;
+  top:2px !important;
+  font-family:Arial,sans-serif !important;
+  font-size:10px !important;
+  line-height:1 !important;
+  -webkit-text-fill-color:#2bcdf0 !important;
+  color:#2bcdf0 !important;
+  filter:drop-shadow(0 0 5px rgba(50,155,255,.38)) !important;
+}
+
+/* Dark: brighter cool-toned tech lettering and pink-lilac signature. */
+body.theme-dark .brand h1 .title-bold {
+  background:linear-gradient(108deg,#42d7ff 0%,#7197ff 36%,#a3a1ff 72%,#d2a6ff 100%) !important;
+  background-size:220% 100% !important;
+  -webkit-background-clip:text !important;
+  background-clip:text !important;
+  -webkit-text-fill-color:transparent !important;
+  color:transparent !important;
+  filter:drop-shadow(0 2px 10px rgba(69,145,255,.20)) !important;
+}
+body.theme-dark .brand h1 .title-bold::before {
+  -webkit-text-fill-color:#70ddff !important;
+  color:#70ddff !important;
+}
+body.theme-dark .brand h1 .title-script {
+  background:linear-gradient(108deg,#a6a4ff 0%,#c8a0ff 42%,#ff9cdb 100%) !important;
+  background-size:190% 100% !important;
+  -webkit-background-clip:text !important;
+  background-clip:text !important;
+  -webkit-text-fill-color:transparent !important;
+  color:transparent !important;
+  filter:drop-shadow(0 2px 9px rgba(181,116,255,.25)) !important;
+}
+body.theme-dark .brand h1 .title-script::after {
+  background:linear-gradient(90deg,#73c9ff 0%,#a18cff 48%,#ff8bcf 100%) bottom/100% 2px no-repeat !important;
+}
+body.theme-dark .brand h1 .title-script::before {
+  -webkit-text-fill-color:#79d8ff !important;
+  color:#79d8ff !important;
+}
+
+/* Vivid: saturated cobalt/violet with a vivid fuchsia signature. */
+body.theme-vivid .brand h1 .title-bold {
+  background:linear-gradient(108deg,#087ff5 0%,#3764ff 34%,#654af0 70%,#8b45eb 100%) !important;
+  background-size:220% 100% !important;
+  -webkit-background-clip:text !important;
+  background-clip:text !important;
+  -webkit-text-fill-color:transparent !important;
+  color:transparent !important;
+}
+body.theme-vivid .brand h1 .title-script {
+  background:linear-gradient(108deg,#4936ed 0%,#8950ef 40%,#d83cc1 76%,#f14a9e 100%) !important;
+  background-size:190% 100% !important;
+  -webkit-background-clip:text !important;
+  background-clip:text !important;
+  -webkit-text-fill-color:transparent !important;
+  color:transparent !important;
+}
+body.theme-vivid .brand h1 .title-script::after {
+  background:linear-gradient(90deg,#5142ef 0%,#9350ee 52%,#ec4bad 100%) bottom/100% 2px no-repeat !important;
+}
+
+@keyframes signatureBoldFlow {
+  0% { background-position:0% 50%; }
+  100% { background-position:100% 50%; }
+}
+@keyframes signatureScriptFlow {
+  0% { background-position:0% 50%; filter:drop-shadow(0 2px 6px rgba(144,70,218,.12)); }
+  100% { background-position:100% 50%; filter:drop-shadow(0 3px 10px rgba(210,68,183,.22)); }
+}
+@media (max-width:1200px) {
+  .brand h1 { font-size:clamp(23px, 2.1vw, 27px) !important; }
+  .brand h1 .title-script { font-size:1.44em !important; }
+}
+@media (max-width:520px) {
+  .brand-title { gap:6px !important; }
+  .brand h1 { font-size:24px !important; letter-spacing:-1.1px !important; }
+  .brand h1 .title-accent { gap:3px !important; }
+  .brand h1 .title-bold { letter-spacing:-1.2px !important; }
+  .brand h1 .title-script { font-size:1.35em !important; letter-spacing:-.6px !important; }
+  .brand h1 .title-script::before { font-size:8px !important; right:-5px !important; }
+  .brand-title > .pro { height:18px !important; min-width:32px !important; padding:0 6px !important; font-size:8px !important; }
+}
+@media (prefers-reduced-motion:reduce) {
+  .brand h1 .title-bold,
+  .brand h1 .title-script { animation:none !important; }
+}
+
+
+/* Exact approved concept wordmark artwork: deterministic across machines and font availability. */
+.brand-title {
+  position:relative !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:flex-start !important;
+  flex-wrap:nowrap !important;
+  width:100% !important;
+  min-height:0 !important;
+  gap:0 !important;
+}
+.brand-title > h1.wordmark-accessible {
+  position:absolute !important;
+  width:1px !important;
+  height:1px !important;
+  padding:0 !important;
+  margin:-1px !important;
+  overflow:hidden !important;
+  clip:rect(0,0,0,0) !important;
+  clip-path:inset(50%) !important;
+  white-space:nowrap !important;
+  border:0 !important;
+}
+.brand-title > .pro {
+  position:absolute !important;
+  width:1px !important;
+  height:1px !important;
+  padding:0 !important;
+  margin:-1px !important;
+  overflow:hidden !important;
+  clip:rect(0,0,0,0) !important;
+  clip-path:inset(50%) !important;
+  white-space:nowrap !important;
+  opacity:0 !important;
+  pointer-events:none !important;
+}
+.brand-wordmark-picture {
+  display:block !important;
+  flex:1 1 100% !important;
+  width:100% !important;
+  min-width:0 !important;
+  margin:0 !important;
+  padding:0 !important;
+  line-height:0 !important;
+}
+.brand-wordmark-art {
+  display:none !important;
+  width:100% !important;
+  max-width:100% !important;
+  height:auto !important;
+  max-height:67px !important;
+  object-fit:contain !important;
+  object-position:left center !important;
+  vertical-align:top !important;
+}
+body.theme-vivid .brand-wordmark-vivid { display:block !important; }
+body.theme-dark .brand-wordmark-dark { display:block !important; }
+@media (max-width:520px) {
+  .brand-wordmark-art { max-height:62px !important; }
+}
+
+/* =====================================================================
+   FINAL LOGO REFINEMENT — use crisp live text instead of soft raster art.
+   Keeps the approved bold-tech + signature look while adding controlled
+   depth to “PVC Card” and stronger legibility in both themes.
+   ===================================================================== */
+.brand-title {
+  display:flex !important;
+  align-items:center !important;
+  justify-content:flex-start !important;
+  flex-wrap:nowrap !important;
+  gap:5px !important;
+  width:100% !important;
+  min-width:0 !important;
+  min-height:40px !important;
+  overflow:visible !important;
+}
+.brand-title > h1.wordmark-accessible {
+  position:relative !important;
+  display:block !important;
+  flex:0 1 auto !important;
+  width:auto !important;
+  height:auto !important;
+  max-width:100% !important;
+  min-width:0 !important;
+  padding:0 !important;
+  margin:0 !important;
+  overflow:visible !important;
+  clip:auto !important;
+  clip-path:none !important;
+  white-space:nowrap !important;
+  border:0 !important;
+  opacity:1 !important;
+  pointer-events:auto !important;
+  font-size:clamp(22px, 2vw, 27px) !important;
+  line-height:1.05 !important;
+  letter-spacing:-1.15px !important;
+  text-shadow:none !important;
+}
+.brand h1 .title-accent {
+  display:inline-flex !important;
+  align-items:baseline !important;
+  gap:2px !important;
+  white-space:nowrap !important;
+  line-height:1.05 !important;
+}
+.brand h1 .title-bold {
+  font-family:Inter, "Segoe UI", Arial, sans-serif !important;
+  font-size:1em !important;
+  font-weight:950 !important;
+  letter-spacing:-1.25px !important;
+  -webkit-text-stroke:.28px rgba(31,77,190,.32) !important;
+  background:linear-gradient(180deg,#37c8ff 0%,#1678f7 29%,#3158f2 67%,#573be1 100%) !important;
+  background-size:180% 100% !important;
+  -webkit-background-clip:text !important;
+  background-clip:text !important;
+  -webkit-text-fill-color:transparent !important;
+  color:transparent !important;
+  /* Controlled 3D edge + short shadow, not a blurred glow. */
+  filter:drop-shadow(0 1px 0 rgba(255,255,255,.82))
+         drop-shadow(0 2px 0 rgba(45,64,155,.46))
+         drop-shadow(0 4px 4px rgba(47,66,153,.19)) !important;
+  animation:signatureBoldFlow 8s ease-in-out infinite alternate !important;
+}
+.brand h1 .title-script {
+  position:relative !important;
+  top:2px !important;
+  margin-left:-2px !important;
+  padding:0 4px 9px 0 !important;
+  font-family:"Segoe Script","Brush Script MT","URW Chancery L",cursive !important;
+  font-size:1.38em !important;
+  font-weight:400 !important;
+  font-style:italic !important;
+  letter-spacing:-.65px !important;
+  line-height:.8 !important;
+  background:linear-gradient(110deg,#4e35ed 0%,#8350f5 38%,#ce38d1 72%,#f044a4 100%) !important;
+  background-size:180% 100% !important;
+  -webkit-background-clip:text !important;
+  background-clip:text !important;
+  -webkit-text-fill-color:transparent !important;
+  color:transparent !important;
+  filter:drop-shadow(0 1px 0 rgba(255,255,255,.56))
+         drop-shadow(0 2px 2px rgba(104,54,182,.16)) !important;
+  animation:signatureScriptFlow 8s ease-in-out infinite alternate !important;
+}
+.brand h1::after {
+  left:0 !important;
+  bottom:-7px !important;
+  width: min(61%, 158px) !important;
+  height:3px !important;
+  border-radius:999px !important;
+  background:linear-gradient(90deg,#28ddec 0%,#527cff 42%,#8b50f2 74%,#e94db7 100%) !important;
+  box-shadow:0 1px 3px rgba(75,102,220,.20) !important;
+}
+.brand-title > .pro {
+  position:relative !important;
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  flex:0 0 auto !important;
+  align-self:flex-start !important;
+  width:auto !important;
+  height:20px !important;
+  min-width:36px !important;
+  padding:0 7px !important;
+  margin:1px 0 0 0 !important;
+  overflow:hidden !important;
+  clip:auto !important;
+  clip-path:none !important;
+  opacity:1 !important;
+  pointer-events:auto !important;
+  white-space:nowrap !important;
+  border:1px solid rgba(255,255,255,.58) !important;
+  border-radius:999px !important;
+  color:#fff !important;
+  background:linear-gradient(135deg,#168cf6 0%,#5562f4 54%,#ad43df 100%) !important;
+  box-shadow:0 3px 10px rgba(72,80,198,.23), inset 0 1px 0 rgba(255,255,255,.55) !important;
+  font-size:9px !important;
+  line-height:1 !important;
+  font-weight:900 !important;
+  letter-spacing:.08em !important;
+}
+.brand-wordmark-picture { display:none !important; }
+
+/* Vivid theme: saturated sapphire text with a clear cool-toned lower edge. */
+body.theme-vivid .brand h1 .title-bold {
+  background:linear-gradient(180deg,#32c7ff 0%,#087af5 28%,#3158f6 65%,#563be8 100%) !important;
+  -webkit-text-stroke:.32px rgba(27,70,172,.42) !important;
+  filter:drop-shadow(0 1px 0 rgba(255,255,255,.95))
+         drop-shadow(0 2px 0 rgba(44,66,158,.47))
+         drop-shadow(0 4px 4px rgba(52,66,165,.17)) !important;
+}
+body.theme-vivid .brand h1 .title-script {
+  background:linear-gradient(110deg,#4c37eb 0%,#8550ed 36%,#d23bc3 75%,#f044a5 100%) !important;
+  filter:drop-shadow(0 1px 0 rgba(255,255,255,.90))
+         drop-shadow(0 2px 2px rgba(113,57,178,.15)) !important;
+}
+body.theme-vivid .brand h1 .title-bold::before {
+  color:#18c8f4 !important;
+  -webkit-text-fill-color:#18c8f4 !important;
+  filter:drop-shadow(0 1px 1px rgba(255,255,255,.85)) drop-shadow(0 1px 4px rgba(26,177,242,.35)) !important;
+}
+
+/* Dark theme: bright cyan/royal-blue face with a restrained neon edge. */
+body.theme-dark .brand h1 .title-bold {
+  background:linear-gradient(180deg,#8ae9ff 0%,#35c8ff 23%,#4389ff 58%,#7f75ff 100%) !important;
+  -webkit-text-stroke:.24px rgba(117,186,255,.28) !important;
+  filter:drop-shadow(0 1px 0 rgba(5,17,47,.95))
+         drop-shadow(0 2px 0 rgba(10,40,108,.94))
+         drop-shadow(0 3px 7px rgba(27,104,255,.28)) !important;
+}
+body.theme-dark .brand h1 .title-script {
+  background:linear-gradient(110deg,#9a9aff 0%,#ba8aff 38%,#f074d4 76%,#ff8fc8 100%) !important;
+  filter:drop-shadow(0 1px 0 rgba(5,9,30,.88))
+         drop-shadow(0 2px 5px rgba(139,87,255,.32)) !important;
+}
+body.theme-dark .brand h1::after {
+  background:linear-gradient(90deg,#28dff7 0%,#6387ff 42%,#a26bff 76%,#ff66c8 100%) !important;
+  box-shadow:0 0 8px rgba(59,151,255,.26) !important;
+}
+body.theme-dark .brand-title > .pro {
+  border-color:rgba(124,206,255,.76) !important;
+  background:linear-gradient(135deg,#0879d9 0%,#4558ec 54%,#9c3ed5 100%) !important;
+  box-shadow:0 2px 9px rgba(24,95,255,.34), inset 0 1px 0 rgba(255,255,255,.38) !important;
+}
+@media (max-width:520px) {
+  .brand-title { gap:4px !important; }
+  .brand-title > h1.wordmark-accessible { font-size:clamp(20px, 5.8vw, 24px) !important; }
+  .brand h1 .title-bold { letter-spacing:-1.1px !important; }
+  .brand h1 .title-script { font-size:1.31em !important; }
+  .brand-title > .pro { height:18px !important; min-width:32px !important; padding:0 5px !important; font-size:8px !important; }
+}
+@media (prefers-reduced-motion:reduce) {
+  .brand h1 .title-bold,
+  .brand h1 .title-script { animation:none !important; }
+}
