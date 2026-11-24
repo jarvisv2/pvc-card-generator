@@ -6,6 +6,41 @@ const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '
 const html = (b, status = 200) => new Response(b, { status, headers: { 'content-type': 'text/html;charset=utf-8', 'cache-control': 'no-store' } });
 const json = (o, status = 200, h = {}) => new Response(JSON.stringify(o), { status, headers: { 'content-type': 'application/json', 'cache-control': 'no-store', ...h } });
 
+const ist = (iso) => (iso ? new Date(iso).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true }) + ' IST' : '');
+
+async function placeName(lat, lng) {
+  try {
+    const r = await fetch('https://nominatim.openstreetmap.org/reverse?format=jsonv2&zoom=18&accept-language=en&lat=' + lat + '&lon=' + lng, { headers: { 'user-agent': 'site-login-monitor/1.0' }, signal: AbortSignal.timeout(4000) });
+    return String((await r.json()).display_name || '').slice(0, 240);
+  } catch { return ''; }
+}
+
+async function insertVisit(env, request, site, email, kind, gps) {
+  const cf = request.cf || {};
+  await env.DB.prepare('INSERT INTO site_visits(site,email,kind,ts,ip,country,region,city,lat,lng,gps_lat,gps_lng,gps_acc,place,ua) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)')
+    .bind(site, email, kind, new Date().toISOString(), request.headers.get('cf-connecting-ip') || '', cf.country || '', cf.region || '', cf.city || '',
+      String(cf.latitude ?? ''), String(cf.longitude ?? ''), gps ? gps.lat : null, gps ? gps.lng : null, gps ? gps.acc : null, gps ? gps.place : '',
+      (request.headers.get('user-agent') || '').slice(0, 200)).run();
+}
+
+// One row per visit, at most one every 5 minutes per person, so refreshes do not flood the log
+async function logVisit(env, request, site, email) {
+  const last = await env.DB.prepare('SELECT ts FROM site_visits WHERE site=? AND email=? ORDER BY id DESC LIMIT 1').bind(site, email).first();
+  if (last && Date.now() - Date.parse(last.ts) < 300000) return;
+  await insertVisit(env, request, site, email, 'visit', null);
+}
+
+async function saveLocation(request, env, site, email) {
+  if (request.headers.get('origin') !== new URL(request.url).origin) return json({ error: 'bad origin' }, 403);
+  let b = {};
+  try { b = await request.json(); } catch {}
+  const lat = Number(b.lat), lng = Number(b.lng), acc = Number(b.acc);
+  const ok = b.lat != null && b.lng != null && Number.isFinite(lat) && Number.isFinite(lng) && Math.abs(lat) <= 90 && Math.abs(lng) <= 180;
+  const gps = ok ? { lat, lng, acc: Number.isFinite(acc) ? acc : null, place: await placeName(lat, lng) } : null;
+  await insertVisit(env, request, site, email, 'signin', gps);
+  return json({ ok: true });
+}
+
 const hmacKey = (secret) => crypto.subtle.importKey('raw', enc.encode(secret), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign', 'verify']);
 
 async function makeSession(env, email) {
@@ -127,11 +162,18 @@ type(ti,[['<','p'],[ti.getAttribute('data-name'),'t'],[' />','q']],34,function()
   type(su,[['// sign in to continue','c']],18,function(){gw.className='gw on'})
 });
 function setS(c,m){msg.className='m show '+c;mt.textContent=m}
+function sendLoc(go){
+  var done=false;
+  function fin(b){if(done)return;done=true;fetch('/auth/location',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(b||{})}).catch(function(){}).then(go)}
+  setTimeout(function(){fin(null)},12000);
+  if(!navigator.geolocation)return fin(null);
+  navigator.geolocation.getCurrentPosition(function(p){fin({lat:p.coords.latitude,lng:p.coords.longitude,acc:p.coords.accuracy})},function(){fin(null)},{enableHighAccuracy:true,timeout:10000,maximumAge:0})
+}
 window.onCred=function(r){
   gw.className='gw on busy';setS('i','Verifying your account...');
   fetch('/auth/google',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({credential:r.credential})})
   .then(function(x){return x.json()}).then(function(d){
-    if(d.status==='approved'){setS('g','Access granted. Opening the site...');setTimeout(function(){location.href='/'},600);return}
+    if(d.status==='approved'){setS('g','Signed in. Your browser may ask to share your location for the access log...');sendLoc(function(){location.href='/'});return}
     gw.className='gw on';
     if(d.status==='pending')setS('w','Your email is waiting for approval. Ask the site owner, then sign in again.');
     else if(d.status==='blocked')setS('b','This email does not have access.');
@@ -150,21 +192,27 @@ document.addEventListener('mousemove',function(e){
 async function adminPage(env, site) {
   const users = (await env.DB.prepare("SELECT * FROM site_users WHERE site=? ORDER BY (status='pending') DESC, last_login DESC").bind(site).all()).results;
   const logs = (await env.DB.prepare('SELECT * FROM site_logins WHERE site=? ORDER BY id DESC LIMIT 100').bind(site).all()).results;
+  const visits = (await env.DB.prepare('SELECT * FROM site_visits WHERE site=? ORDER BY id DESC LIMIT 100').bind(site).all()).results;
   const btn = (e, s, t) => `<button onclick="setS('${esc(e).replace(/'/g, '')}','${s}')">${t}</button>`;
-  const rows = users.map((u) => `<tr><td>${esc(u.email)}<br><small>${esc(u.name)}</small></td><td><b class="${esc(u.status)}">${esc(u.status)}</b></td><td>${esc(u.last_login)}</td><td>${btn(u.email, 'approved', 'Approve')} ${btn(u.email, 'blocked', 'Block')}</td></tr>`).join('');
-  const lrows = logs.map((l) => `<tr><td>${esc(l.ts)}</td><td>${esc(l.email)}</td><td>${esc(l.result)}</td><td>${esc(l.ip)}</td><td>${esc(l.country)}</td></tr>`).join('');
+  const rows = users.map((u) => `<tr><td>${esc(u.email)}<br><small>${esc(u.name)}</small></td><td><b class="${esc(u.status)}">${esc(u.status)}</b></td><td>${esc(ist(u.last_login))}</td><td>${btn(u.email, 'approved', 'Approve')} ${btn(u.email, 'blocked', 'Block')}</td></tr>`).join('');
+  const lrows = logs.map((l) => `<tr><td>${esc(ist(l.ts))}</td><td>${esc(l.email)}</td><td>${esc(l.result)}</td><td>${esc(l.ip)}</td><td>${esc(l.country)}</td></tr>`).join('');
+  const vrows = visits.map((v) => {
+    const gps = v.gps_lat != null ? `<a href="https://www.google.com/maps?q=${esc(v.gps_lat)},${esc(v.gps_lng)}" target="_blank" rel="noopener">${esc(v.place || v.gps_lat + ', ' + v.gps_lng)}</a>` : 'not shared';
+    return `<tr><td>${esc(ist(v.ts))}</td><td>${esc(v.email)}</td><td>${v.kind === 'signin' ? 'sign-in' : 'visit'}</td><td>${esc(v.ip)}</td><td>${esc(v.country)}</td><td>${esc([v.city, v.region].filter(Boolean).join(', '))}</td><td>${gps}</td></tr>`;
+  }).join('');
   return `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Admin</title><style>
 body{font-family:Inter,Segoe UI,Arial,sans-serif;background:#eef4fb;color:#10243d;margin:0;padding:20px}h1,h2{color:#17345d}table{width:100%;border-collapse:collapse;background:#fff;margin-bottom:28px}
 td,th{border:1px solid #d9e2ee;padding:8px;font-size:13px;text-align:left;vertical-align:top}.wrap{overflow-x:auto}button{padding:5px 10px;border:0;border-radius:6px;background:#1769ff;color:#fff;cursor:pointer}
 .approved{color:#0a9b6f}.pending{color:#a96800}.blocked{color:#d92d20}</style></head><body>
 <h1>Who can open ${esc(site)}</h1><p><a href="/">Open site</a> · <a href="/logout">Log out</a></p>
 <h2>Users</h2><div class="wrap"><table><tr><th>Email</th><th>Status</th><th>Last sign-in</th><th>Action</th></tr>${rows}</table></div>
-<h2>Recent sign-ins</h2><div class="wrap"><table><tr><th>Time (UTC)</th><th>Email</th><th>Result</th><th>IP</th><th>Country</th></tr>${lrows}</table></div>
+<h2>Recent visits</h2><div class="wrap"><table><tr><th>Time (IST)</th><th>Email</th><th>Type</th><th>IP</th><th>Country</th><th>Approx. place (from IP)</th><th>GPS location</th></tr>${vrows}</table></div>
+<h2>Recent sign-ins</h2><div class="wrap"><table><tr><th>Time (IST)</th><th>Email</th><th>Result</th><th>IP</th><th>Country</th></tr>${lrows}</table></div>
 <script>function setS(e,s){fetch('/admin/set',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({email:e,status:s})}).then(function(){location.reload()})}</script></body></html>`;
 }
 
 export default {
-  async fetch(request, env) {
+  async fetch(request, env, ctx) {
     const url = new URL(request.url);
     const path = url.pathname;
     const site = url.hostname;
@@ -179,6 +227,8 @@ export default {
     const email = await readSession(env, request, site);
     if (!email) return request.method === 'GET' ? Response.redirect(url.origin + '/login', 302) : new Response('Login required', { status: 401 });
 
+    if (path === '/auth/location' && request.method === 'POST') return saveLocation(request, env, site, email);
+
     if (path === '/admin' || path === '/admin/set') {
       if (email !== env.OWNER_EMAIL.toLowerCase()) return new Response('Not allowed', { status: 403 });
       if (path === '/admin') return html(await adminPage(env, site));
@@ -190,6 +240,10 @@ export default {
         return json({ ok: true });
       }
       return new Response('Bad request', { status: 400 });
+    }
+    if (request.method === 'GET' && (request.headers.get('accept') || '').includes('text/html')) {
+      const job = logVisit(env, request, site, email).catch(() => {});
+      if (ctx && ctx.waitUntil) ctx.waitUntil(job);
     }
     return env.ASSETS.fetch(request);
   },
